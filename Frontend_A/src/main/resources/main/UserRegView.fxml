@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="control.UserRegistrationGraphicController">
+   <children>
+      <BorderPane layoutX="458.0" layoutY="290.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <Pane BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="343.0" fitWidth="425.0" layoutX="445.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/everydaychef-high-resolution-color-logo-removebg-preview.png" />
+                     </image>
+                  </ImageView>
+                  <TextField fx:id="emailField" layoutX="435.0" layoutY="414.0" prefHeight="26.0" prefWidth="445.0" />
+                  <Label layoutX="435.0" layoutY="396.0" text="Email" />
+                  <Label layoutX="435.0" layoutY="445.0" text="Username" />
+                  <Label layoutX="435.0" layoutY="494.0" text="Password" />
+                  <PasswordField fx:id="passwordField" layoutX="435.0" layoutY="512.0" prefHeight="26.0" prefWidth="445.0" />
+                  <Label layoutX="435.0" layoutY="543.0" text="Confirm Password" />
+                  <PasswordField fx:id="passwordConfirmationField" layoutX="435.0" layoutY="561.0" prefHeight="26.0" prefWidth="445.0" />
+                  <Button layoutX="821.0" layoutY="627.0" mnemonicParsing="false" onAction="#onRegistrationButtonPression" text="Confirm" />
+                  <Button layoutX="436.0" layoutY="627.0" mnemonicParsing="false" onAction="#onBackButtonPression" text="Cancel" />
+                  <TextField fx:id="usernameField" layoutX="435.0" layoutY="462.0" prefHeight="26.0" prefWidth="445.0" />
+               </children>
+            </Pane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
