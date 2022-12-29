@@ -43,10 +43,8 @@ public class UserRegistrationGraphicController {
                 credentials.setPassword(passw);
                 UserLoginController controller = factory.createUserLoginController();
                 if(controller.registerUser(credentials)){
-                    System.out.println("User registered");
-                    FXMLLoader loginLoader = new FXMLLoader(MainApp.class.getResource("UserLoginView.fxml"));
-                    Scene loginView = new Scene(loginLoader.load(),1315,810);
-                    MainApp.primaryStage.setScene(loginView);
+                    UserLoginGraphicController loginGraphicController = new UserLoginGraphicController();
+                    loginGraphicController.loadUI();
                 }else{
                     AlertBox.display("Error", "Unable to register, username or email already used.");
                 }
@@ -66,4 +64,11 @@ public class UserRegistrationGraphicController {
         logController.loadUI();
     }
 
+    //TODO: eccezioni
+    public void loadUI() throws IOException {
+        FXMLLoader regViewLoader = new FXMLLoader(MainApp.class.getResource("UserRegView.fxml"));
+        regViewLoader.setController(this);
+        Scene regView = new Scene(regViewLoader.load(),1315,810);
+        MainApp.primaryStage.setScene(regView);
+    }
 }

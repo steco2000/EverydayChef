@@ -46,11 +46,16 @@ public class UserLoginGraphicController {
 
     @FXML
     private void onRegButtonPression() throws IOException {
+        UserRegistrationGraphicController controller = new UserRegistrationGraphicController();
+        controller.loadUI();
+        /*
         System.out.println("Registration button pressed");
         FXMLLoader regViewLoader = new FXMLLoader(MainApp.class.getResource("UserRegView.fxml"));
         Scene regView = new Scene(regViewLoader.load(),1315,810);
         MainApp.primaryStage.setScene(regView);
+        */
     }
+
 
     //TODO: eccezioni
     @FXML

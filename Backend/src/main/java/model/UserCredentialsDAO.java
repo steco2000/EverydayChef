@@ -6,7 +6,7 @@ import java.io.*;
 
 public class UserCredentialsDAO {
 
-    private static final String USERS_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\ispw\\progetto\\implementazione\\EverydayChef\\ECBackEnd\\src\\main\\resources\\user_credentials.ser";
+    private static final String USERS_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\user_credentials.ser";
 
     //TODO: questo metodo è molto simile a userNotExists, vedi se puoi fare riuso di codice
     public boolean credentialsAreCorrect(String username, String password) {
