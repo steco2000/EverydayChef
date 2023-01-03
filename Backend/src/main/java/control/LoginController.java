@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class LoginController implements UserLoginController, ChefLoginController{
 
-    public static Chef chefLogged = null;
-    public static UserCredentials userLogged = null;
+    public static ChefBase chefLogged = null;
+    public static UserCredBase userLogged = null;
 
     @Override
     public boolean attemptChefLogin(ChefBean credentials) {

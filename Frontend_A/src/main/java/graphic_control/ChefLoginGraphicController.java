@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import main.MainApp;
+import View.MainApp;
 
 import java.io.IOException;
 

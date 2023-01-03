@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import main.MainApp;
+import View.MainApp;
 import utilities.AlertBox;
 
 import java.io.IOException;
