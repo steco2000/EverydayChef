@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import graphic_control.UserLoginGraphicController;
 import javafx.application.Application;
@@ -11,26 +11,30 @@ import java.io.IOException;
 
 public class MainApp extends Application {
 
-    public static Stage primaryStage;
+    private static Stage primaryStage;
+
+    public static Stage getPrimaryStage(){ return primaryStage; };
+    private void setPrimaryStage(Stage stage){ primaryStage = stage; }
 
     @Override
     public void start(Stage stage) throws IOException {
-        primaryStage = stage;
+        setPrimaryStage(stage);
         FXMLLoader loginLoader = new FXMLLoader(MainApp.class.getResource("UserLoginView.fxml"));
         loginLoader.setController(new UserLoginGraphicController());
         Scene loginScene = new Scene(loginLoader.load(),1315,810);
-        primaryStage.setTitle("EverydayChef");
-        primaryStage.setScene(loginScene);
-        primaryStage.setResizable(false);
-        primaryStage.setOnCloseRequest(e -> {
+        stage.setTitle("EverydayChef");
+        stage.setScene(loginScene);
+        stage.setResizable(false);
+        stage.setOnCloseRequest(e -> {
                 e.consume();
                 boolean answer = ConfirmBox.display("Warning", "Any unsaved changes may be lost, are you sure to proceed?");
-                if(answer) primaryStage.close();
+                if(answer) stage.close();
         });
-        primaryStage.show();
+        stage.show();
     }
 
     public static void main(String[] args) {
         launch();
     }
+
 }

@@ -3,16 +3,17 @@ package graphic_control;
 import control.ChefBean;
 import control.ChefLoginController;
 import control.ChefLoginControllerFactory;
-import control.LoginController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import View.MainApp;
+import view.MainApp;
 
 import java.io.IOException;
+
+//TODO: eccezioni
 
 public class ChefLoginGraphicController {
 
@@ -27,14 +28,12 @@ public class ChefLoginGraphicController {
 
     private FXMLLoader uiLoader;
 
-    //TODO: gestisci eccezioni
     @FXML
     private void onRegButtonPression() throws IOException {
         ChefRegistrationGraphicController regController = new ChefRegistrationGraphicController();
         regController.loadUI();
     }
 
-    //TODO: eccezioni
     @FXML
     private void onUserLoginButtonPression() throws IOException {
         UserLoginGraphicController userLoginController = new UserLoginGraphicController();
@@ -43,7 +42,6 @@ public class ChefLoginGraphicController {
 
     @FXML
     private void onLoginButtonPression(){
-        //TODO: attempt chef login
         ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
         ChefLoginController controller = factory.createChefLoginController();
 
@@ -52,18 +50,15 @@ public class ChefLoginGraphicController {
         chefCredentials.setPassword(passField.getText());
 
         boolean result = controller.attemptChefLogin(chefCredentials);
+        System.out.println(result);
 
-        //CODICE DI TEST
-        if(result) System.out.println("Chef logged, username: "+ LoginController.chefLogged.getUsername()+", password: "+LoginController.chefLogged.getPassword()+", ID: "+LoginController.chefLogged.getId());
-        else System.out.println("Login failed");
     }
 
-    //TODO: eccezioni
     public void loadUI() throws IOException {
         uiLoader = new FXMLLoader(MainApp.class.getResource("ChefLoginView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
-        MainApp.primaryStage.setScene(scene);
+        MainApp.getPrimaryStage().setScene(scene);
     }
 
 }

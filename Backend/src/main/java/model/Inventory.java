@@ -24,7 +24,7 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
 
     @Override
     public void addIngredient(IngredientBase ingredient){
-        this.ingredientList.add((Ingredient) ingredient);
+        this.ingredientList.add(ingredient);
         this.notifyObservers();
     }
 
@@ -53,7 +53,6 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
 
     @Override
     public List<IngredientBase> getState(){
-        for(IngredientBase i: ingredientList) System.out.println("Ingredient List item: "+i.getName());
         return ingredientList;
     }
 

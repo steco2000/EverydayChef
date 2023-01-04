@@ -7,7 +7,7 @@ public abstract class InventorySubject {
 
     private List<InventoryObserver> observerList;
 
-    public InventorySubject(){
+    protected InventorySubject(){
         observerList = new ArrayList<>();
     }
 

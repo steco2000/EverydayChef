@@ -8,30 +8,37 @@ import java.io.IOException;
 
 public class LoginController implements UserLoginController, ChefLoginController{
 
-    public static ChefBase chefLogged = null;
-    public static UserCredBase userLogged = null;
+    private static ChefBase chefLogged = null;
+    private static UserCredBase userLogged = null;
+
+    public static UserCredBase getUserLogged(){ return userLogged; }
+    public static void setUserLogged(UserCredBase user){ userLogged = user; }
+
+    public static ChefBase getChefLogged(){ return chefLogged; }
+    public static void setChefLogged(ChefBase chef){ chefLogged = chef; }
 
     @Override
     public boolean attemptChefLogin(ChefBean credentials) {
         ChefDAO dao = new ChefDAO();
-        if(dao.credentialsAreCorrect(credentials.getUsername(),credentials.getPassword())){
-            return true;
+        return dao.credentialsAreCorrect(credentials.getUsername(),credentials.getPassword());
+    }
+
+    private int getChefId(ChefDAO dao) throws IOException, ClassNotFoundException {
+        int id;
+        try{
+            id = dao.getLastId();
+        }catch(EOFException | FileNotFoundException e){
+            id = 0;
         }
-        return false;
+        return id;
     }
 
     @Override
     public boolean registerChef(ChefBean chefInfo) {
-        //TODO: implementa
         ChefDAO dao = new ChefDAO();
         try{
             if(dao.chefNotExists(chefInfo.getEmail(),chefInfo.getUsername())){
-                int id;
-                try{
-                    id = dao.getLastId();
-                }catch(EOFException | FileNotFoundException e){
-                    id = 0;
-                }
+                int id = getChefId(dao);
                 ChefFactory factory = new ChefFactory();
                 Chef chef = (Chef) factory.createChef();
                 chef.setId(id+1);
@@ -75,7 +82,7 @@ public class LoginController implements UserLoginController, ChefLoginController
                 dao.saveUser(user);
                 return true;
             }else return false;
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }

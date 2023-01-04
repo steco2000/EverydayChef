@@ -1,6 +1,6 @@
 package graphic_control;
 
-import View.MainApp;
+import view.MainApp;
 import control.IngredientBean;
 import control.InventoryController;
 import control.InventoryControllerFactory;
@@ -22,11 +22,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+//TODO: eccezioni
+
 public class InventoryGraphicController {
 
     private InventoryTableDataBean dataBean;
     private InventoryController applController;
-    static String toUpdateName;
+    private static String toUpdateName;
+    private static final String ERROR_BOX_TITLE = "Error";
 
     @FXML
     private TextField nameField;
@@ -64,7 +67,7 @@ public class InventoryGraphicController {
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
         this.setUpTable();
-        MainApp.primaryStage.setScene(scene);
+        MainApp.getPrimaryStage().setScene(scene);
     }
 
     private void setUpTable() {
@@ -79,14 +82,13 @@ public class InventoryGraphicController {
     private ObservableList<IngredientBean> getObservableTableData() {
         ObservableList<IngredientBean> observableList = FXCollections.observableArrayList();
         List<IngredientBean> dataList = dataBean.getTableData();
-        if(dataList == null) return null;
+        if(dataList.isEmpty()) return null;
         for(IngredientBean i: dataList){
             observableList.add(i);
         }
         return observableList;
     }
 
-    //TODO: eccezioni
     @FXML
     public void onBackButtonPression() throws IOException {
         applController.saveCurrentInventory();
@@ -94,16 +96,14 @@ public class InventoryGraphicController {
         controller.loadUI();
     }
 
-    //TODO: eccezioni
     @FXML
     public void onAddIngredientButtonPression() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("AddIngredientView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
-        MainApp.primaryStage.setScene(scene);
+        MainApp.getPrimaryStage().setScene(scene);
     }
 
-    //TODO: eccezioni
     @FXML
     public void onUpdateButtonPression() throws IOException {
         IngredientBean ingredientToUpdate = inventoryTable.getSelectionModel().getSelectedItem();
@@ -121,10 +121,9 @@ public class InventoryGraphicController {
         dateField.setText(dateValue);
         notesField.setText(ingredientToUpdate.getNotes());
 
-        MainApp.primaryStage.setScene(scene);
+        MainApp.getPrimaryStage().setScene(scene);
     }
 
-    //TODO: eccezioni
     @FXML
     public void onUpdateConfirmationButtonPression() throws IOException {
         IngredientBean updates = new IngredientBean();
@@ -134,7 +133,7 @@ public class InventoryGraphicController {
         updates.setExpirationDate(dateField.getText());
         updates.setNotes(notesField.getText());
         if(!applController.updateIngredient(toUpdateName,updates)){
-            AlertBox.display("Error", "This ingredient is already present in the inventory!");
+            AlertBox.display(ERROR_BOX_TITLE, "This ingredient is already present in the inventory!");
             return;
         }
         this.loadUI();
@@ -147,7 +146,6 @@ public class InventoryGraphicController {
         this.setUpTable();
     }
 
-    //TODO: eccezioni
     @FXML
     public void onIngredientConfirmationButtonPression() throws IOException {
         IngredientBean ingredientBean = new IngredientBean();
@@ -155,18 +153,17 @@ public class InventoryGraphicController {
         ingredientBean.setQuantity(Double.parseDouble(quantityField.getText()));        //TODO: double validation
         ingredientBean.setMeasureUnit(unitField.getText());
         if(!ingredientBean.setExpirationDate(dateField.getText())){
-            AlertBox.display("Error","Date format incorrect");
+            AlertBox.display(ERROR_BOX_TITLE,"Date format incorrect");
             return;
         }
         ingredientBean.setNotes(notesField.getText());
         if(applController.addIngredient(ingredientBean)) {
             this.loadUI();
         }else{
-            AlertBox.display("Error","Ingredient already present in the inventory, please update it instead of adding a new one.");
+            AlertBox.display(ERROR_BOX_TITLE,"Ingredient already present in the inventory, please update it instead of adding a new one.");
         }
     }
 
-    //TODO: eccezioni
     @FXML
     public void onIngredientPageBackButtonPression() throws IOException {
         this.loadUI();

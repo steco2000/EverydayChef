@@ -37,8 +37,7 @@ public class UserCredentials implements UserCredBase, Serializable {
 
     @Override
     public boolean checkCredentials(String us, String pw){
-        if(this.username.equals(us) && this.password.equals(pw)) return true;
-        return false;
+        return (this.username.equals(us) && this.password.equals(pw));
     }
 
     @Override

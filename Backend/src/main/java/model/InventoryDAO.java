@@ -7,14 +7,14 @@ import java.io.*;
 
 public class InventoryDAO {
 
-    private static String INVENTORY_FILE_NAME = null;
+    private String inventoryFileName;
 
     public InventoryDAO(){
-        INVENTORY_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\"+LoginController.userLogged.getUsername()+"-inventory.ser";
+        inventoryFileName = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";
     }
 
     public void saveInventory(InventoryBase inventory) throws IOException {
-        FileOutputStream fileout = new FileOutputStream(INVENTORY_FILE_NAME);
+        FileOutputStream fileout = new FileOutputStream(inventoryFileName);
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 
         out.writeObject(inventory);
@@ -25,10 +25,10 @@ public class InventoryDAO {
     public InventoryBase retrieveInventory(){
         Inventory currInv;
         FileInputStream filein = null;
-        String username = LoginController.userLogged.getUsername();
+        String username = LoginController.getUserLogged().getUsername();
 
         try{
-            filein = new FileInputStream(INVENTORY_FILE_NAME);
+            filein = new FileInputStream(inventoryFileName);
             while(true){
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currInv = (Inventory) inputObjStream.readObject();
@@ -38,7 +38,7 @@ public class InventoryDAO {
             try {
                 filein.close();
                 InventoryFactory inventoryFactory = new InventoryFactory();
-                currInv = inventoryFactory.createInventory((UserCredentials) LoginController.userLogged);
+                currInv = inventoryFactory.createInventory((UserCredentials) LoginController.getUserLogged());
             } catch (IOException ex) {
                 ex.printStackTrace();
                 return null;
@@ -48,7 +48,7 @@ public class InventoryDAO {
             return null;
         } catch (FileNotFoundException e) {
             InventoryFactory inventoryFactory = new InventoryFactory();
-            currInv = inventoryFactory.createInventory((UserCredentials) LoginController.userLogged);
+            currInv = inventoryFactory.createInventory((UserCredentials) LoginController.getUserLogged());
         } catch (IOException e) {
             e.printStackTrace();
             return null;

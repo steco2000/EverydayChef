@@ -1,6 +1,6 @@
 package graphic_control;
 
-import View.MainApp;
+import view.MainApp;
 import control.LoginController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,8 +18,8 @@ public class UserHomeGraphicController {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("UserHomeView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
-        welcomeLabel.setText(welcomeLabel.getText()+", "+LoginController.userLogged.getUsername()+"!");
-        MainApp.primaryStage.setScene(scene);
+        welcomeLabel.setText(welcomeLabel.getText()+", "+LoginController.getUserLogged().getUsername()+"!");
+        MainApp.getPrimaryStage().setScene(scene);
     }
 
     //TODO: eccezioni

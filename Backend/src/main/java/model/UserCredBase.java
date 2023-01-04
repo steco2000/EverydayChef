@@ -1,6 +1,8 @@
 package model;
 
-public interface UserCredBase {
+import java.io.Serializable;
+
+public interface UserCredBase extends Serializable {
 
     String getUsername();
     void setUsername(String username);

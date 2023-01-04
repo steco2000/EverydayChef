@@ -9,11 +9,11 @@ public class InventoryTableDataBean extends InventoryObserver {
 
     private Inventory subject;
     private List<IngredientBase> ingredientList;
-    public static InventoryTableDataBean singletonInstance;
+    private static InventoryTableDataBean singletonInstance;
 
     public List<IngredientBean> getTableData(){
         List<IngredientBean> beanList = new ArrayList<>();
-        if(ingredientList == null) return null;
+        if(ingredientList == null) return beanList;
         for(IngredientBase i: ingredientList){
             IngredientBean bean = new IngredientBean();
             bean.setName(i.getName());

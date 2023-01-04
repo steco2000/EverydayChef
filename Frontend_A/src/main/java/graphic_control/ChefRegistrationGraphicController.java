@@ -9,10 +9,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import View.MainApp;
+import view.MainApp;
 import utilities.AlertBox;
 
 import java.io.IOException;
+
+//TODO: controlla eccezioni
 
 public class ChefRegistrationGraphicController {
 
@@ -45,11 +47,12 @@ public class ChefRegistrationGraphicController {
     private Scene sceneB;
     private ChefBean newChef;
 
-    //TODO: eccezioni
+    private static final String ERROR_BOX_TITLE = "Error";
+
     @FXML
     private void onBackButtonPression() throws IOException {
         if(windowFlag){
-            MainApp.primaryStage.setScene(sceneA);
+            MainApp.getPrimaryStage().setScene(sceneA);
             windowFlag = false;
         }else{
             ChefLoginGraphicController logController = new ChefLoginGraphicController();
@@ -69,13 +72,12 @@ public class ChefRegistrationGraphicController {
             windowBLoader.setController(this);
             sceneB = new Scene(windowBLoader.load(), 1315, 810);
             windowFlag = true;
-            MainApp.primaryStage.setScene(sceneB);
+            MainApp.getPrimaryStage().setScene(sceneB);
         }else{
-            AlertBox.display("Error","Birth Date incorrect!");
+            AlertBox.display(ERROR_BOX_TITLE,"Birth Date incorrect!");
         }
     }
 
-    //TODO: eccezioni
     @FXML
     private void onRegisterButtonPression() throws IOException {
         newChef.setUsername(usernameField.getText());
@@ -83,7 +85,6 @@ public class ChefRegistrationGraphicController {
             String pw = passwordField.getText();
             String pwConf = passwordConfirmationField.getText();
             if(pw.equals(pwConf)){
-                //TODO: registra chef
                 newChef.setPassword(pw);
                 ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
                 ChefLoginController controller = factory.createChefLoginController();
@@ -91,13 +92,13 @@ public class ChefRegistrationGraphicController {
                     ChefLoginGraphicController graphicController = new ChefLoginGraphicController();
                     graphicController.loadUI();
                 }else{
-                    AlertBox.display("Error","Unable to register, username or email already exists!");
+                    AlertBox.display(ERROR_BOX_TITLE,"Unable to register, username or email already exists!");
                 }
             }else{
-                AlertBox.display("Error","Password doesn't match!");
+                AlertBox.display(ERROR_BOX_TITLE,"Password doesn't match!");
             }
         }else{
-            AlertBox.display("Error","Email incorrect!");
+            AlertBox.display(ERROR_BOX_TITLE,"Email incorrect!");
         }
     }
 
@@ -105,7 +106,7 @@ public class ChefRegistrationGraphicController {
         FXMLLoader windowALoader = new FXMLLoader(MainApp.class.getResource("ChefRegistrationView_A.fxml"));
         windowALoader.setController(this);
         sceneA = new Scene(windowALoader.load(),1315,810);
-        MainApp.primaryStage.setScene(sceneA);
+        MainApp.getPrimaryStage().setScene(sceneA);
     }
 
 }

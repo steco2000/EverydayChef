@@ -4,11 +4,12 @@ import control.LoginController;
 
 import java.io.*;
 
+//TODO: eccezioni
+
 public class UserCredentialsDAO {
 
     private static final String USERS_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\user_credentials.ser";
 
-    //TODO: questo metodo è molto simile a userNotExists, vedi se puoi fare riuso di codice
     public boolean credentialsAreCorrect(String username, String password) {
         UserCredentials currUser;
         FileInputStream filein = null;
@@ -18,10 +19,9 @@ public class UserCredentialsDAO {
             while (true) {
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currUser = (UserCredentials) inputObjStream.readObject();
-                System.out.println("Current email: " + currUser.getEmail() + ", current username: " + currUser.getUsername() + ", current pw: " + currUser.getPassword());
                 if ((currUser.getPassword().equals(password)) && (currUser.getUsername().equals(username))) {
                     filein.close();
-                    LoginController.userLogged = currUser;
+                    LoginController.setUserLogged(currUser);
                     return true;
                 }
             }
@@ -37,7 +37,7 @@ public class UserCredentialsDAO {
     }
 
         //TODO: controlla eccezione
-    public void saveUser(UserCredBase user) throws IOException, ClassNotFoundException {
+    public void saveUser(UserCredBase user) throws IOException {
         FileOutputStream fileout = new FileOutputStream(USERS_FILE_NAME, true);
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 
@@ -55,14 +55,12 @@ public class UserCredentialsDAO {
             while(true){
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currUser = (UserCredentials) inputObjStream.readObject();
-                System.out.println("Current email: "+currUser.getEmail()+", current username: "+currUser.getUsername()+", current pw: "+currUser.getPassword());
                 if((currUser.getEmail().equals(email)) || (currUser.getUsername().equals(username))){
                     filein.close();
                     return false;
                 }
             }
         }catch (EOFException e) {
-            System.out.println("End of file");
             try {
                 filein.close();
             } catch (IOException ex) {

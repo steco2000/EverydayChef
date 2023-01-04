@@ -8,10 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import View.MainApp;
+import view.MainApp;
 import utilities.AlertBox;
 
 import java.io.IOException;
+
+//TODO: eccezioni
 
 public class UserRegistrationGraphicController {
 
@@ -27,7 +29,8 @@ public class UserRegistrationGraphicController {
     @FXML
     private PasswordField passwordConfirmationField;
 
-    //TODO: vedi se puoi gestire questo con un'eccezione
+    private static final String ERROR_BOX_TITLE = "Error";
+
     @FXML
     private void onRegistrationButtonPression() throws IOException {
         UserCredBean credentials = new UserCredBean();
@@ -46,15 +49,15 @@ public class UserRegistrationGraphicController {
                     UserLoginGraphicController loginGraphicController = new UserLoginGraphicController();
                     loginGraphicController.loadUI();
                 }else{
-                    AlertBox.display("Error", "Unable to register, username or email already used.");
+                    AlertBox.display(ERROR_BOX_TITLE, "Unable to register, username or email already used.");
                 }
 
             }else{
-                AlertBox.display("Error", "Password doesn't match!");
+                AlertBox.display(ERROR_BOX_TITLE, "Password doesn't match!");
             }
 
         }else{
-            AlertBox.display("Error", "Incorrect email!");
+            AlertBox.display(ERROR_BOX_TITLE, "Incorrect email!");
         }
     }
 
@@ -64,11 +67,10 @@ public class UserRegistrationGraphicController {
         logController.loadUI();
     }
 
-    //TODO: eccezioni
     public void loadUI() throws IOException {
         FXMLLoader regViewLoader = new FXMLLoader(MainApp.class.getResource("UserRegView.fxml"));
         regViewLoader.setController(this);
         Scene regView = new Scene(regViewLoader.load(),1315,810);
-        MainApp.primaryStage.setScene(regView);
+        MainApp.getPrimaryStage().setScene(regView);
     }
 }

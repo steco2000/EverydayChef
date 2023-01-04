@@ -6,14 +6,15 @@ import control.UserLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import View.MainApp;
+import view.MainApp;
 import utilities.AlertBox;
 
 import java.io.IOException;
+
+//TODO: eccezioni
 
 public class UserLoginGraphicController {
 
@@ -28,12 +29,10 @@ public class UserLoginGraphicController {
 
     private Scene scene;
 
-    //TODO: eccezioni
     @FXML
     private void onLoginButtonPression() throws IOException {
         String username = usernameField.getText();
         String password = passField.getText();
-        System.out.println("Username: "+username+", Password: "+password);
         UserLoginControllerFactory controllerFactory = new UserLoginControllerFactory();
         UserLoginController loginController = controllerFactory.createUserLoginController();
 
@@ -43,7 +42,6 @@ public class UserLoginGraphicController {
         credBean.setRememberMe(rememberMeCheckbox.isSelected());
 
         boolean result = loginController.attemptUserLogin(credBean);
-        System.out.println(result);
         if(result){
             UserHomeGraphicController controller = new UserHomeGraphicController();
             controller.loadUI();
@@ -59,18 +57,16 @@ public class UserLoginGraphicController {
     }
 
 
-    //TODO: eccezioni
     @FXML
     private void onChefLoginButtonPression() throws IOException {
         ChefLoginGraphicController chefController = new ChefLoginGraphicController();
         chefController.loadUI();
     }
 
-    //TODO: eccezioni
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("UserLoginView.fxml"));
         uiLoader.setController(this);
         scene = new Scene(uiLoader.load(),1315,810);
-        MainApp.primaryStage.setScene(scene);
+        MainApp.getPrimaryStage().setScene(scene);
     }
 }
