@@ -1,8 +1,12 @@
 package control;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.IllegalFormatConversionException;
+import java.util.IllegalFormatException;
+import java.util.Locale;
 
 public class IngredientBean {
 
@@ -16,7 +20,8 @@ public class IngredientBean {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws IllegalArgumentException {
+        if(name.length() == 0) throw new IllegalArgumentException();
         this.name = name;
     }
 
@@ -24,8 +29,15 @@ public class IngredientBean {
         return quantity;
     }
 
-    public void setQuantity(double quantity) {
-        this.quantity = quantity;
+    public void setQuantity(String quantity) throws ParseException, IllegalArgumentException {
+        if(quantity.length() == 0) throw new IllegalArgumentException();
+        try{
+            this.quantity = Double.parseDouble(quantity);
+        }catch(NumberFormatException e){
+            NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+            Number number = format.parse(quantity);
+            this.quantity = number.doubleValue();
+        }
     }
 
     public String getMeasureUnit() {
@@ -44,19 +56,14 @@ public class IngredientBean {
         this.expirationDate = expirationDate;
     }
 
-    public boolean setExpirationDate(String expirationDate) {
+    public void setExpirationDate(String expirationDate) throws ParseException {
         Date javaDate;
-        if (expirationDate.trim().equals("")) return true;
+        if (expirationDate.trim().equals("")) return;
         else{
             SimpleDateFormat sdfrmt = new SimpleDateFormat("dd/MM/yyyy");
             sdfrmt.setLenient(false);
-            try{
-                javaDate = sdfrmt.parse(expirationDate);
-            }catch (ParseException e){
-                return false;
-            }
+            javaDate = sdfrmt.parse(expirationDate);
             this.expirationDate = javaDate;
-            return true;
         }
     }
 

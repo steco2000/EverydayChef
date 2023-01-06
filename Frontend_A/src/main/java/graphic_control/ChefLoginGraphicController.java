@@ -26,8 +26,6 @@ public class ChefLoginGraphicController {
     @FXML
     private CheckBox rememberMeCheckbox;
 
-    private FXMLLoader uiLoader;
-
     @FXML
     private void onRegButtonPression() throws IOException {
         ChefRegistrationGraphicController regController = new ChefRegistrationGraphicController();
@@ -49,13 +47,12 @@ public class ChefLoginGraphicController {
         chefCredentials.setUsername(usernameField.getText());
         chefCredentials.setPassword(passField.getText());
 
-        boolean result = controller.attemptChefLogin(chefCredentials);
-        System.out.println(result);
+        controller.attemptChefLogin(chefCredentials);
 
     }
 
     public void loadUI() throws IOException {
-        uiLoader = new FXMLLoader(MainApp.class.getResource("ChefLoginView.fxml"));
+        FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("ChefLoginView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
         MainApp.getPrimaryStage().setScene(scene);

@@ -13,8 +13,8 @@ public class MainApp extends Application {
 
     private static Stage primaryStage;
 
-    public static Stage getPrimaryStage(){ return primaryStage; };
-    private void setPrimaryStage(Stage stage){ primaryStage = stage; }
+    public static Stage getPrimaryStage(){ return primaryStage; }
+    private static void setPrimaryStage(Stage stage){ primaryStage = stage; }
 
     @Override
     public void start(Stage stage) throws IOException {

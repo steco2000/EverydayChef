@@ -14,7 +14,7 @@ import utilities.AlertBox;
 
 import java.io.IOException;
 
-//TODO: controlla eccezioni
+//TODO: controlla eccezioni + input validation
 
 public class ChefRegistrationGraphicController {
 

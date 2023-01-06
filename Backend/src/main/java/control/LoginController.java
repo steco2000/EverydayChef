@@ -38,10 +38,8 @@ public class LoginController implements UserLoginController, ChefLoginController
         ChefDAO dao = new ChefDAO();
         try{
             if(dao.chefNotExists(chefInfo.getEmail(),chefInfo.getUsername())){
-                int id = getChefId(dao);
                 ChefFactory factory = new ChefFactory();
-                Chef chef = (Chef) factory.createChef();
-                chef.setId(id+1);
+                ChefBase chef = factory.createChef();
                 chef.setName(chefInfo.getName());
                 chef.setSurname(chefInfo.getSurname());
                 chef.setBirthDate(chefInfo.getBirthDateInternalFormat());
@@ -55,7 +53,7 @@ public class LoginController implements UserLoginController, ChefLoginController
             }else{
                 return false;
             }
-        }catch(IOException | ClassNotFoundException e){
+        }catch(IOException e){
             e.printStackTrace();
             return false;
         }

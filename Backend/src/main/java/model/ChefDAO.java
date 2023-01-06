@@ -51,7 +51,7 @@ public class ChefDAO {
         }
     }
 
-    public void saveChef(Chef chef) throws IOException {
+    public void saveChef(ChefBase chef) throws IOException {
         FileOutputStream fileout = new FileOutputStream(CHEF_FILE_NAME, true);
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 

@@ -13,7 +13,7 @@ public class ChefFactory {
         } catch (IOException | ClassNotFoundException e) {
             id = 0;
         }
-        newChef.setId(id);
+        newChef.setId(id+1);
         return newChef;
     }
 

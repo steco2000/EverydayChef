@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 public class UserCredentials implements UserCredBase, Serializable {
@@ -8,6 +9,7 @@ public class UserCredentials implements UserCredBase, Serializable {
     private String password;
     private String email;
     private boolean rememberMe;
+    private Inventory ingredientsInventory;
 
     public UserCredentials(String us, String pw, String email){
         this.username = us;
@@ -16,13 +18,13 @@ public class UserCredentials implements UserCredBase, Serializable {
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
-    public void setUsername(String username) {
-        this.username = username;
+    public String getUsername() {
+        return username;
     }
 
     @Override
@@ -33,11 +35,6 @@ public class UserCredentials implements UserCredBase, Serializable {
     @Override
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public boolean checkCredentials(String us, String pw){
-        return (this.username.equals(us) && this.password.equals(pw));
     }
 
     @Override
@@ -58,6 +55,21 @@ public class UserCredentials implements UserCredBase, Serializable {
     @Override
     public boolean getRememberMe() {
         return this.rememberMe;
+    }
+
+    public Inventory getIngredientsInventory() {
+        return ingredientsInventory;
+    }
+
+    //TODO: controlla eccezione
+    public void setIngredientsInventory(Inventory ingredientsInventory) {
+        this.ingredientsInventory = ingredientsInventory;
+        UserCredentialsDAO dao = new UserCredentialsDAO();
+        try {
+            dao.saveUser(this);
+        } catch (IOException e) {
+            return;
+        }
     }
 
 }

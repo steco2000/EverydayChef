@@ -12,6 +12,7 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
     public Inventory(UserCredentials user){
         this.ingredientList = new ArrayList<>();
         this.user = user;
+        user.setIngredientsInventory(this);
     }
 
     public void setUser(UserCredentials user) {

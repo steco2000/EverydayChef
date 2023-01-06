@@ -60,6 +60,11 @@ public class Chef implements ChefBase, Serializable {
     }
 
     @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
     public String getInfo() {
         return info;
     }
@@ -67,11 +72,6 @@ public class Chef implements ChefBase, Serializable {
     @Override
     public void setInfo(String info) {
         this.info = info;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
     }
 
     @Override

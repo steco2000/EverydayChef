@@ -8,14 +8,14 @@ import java.io.*;
 
 public class UserCredentialsDAO {
 
-    private static final String USERS_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\user_credentials.ser";
+    private static final String USERS_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\user_credentials_";
 
     public boolean credentialsAreCorrect(String username, String password) {
         UserCredentials currUser;
         FileInputStream filein = null;
 
         try {
-            filein = new FileInputStream(USERS_FILE_NAME);
+            filein = new FileInputStream(USERS_FILE_NAME+username+".ser");
             while (true) {
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currUser = (UserCredentials) inputObjStream.readObject();
@@ -38,7 +38,7 @@ public class UserCredentialsDAO {
 
         //TODO: controlla eccezione
     public void saveUser(UserCredBase user) throws IOException {
-        FileOutputStream fileout = new FileOutputStream(USERS_FILE_NAME, true);
+        FileOutputStream fileout = new FileOutputStream(USERS_FILE_NAME+user.getUsername()+".ser");
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 
         out.writeObject(user);
@@ -51,7 +51,7 @@ public class UserCredentialsDAO {
         FileInputStream filein = null;
 
         try{
-            filein = new FileInputStream(USERS_FILE_NAME);
+            filein = new FileInputStream(USERS_FILE_NAME+username+".ser");
             while(true){
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currUser = (UserCredentials) inputObjStream.readObject();

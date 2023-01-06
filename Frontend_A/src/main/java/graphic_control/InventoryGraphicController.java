@@ -16,13 +16,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import utilities.AlertBox;
-
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-//TODO: eccezioni
+//TODO: eccezioni + menu per le unità di misura + data in formato corretto
 
 public class InventoryGraphicController {
 
@@ -81,7 +81,12 @@ public class InventoryGraphicController {
 
     private ObservableList<IngredientBean> getObservableTableData() {
         ObservableList<IngredientBean> observableList = FXCollections.observableArrayList();
-        List<IngredientBean> dataList = dataBean.getTableData();
+        List<IngredientBean> dataList = null;
+        try {
+            dataList = dataBean.getTableData();
+        } catch (ParseException e) {
+            AlertBox.display(ERROR_BOX_TITLE,"Data corrupted.");
+        }
         if(dataList.isEmpty()) return null;
         for(IngredientBean i: dataList){
             observableList.add(i);
@@ -107,6 +112,7 @@ public class InventoryGraphicController {
     @FXML
     public void onUpdateButtonPression() throws IOException {
         IngredientBean ingredientToUpdate = inventoryTable.getSelectionModel().getSelectedItem();
+        if(ingredientToUpdate == null) return;
         toUpdateName = ingredientToUpdate.getName();
 
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("UpdateIngredientView.fxml"));
@@ -117,8 +123,13 @@ public class InventoryGraphicController {
         quantityField.setText(String.valueOf(ingredientToUpdate.getQuantity()));
         unitField.setText(ingredientToUpdate.getMeasureUnit());
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String dateValue = dateFormat.format(ingredientToUpdate.getExpirationDate());
-        dateField.setText(dateValue);
+        String dateValue;
+        try {
+            dateValue = dateFormat.format(ingredientToUpdate.getExpirationDate());
+            dateField.setText(dateValue);
+        }catch(NullPointerException e){
+            dateField.setText("");
+        }
         notesField.setText(ingredientToUpdate.getNotes());
 
         MainApp.getPrimaryStage().setScene(scene);
@@ -127,11 +138,19 @@ public class InventoryGraphicController {
     @FXML
     public void onUpdateConfirmationButtonPression() throws IOException {
         IngredientBean updates = new IngredientBean();
-        updates.setName(nameField.getText());
-        updates.setQuantity(Double.parseDouble(quantityField.getText()));
-        updates.setMeasureUnit(unitField.getText());
-        updates.setExpirationDate(dateField.getText());
-        updates.setNotes(notesField.getText());
+        try {
+            updates.setName(nameField.getText());
+            updates.setQuantity(quantityField.getText());
+            updates.setMeasureUnit(unitField.getText());
+            updates.setExpirationDate(dateField.getText());
+            updates.setNotes(notesField.getText());
+        }catch(IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing.");
+            return;
+        }catch(ParseException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are not valid.");
+            return;
+        }
         if(!applController.updateIngredient(toUpdateName,updates)){
             AlertBox.display(ERROR_BOX_TITLE, "This ingredient is already present in the inventory!");
             return;
@@ -149,14 +168,20 @@ public class InventoryGraphicController {
     @FXML
     public void onIngredientConfirmationButtonPression() throws IOException {
         IngredientBean ingredientBean = new IngredientBean();
-        ingredientBean.setName(nameField.getText());
-        ingredientBean.setQuantity(Double.parseDouble(quantityField.getText()));        //TODO: double validation
-        ingredientBean.setMeasureUnit(unitField.getText());
-        if(!ingredientBean.setExpirationDate(dateField.getText())){
-            AlertBox.display(ERROR_BOX_TITLE,"Date format incorrect");
+        try{
+            ingredientBean.setName(nameField.getText());
+            ingredientBean.setQuantity(quantityField.getText());
+            ingredientBean.setMeasureUnit(unitField.getText());
+            ingredientBean.setExpirationDate(dateField.getText());
+            ingredientBean.setNotes(notesField.getText());
+            ingredientBean.setNotes(notesField.getText());
+        }catch(IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing.");
+            return;
+        }catch(ParseException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are not valid.");
             return;
         }
-        ingredientBean.setNotes(notesField.getText());
         if(applController.addIngredient(ingredientBean)) {
             this.loadUI();
         }else{
