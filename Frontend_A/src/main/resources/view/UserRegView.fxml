@@ -22,15 +22,15 @@
                      </image>
                   </ImageView>
                   <TextField fx:id="emailField" layoutX="435.0" layoutY="414.0" prefHeight="26.0" prefWidth="445.0" />
+                  <TextField fx:id="usernameField" layoutX="435.0" layoutY="462.0" prefHeight="26.0" prefWidth="445.0" />
                   <Label layoutX="435.0" layoutY="396.0" text="Email" />
                   <Label layoutX="435.0" layoutY="445.0" text="Username" />
                   <Label layoutX="435.0" layoutY="494.0" text="Password" />
                   <PasswordField fx:id="passwordField" layoutX="435.0" layoutY="512.0" prefHeight="26.0" prefWidth="445.0" />
                   <Label layoutX="435.0" layoutY="543.0" text="Confirm Password" />
                   <PasswordField fx:id="passwordConfirmationField" layoutX="435.0" layoutY="561.0" prefHeight="26.0" prefWidth="445.0" />
-                  <Button layoutX="821.0" layoutY="627.0" mnemonicParsing="false" onAction="#onRegistrationButtonPression" text="Confirm" />
                   <Button layoutX="436.0" layoutY="627.0" mnemonicParsing="false" onAction="#onBackButtonPression" text="Cancel" />
-                  <TextField fx:id="usernameField" layoutX="435.0" layoutY="462.0" prefHeight="26.0" prefWidth="445.0" />
+                  <Button layoutX="821.0" layoutY="627.0" mnemonicParsing="false" onAction="#onRegistrationButtonPression" text="Confirm" />
                </children>
             </Pane>
          </center>

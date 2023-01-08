@@ -1,8 +1,12 @@
 package control;
 
+import java.lang.reflect.MalformedParametersException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +27,7 @@ public class ChefBean {
     }
 
     public void setUsername(String username) {
+        if(username.length() == 0) throw new IllegalArgumentException();
         this.username = username;
     }
 
@@ -30,7 +35,8 @@ public class ChefBean {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws IllegalArgumentException{
+        if(name.length() == 0) throw new IllegalArgumentException();
         this.name = name;
     }
 
@@ -38,7 +44,8 @@ public class ChefBean {
         return surname;
     }
 
-    public void setSurname(String surname) {
+    public void setSurname(String surname) throws IllegalArgumentException{
+        if(surname.length() == 0) throw new IllegalArgumentException();
         this.surname = surname;
     }
 
@@ -49,19 +56,18 @@ public class ChefBean {
 
     public Date getBirthDateInternalFormat(){ return this.birthDate; }
 
-    public boolean setBirthDate(String birthDate) {
+    public void setBirthDate(String birthDate) throws ParseException {
         Date javaDate;
-        if (birthDate.trim().equals("")) return true;
+        if (birthDate.trim().equals("")) {
+        }
         else{
             SimpleDateFormat sdfrmt = new SimpleDateFormat("dd/MM/yyyy");
             sdfrmt.setLenient(false);
-            try{
-                javaDate = sdfrmt.parse(birthDate);
-            }catch (ParseException e){
-                return false;
-            }
+            javaDate = sdfrmt.parse(birthDate);
+            long millis = System.currentTimeMillis();
+            Date now = new Date(millis);
+            if(javaDate.after(now)) throw new IllegalArgumentException();
             this.birthDate = javaDate;
-            return true;
         }
     }
 
@@ -73,11 +79,10 @@ public class ChefBean {
         this.info = info;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
     public void setPassword(String password) {
+        if(password.length() == 0) throw new IllegalArgumentException();
         this.password = password;
     }
 
@@ -96,8 +101,8 @@ public class ChefBean {
         return matcher.matches();
     }
 
-    public boolean setEmail(String email) {
-        if(!isValid(email)) return false;
+    public boolean setEmail(String email) throws MalformedParametersException{
+        if(!isValid(email)) throw new MalformedParametersException();
         this.email = email;
         return true;
     }

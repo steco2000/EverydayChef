@@ -26,10 +26,10 @@
                <Label layoutX="435.0" layoutY="396.0" text="Username" />
                <Label layoutX="435.0" layoutY="480.0" text="Password" />
                <PasswordField fx:id="passField" layoutX="435.0" layoutY="498.0" prefHeight="26.0" prefWidth="445.0" />
-               <Button layoutX="820.0" layoutY="606.0" mnemonicParsing="false" onAction="#onLoginButtonPression" prefHeight="30.0" prefWidth="60.0" text="Login" />
-               <Button layoutX="433.0" layoutY="606.0" mnemonicParsing="false" onAction="#onRegButtonPression" text="Register" />
                <CheckBox fx:id="rememberMeCheckbox" layoutX="433.0" layoutY="555.0" mnemonicParsing="false" text="Remember Me" />
+               <Button layoutX="433.0" layoutY="606.0" mnemonicParsing="false" onAction="#onRegButtonPression" text="Register" />
                   <Button layoutX="612.0" layoutY="609.0" mnemonicParsing="false" onAction="#onChefLoginButtonPression" text="Log In as Chef" />
+               <Button layoutX="820.0" layoutY="606.0" mnemonicParsing="false" onAction="#onLoginButtonPression" prefHeight="30.0" prefWidth="60.0" text="Login" />
             </children>
          </Pane>
       </center>

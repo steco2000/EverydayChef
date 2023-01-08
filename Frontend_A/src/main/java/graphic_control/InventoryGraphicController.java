@@ -1,5 +1,6 @@
 package graphic_control;
 
+import javafx.scene.control.*;
 import view.MainApp;
 import control.IngredientBean;
 import control.InventoryController;
@@ -10,10 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import utilities.AlertBox;
 import java.io.IOException;
@@ -22,7 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-//TODO: eccezioni + menu per le unità di misura + data in formato corretto
+//TODO: eccezioni
 
 public class InventoryGraphicController {
 
@@ -36,7 +33,7 @@ public class InventoryGraphicController {
     @FXML
     private TextField quantityField;
     @FXML
-    private TextField unitField;
+    private ChoiceBox<String> unitBox;
     @FXML
     private TextField dateField;
     @FXML
@@ -74,7 +71,7 @@ public class InventoryGraphicController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         unitColumn.setCellValueFactory(new PropertyValueFactory<>("measureUnit"));
-        expDateColumn.setCellValueFactory(new PropertyValueFactory<>("expirationDate"));
+        expDateColumn.setCellValueFactory(new PropertyValueFactory<>("stringExpDate"));
         notesColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));
         inventoryTable.setItems(this.getObservableTableData());
     }
@@ -106,6 +103,8 @@ public class InventoryGraphicController {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("AddIngredientView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
+        unitBox.getItems().addAll("Kg","L");
+        unitBox.setValue("Kg");
         MainApp.getPrimaryStage().setScene(scene);
     }
 
@@ -119,9 +118,12 @@ public class InventoryGraphicController {
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
 
+        unitBox.getItems().addAll("Kg","L");
+        unitBox.setValue("Kg");
+
         nameField.setText(ingredientToUpdate.getName());
         quantityField.setText(String.valueOf(ingredientToUpdate.getQuantity()));
-        unitField.setText(ingredientToUpdate.getMeasureUnit());
+        unitBox.setValue(ingredientToUpdate.getMeasureUnit());
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateValue;
         try {
@@ -141,7 +143,7 @@ public class InventoryGraphicController {
         try {
             updates.setName(nameField.getText());
             updates.setQuantity(quantityField.getText());
-            updates.setMeasureUnit(unitField.getText());
+            updates.setMeasureUnit(unitBox.getValue());
             updates.setExpirationDate(dateField.getText());
             updates.setNotes(notesField.getText());
         }catch(IllegalArgumentException e){
@@ -171,7 +173,7 @@ public class InventoryGraphicController {
         try{
             ingredientBean.setName(nameField.getText());
             ingredientBean.setQuantity(quantityField.getText());
-            ingredientBean.setMeasureUnit(unitField.getText());
+            ingredientBean.setMeasureUnit(unitBox.getValue());
             ingredientBean.setExpirationDate(dateField.getText());
             ingredientBean.setNotes(notesField.getText());
             ingredientBean.setNotes(notesField.getText());

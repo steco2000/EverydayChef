@@ -26,8 +26,8 @@
                         <Label layoutX="435.0" layoutY="422.0" text="Username" />
                         <Label layoutX="435.0" layoutY="480.0" text="Password" />
                         <PasswordField fx:id="passField" layoutX="435.0" layoutY="498.0" prefHeight="26.0" prefWidth="445.0" />
-                        <Button layoutX="433.0" layoutY="606.0" mnemonicParsing="false" onAction="#onRegButtonPression" text="Register As Chef" />
                         <CheckBox fx:id="rememberMeCheckbox" layoutX="433.0" layoutY="555.0" mnemonicParsing="false" text="Remember Me" />
+                        <Button layoutX="433.0" layoutY="606.0" mnemonicParsing="false" onAction="#onRegButtonPression" text="Register As Chef" />
                   <Label layoutX="435.0" layoutY="388.0" text="Log in as Chef:" />
                   <Button layoutX="612.0" layoutY="606.0" mnemonicParsing="false" onAction="#onUserLoginButtonPression" text="Log In as User" />
                   <Button layoutX="802.0" layoutY="606.0" mnemonicParsing="false" onAction="#onLoginButtonPression" prefHeight="25.0" prefWidth="78.0" text="Log In" />

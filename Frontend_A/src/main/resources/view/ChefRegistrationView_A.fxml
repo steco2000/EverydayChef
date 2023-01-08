@@ -26,13 +26,13 @@
                         <Label layoutX="435.0" layoutY="399.0" text="Surname" />
                         <Label layoutX="435.0" layoutY="448.0" text="Birth Date" />
                         <TextField fx:id="surnameField" layoutX="435.0" layoutY="416.0" prefHeight="26.0" prefWidth="445.0" />
+                  <TextField fx:id="birthDateField" layoutX="435.0" layoutY="465.0" prefHeight="26.0" prefWidth="445.0" />
                   <TextArea fx:id="infoField" layoutX="435.0" layoutY="521.0" prefHeight="102.0" prefWidth="445.0" />
                   <Label layoutX="435.0" layoutY="504.0" text="Bio Informations" />
                   <Label layoutX="435.0" layoutY="315.0" text="Register as Chef:" />
                   <Label layoutX="820.0" layoutY="315.0" text="Page 1 of 2" />
                   <Button layoutX="436.0" layoutY="654.0" mnemonicParsing="false" onAction="#onBackButtonPression" text="Back" />
                   <Button layoutX="839.0" layoutY="654.0" mnemonicParsing="false" onAction="#onNextButtonPression" text="Next" />
-                  <TextField fx:id="birthDateField" layoutX="435.0" layoutY="465.0" prefHeight="26.0" prefWidth="445.0" />
                     </children>
                 </Pane>
             </center>

@@ -13,8 +13,10 @@ import view.MainApp;
 import utilities.AlertBox;
 
 import java.io.IOException;
+import java.lang.reflect.MalformedParametersException;
+import java.text.ParseException;
 
-//TODO: controlla eccezioni + input validation
+//TODO: controlla eccezioni
 
 public class ChefRegistrationGraphicController {
 
@@ -62,43 +64,48 @@ public class ChefRegistrationGraphicController {
 
     @FXML
     private void onNextButtonPression() throws IOException {
-        newChef = new ChefBean();
-        newChef.setName(nameField.getText());
-        newChef.setSurname(surnameField.getText());
-
-        if(newChef.setBirthDate(birthDateField.getText())) {
+        try {
+            newChef = new ChefBean();
+            newChef.setName(nameField.getText());
+            newChef.setSurname(surnameField.getText());
+            newChef.setBirthDate(birthDateField.getText());
             newChef.setInfo(infoField.getText());
             FXMLLoader windowBLoader = new FXMLLoader(MainApp.class.getResource("ChefRegistrationView_B.fxml"));
             windowBLoader.setController(this);
             sceneB = new Scene(windowBLoader.load(), 1315, 810);
             windowFlag = true;
             MainApp.getPrimaryStage().setScene(sceneB);
-        }else{
-            AlertBox.display(ERROR_BOX_TITLE,"Birth Date incorrect!");
+        } catch (ParseException e) {
+            AlertBox.display(ERROR_BOX_TITLE,"Birth date is not valid.");
+        }catch (IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are missing or incorrect.");
         }
     }
 
     @FXML
     private void onRegisterButtonPression() throws IOException {
-        newChef.setUsername(usernameField.getText());
-        if(newChef.setEmail(emailField.getText())){
+        try {
+            newChef.setUsername(usernameField.getText());
+            newChef.setEmail(emailField.getText());
             String pw = passwordField.getText();
             String pwConf = passwordConfirmationField.getText();
-            if(pw.equals(pwConf)){
+            if (pw.equals(pwConf)) {
                 newChef.setPassword(pw);
                 ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
                 ChefLoginController controller = factory.createChefLoginController();
-                if(controller.registerChef(newChef)){
+                if (controller.registerChef(newChef)) {
                     ChefLoginGraphicController graphicController = new ChefLoginGraphicController();
                     graphicController.loadUI();
                 }else{
-                    AlertBox.display(ERROR_BOX_TITLE,"Unable to register, username or email already exists!");
+                    AlertBox.display(ERROR_BOX_TITLE, "Unable to register, username or email already exists!");
                 }
             }else{
-                AlertBox.display(ERROR_BOX_TITLE,"Password doesn't match!");
+                AlertBox.display(ERROR_BOX_TITLE, "Password doesn't match!");
             }
-        }else{
-            AlertBox.display(ERROR_BOX_TITLE,"Email incorrect!");
+        }catch(IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing!");
+        }catch(MalformedParametersException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Invalid email!");
         }
     }
 

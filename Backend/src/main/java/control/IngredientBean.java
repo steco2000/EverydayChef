@@ -1,11 +1,10 @@
 package control;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.IllegalFormatConversionException;
-import java.util.IllegalFormatException;
 import java.util.Locale;
 
 public class IngredientBean {
@@ -14,6 +13,7 @@ public class IngredientBean {
     private double quantity;
     private String measureUnit;
     private Date expirationDate;
+    private String stringExpDate;
     private String notes;
 
     public String getName() {
@@ -52,13 +52,21 @@ public class IngredientBean {
         return expirationDate;
     }
 
+    public String getStringExpDate() {
+        return stringExpDate;
+    }
+
     public void setExpirationDateInternalFormat(Date expirationDate){
         this.expirationDate = expirationDate;
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        this.stringExpDate = dateFormat.format(expirationDate);
     }
 
     public void setExpirationDate(String expirationDate) throws ParseException {
         Date javaDate;
-        if (expirationDate.trim().equals("")) return;
+        this.stringExpDate = expirationDate;
+        if(expirationDate.trim().equals("")){
+        }
         else{
             SimpleDateFormat sdfrmt = new SimpleDateFormat("dd/MM/yyyy");
             sdfrmt.setLenient(false);

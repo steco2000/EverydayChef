@@ -47,7 +47,7 @@ public class ChefLoginGraphicController {
         chefCredentials.setUsername(usernameField.getText());
         chefCredentials.setPassword(passField.getText());
 
-        controller.attemptChefLogin(chefCredentials);
+        System.out.println(controller.attemptChefLogin(chefCredentials));
 
     }
 

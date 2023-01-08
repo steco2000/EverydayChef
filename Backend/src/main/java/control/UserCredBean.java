@@ -1,5 +1,6 @@
 package control;
 
+import java.lang.reflect.MalformedParametersException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,15 +15,15 @@ public class UserCredBean {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username) throws IllegalArgumentException{
+        if(username.length() == 0) throw new IllegalArgumentException();
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
-    public void setPassword(String password) {
+    public void setPassword(String password) throws IllegalArgumentException{
+        if(password.length() == 0) throw new IllegalArgumentException();
         this.password = password;
     }
 
@@ -30,10 +31,9 @@ public class UserCredBean {
         return email;
     }
 
-    public boolean setEmail(String email) {
-        if(!isValid(email)) return false;
+    public void setEmail(String email) {
+        if(!isValid(email)) throw new MalformedParametersException();
         this.email = email;
-        return true;
     }
 
     private boolean isValid(String email){

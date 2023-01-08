@@ -10,8 +10,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import view.MainApp;
 import utilities.AlertBox;
-
 import java.io.IOException;
+import java.lang.reflect.MalformedParametersException;
 
 //TODO: eccezioni
 
@@ -36,28 +36,30 @@ public class UserRegistrationGraphicController {
         UserCredBean credentials = new UserCredBean();
         UserLoginControllerFactory factory = new UserLoginControllerFactory();
 
-        if(credentials.setEmail(emailField.getText())){
+        try {
+            credentials.setEmail(emailField.getText());
             credentials.setUsername(usernameField.getText());
 
             String passw = passwordField.getText();
             String passwConf = passwordConfirmationField.getText();
 
-            if(passw.equals(passwConf)){
+            if (passw.equals(passwConf)) {
                 credentials.setPassword(passw);
                 UserLoginController controller = factory.createUserLoginController();
-                if(controller.registerUser(credentials)){
+                if (controller.registerUser(credentials)) {
                     UserLoginGraphicController loginGraphicController = new UserLoginGraphicController();
                     loginGraphicController.loadUI();
-                }else{
+                } else {
                     AlertBox.display(ERROR_BOX_TITLE, "Unable to register, username or email already used.");
                 }
 
-            }else{
+            } else {
                 AlertBox.display(ERROR_BOX_TITLE, "Password doesn't match!");
             }
-
-        }else{
-            AlertBox.display(ERROR_BOX_TITLE, "Incorrect email!");
+        }catch(IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing.");
+        }catch(MalformedParametersException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Email is not valid.");
         }
     }
 

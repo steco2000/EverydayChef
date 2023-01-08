@@ -8,7 +8,7 @@ import java.io.*;
 
 public class ChefDAO {
 
-    private static final String CHEF_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\chefs.ser";
+    private static final String CHEF_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\chef_data_";
     private static final String LAST_ID_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\last_chef_id.ser";
 
     public int getLastId() throws IOException, ClassNotFoundException {
@@ -23,7 +23,7 @@ public class ChefDAO {
         FileInputStream filein = null;
 
         try{
-            filein = new FileInputStream(CHEF_FILE_NAME);
+            filein = new FileInputStream(CHEF_FILE_NAME+username+".ser");
             while(true){
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currChef = (Chef) inputObjStream.readObject();
@@ -52,7 +52,7 @@ public class ChefDAO {
     }
 
     public void saveChef(ChefBase chef) throws IOException {
-        FileOutputStream fileout = new FileOutputStream(CHEF_FILE_NAME, true);
+        FileOutputStream fileout = new FileOutputStream(CHEF_FILE_NAME+chef.getUsername()+".ser", true);
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 
         FileOutputStream fileoutID = new FileOutputStream(LAST_ID_FILE_NAME);
@@ -67,40 +67,12 @@ public class ChefDAO {
         fileoutID.close();
     }
 
-    public ChefBase retrieveChef(int id){
-        FileInputStream filein = null;
-        Chef currChef = null;
-
-        try {
-            filein = new FileInputStream(CHEF_FILE_NAME);
-            while (true) {
-                ObjectInputStream inputObjStream = new ObjectInputStream(filein);
-                currChef = (Chef) inputObjStream.readObject();
-                if (currChef.getId() == id) {
-                    filein.close();
-                    return currChef;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (EOFException e) {
-            return null;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public boolean credentialsAreCorrect(String username, String password) {
         Chef currChef;
         FileInputStream filein = null;
 
         try {
-            filein = new FileInputStream(CHEF_FILE_NAME);
+            filein = new FileInputStream(CHEF_FILE_NAME+username+".ser");
             while (true) {
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currChef = (Chef) inputObjStream.readObject();
