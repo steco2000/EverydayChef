@@ -38,7 +38,8 @@ public class ChefLoginGraphicController {
         userLoginController.loadUI();
     }
 
-    @FXML
+    //TODO: implementazione parte chef da qui
+    /*@FXML
     private void onLoginButtonPression(){
         ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
         ChefLoginController controller = factory.createChefLoginController();
@@ -47,9 +48,9 @@ public class ChefLoginGraphicController {
         chefCredentials.setUsername(usernameField.getText());
         chefCredentials.setPassword(passField.getText());
 
-        System.out.println(controller.attemptChefLogin(chefCredentials));
+        controller.attemptChefLogin(chefCredentials);
 
-    }
+    }*/
 
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("ChefLoginView.fxml"));
