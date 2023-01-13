@@ -2,10 +2,10 @@ package graphic_control;
 
 import javafx.scene.control.*;
 import view.MainApp;
-import control.IngredientBean;
+import beans.IngredientBean;
 import control.InventoryController;
-import control.InventoryControllerFactory;
-import control.InventoryTableDataBean;
+import factories.InventoryControllerFactory;
+import beans.InventoryTableDataBean;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -103,7 +103,7 @@ public class InventoryGraphicController {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("AddIngredientView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
-        unitBox.getItems().addAll("Kg","L");
+        unitBox.getItems().addAll("Kg","L","");
         unitBox.setValue("Kg");
         MainApp.getPrimaryStage().setScene(scene);
     }
@@ -118,7 +118,7 @@ public class InventoryGraphicController {
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
 
-        unitBox.getItems().addAll("Kg","L");
+        unitBox.getItems().addAll("Kg","L","");
         unitBox.setValue("Kg");
 
         nameField.setText(ingredientToUpdate.getName());
@@ -187,7 +187,7 @@ public class InventoryGraphicController {
         if(applController.addIngredient(ingredientBean)) {
             this.loadUI();
         }else{
-            AlertBox.display(ERROR_BOX_TITLE,"Ingredient already present in the inventory, please update it instead of adding a new one.");
+            AlertBox.display(ERROR_BOX_TITLE,"InventoryIngredient already present in the inventory, please update it instead of adding a new one.");
         }
     }
 

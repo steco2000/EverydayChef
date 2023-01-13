@@ -1,8 +1,8 @@
 package graphic_control;
 
-import control.UserCredBean;
+import beans.UserCredBean;
 import control.UserLoginController;
-import control.UserLoginControllerFactory;
+import factories.UserLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

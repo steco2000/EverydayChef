@@ -1,5 +1,7 @@
 package model;
 
+import dao.UserCredentialsDAO;
+
 import java.io.IOException;
 import java.io.Serializable;
 

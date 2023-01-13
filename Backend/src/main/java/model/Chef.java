@@ -1,7 +1,9 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Chef implements ChefBase, Serializable {
 
@@ -9,10 +11,15 @@ public class Chef implements ChefBase, Serializable {
     private String surname;
     private Date birthDate;
     private String info;
+    private List<Recipe> recipeList;
     private String username;
     private String password;
     private String email;
     private int id;
+
+    public Chef(){
+        recipeList = new ArrayList<>();
+    }
 
     @Override
     public void setName(String name) {
@@ -27,6 +34,22 @@ public class Chef implements ChefBase, Serializable {
     @Override
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public List<Recipe> getRecipes() {
+        return this.recipeList;
+    }
+
+    public boolean addRecipe(Recipe recipe){
+        for(Recipe r: recipeList){
+            if(recipe.getName().equals(r.getName())) return false;
+        }
+        this.recipeList.add(recipe);
+        return true;
+    }
+
+    public void removeRecipe(Recipe recipe){
+        this.recipeList.remove(recipe);
     }
 
     @Override

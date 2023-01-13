@@ -1,6 +1,8 @@
-package model;
+package dao;
 
 import control.LoginController;
+import model.Chef;
+import model.ChefBase;
 
 import java.io.*;
 
@@ -72,17 +74,18 @@ public class ChefDAO {
         FileInputStream filein = null;
 
         try {
-            filein = new FileInputStream(CHEF_FILE_NAME+username+".ser");
-            while (true) {
-                ObjectInputStream inputObjStream = new ObjectInputStream(filein);
-                currChef = (Chef) inputObjStream.readObject();
-                if ((currChef.getPassword().equals(password)) && (currChef.getUsername().equals(username))) {
-                    LoginController.setChefLogged(currChef);
-                    filein.close();
-                    return true;
-                }
+            filein = new FileInputStream(CHEF_FILE_NAME + username + ".ser");
+            ObjectInputStream inputObjStream = new ObjectInputStream(filein);
+            currChef = (Chef) inputObjStream.readObject();
+            System.out.println("Inserite: "+username+" "+password);
+            System.out.println("Lette da file: "+currChef.getUsername()+" "+currChef.getPassword());
+            if ((currChef.getPassword().equals(password)) && (currChef.getUsername().equals(username))) {
+                LoginController.setChefLogged(currChef);
+                filein.close();
+                return true;
             }
-        } catch (FileNotFoundException e) {
+            return false;
+        }catch (FileNotFoundException e) {
             return false;
         } catch (EOFException e) {
             return false;
@@ -91,5 +94,22 @@ public class ChefDAO {
         } catch (IOException e) {
             return false;
         }
+    }
+
+
+    public ChefBase retrieveChef(String chefUsername) {
+        FileInputStream filein;
+        try {
+            filein = new FileInputStream(CHEF_FILE_NAME + chefUsername + ".ser");
+            ObjectInputStream inputObjStream = new ObjectInputStream(filein);
+            return (ChefBase) inputObjStream.readObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -1,4 +1,7 @@
-package control;
+package factories;
+
+import control.ChefLoginController;
+import control.LoginController;
 
 public class ChefLoginControllerFactory {
 

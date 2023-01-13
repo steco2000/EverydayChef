@@ -1,4 +1,4 @@
-package control;
+package beans;
 
 import model.*;
 
@@ -39,11 +39,8 @@ public class InventoryTableDataBean extends InventoryObserver {
     }
 
     public static InventoryTableDataBean getSingletonInstance(){
-        if(singletonInstance == null){
-            singletonInstance = new InventoryTableDataBean();
-            return singletonInstance;
-        }
-        else return singletonInstance;
+        if(singletonInstance == null) singletonInstance = new InventoryTableDataBean();
+        return singletonInstance;
     }
 
 }

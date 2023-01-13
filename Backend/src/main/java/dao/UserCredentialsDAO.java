@@ -1,6 +1,8 @@
-package model;
+package dao;
 
 import control.LoginController;
+import model.UserCredBase;
+import model.UserCredentials;
 
 import java.io.*;
 

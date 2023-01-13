@@ -1,61 +1,49 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class Ingredient implements IngredientBase, Serializable {
+public class Ingredient implements RecipeIngredient, Serializable {
 
-    private String name;
-    private double quantity;
-    private String measureUnit;
-    private Date expirationDate;
-    private String notes;
+    protected String name;
+    protected double quantity;
+    protected String measureUnit;
 
-    public Ingredient(String name, double quantity, String measureUnit, Date expirationDate, String notes){
+    public Ingredient(){
+    }
+
+    public Ingredient(String name, double quantity, String measureUnit){
         this.name = name;
         this.quantity = quantity;
         this.measureUnit = measureUnit;
-        this.expirationDate = expirationDate;
-        this.notes = notes;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public double getQuantity() {
         return quantity;
     }
 
+    @Override
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
+    @Override
     public String getMeasureUnit() {
         return measureUnit;
     }
 
+    @Override
     public void setMeasureUnit(String measureUnit) {
         this.measureUnit = measureUnit;
-    }
-
-    public Date getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }

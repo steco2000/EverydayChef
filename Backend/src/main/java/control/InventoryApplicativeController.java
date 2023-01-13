@@ -1,5 +1,8 @@
 package control;
 
+import beans.IngredientBean;
+import dao.InventoryDAO;
+import factories.IngredientFactory;
 import model.*;
 
 import java.io.IOException;

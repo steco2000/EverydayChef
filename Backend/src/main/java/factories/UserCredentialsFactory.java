@@ -1,4 +1,7 @@
-package model;
+package factories;
+
+import model.UserCredBase;
+import model.UserCredentials;
 
 public class UserCredentialsFactory {
 

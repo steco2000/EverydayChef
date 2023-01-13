@@ -1,4 +1,8 @@
-package model;
+package factories;
+
+import model.Chef;
+import model.ChefBase;
+import dao.ChefDAO;
 
 import java.io.IOException;
 

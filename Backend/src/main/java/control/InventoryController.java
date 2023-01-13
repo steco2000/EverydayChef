@@ -1,5 +1,7 @@
 package control;
 
+import beans.IngredientBean;
+
 public interface InventoryController {
 
     boolean addIngredient(IngredientBean ingredient);

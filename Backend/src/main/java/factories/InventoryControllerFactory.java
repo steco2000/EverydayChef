@@ -1,4 +1,7 @@
-package control;
+package factories;
+
+import control.InventoryApplicativeController;
+import control.InventoryController;
 
 public class InventoryControllerFactory {
 

@@ -1,7 +1,11 @@
-package model;
+package dao;
 
-import control.InventoryTableDataBean;
+import beans.InventoryTableDataBean;
 import control.LoginController;
+import factories.InventoryFactory;
+import model.Inventory;
+import model.InventoryBase;
+import model.UserCredentials;
 
 import java.io.*;
 

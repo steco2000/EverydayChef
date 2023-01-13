@@ -1,4 +1,7 @@
-package model;
+package factories;
+
+import model.Inventory;
+import model.UserCredentials;
 
 public class InventoryFactory {
 

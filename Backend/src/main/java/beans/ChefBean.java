@@ -1,4 +1,4 @@
-package control;
+package beans;
 
 import java.lang.reflect.MalformedParametersException;
 import java.text.DateFormat;

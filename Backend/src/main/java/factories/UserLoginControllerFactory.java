@@ -1,4 +1,7 @@
-package control;
+package factories;
+
+import control.LoginController;
+import control.UserLoginController;
 
 public class UserLoginControllerFactory {
 

@@ -1,5 +1,11 @@
 package control;
 
+import beans.ChefBean;
+import beans.UserCredBean;
+import dao.ChefDAO;
+import dao.UserCredentialsDAO;
+import factories.ChefFactory;
+import factories.UserCredentialsFactory;
 import model.*;
 
 import java.io.EOFException;
@@ -63,10 +69,7 @@ public class LoginController implements UserLoginController, ChefLoginController
     @Override
     public boolean attemptUserLogin(UserCredBean credentials) {
         UserCredentialsDAO dao = new UserCredentialsDAO();
-        if(dao.credentialsAreCorrect(credentials.getUsername(),credentials.getPassword())){
-            return true;
-        }
-        return false;
+        return dao.credentialsAreCorrect(credentials.getUsername(),credentials.getPassword());
     }
 
     @Override

@@ -1,8 +1,8 @@
 package graphic_control;
 
-import control.ChefBean;
+import beans.ChefBean;
 import control.ChefLoginController;
-import control.ChefLoginControllerFactory;
+import factories.ChefLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

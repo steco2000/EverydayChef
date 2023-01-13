@@ -1,14 +1,15 @@
 package graphic_control;
 
-import control.ChefBean;
+import beans.ChefBean;
 import control.ChefLoginController;
-import control.ChefLoginControllerFactory;
+import factories.ChefLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import utilities.AlertBox;
 import view.MainApp;
 
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class ChefLoginGraphicController {
     @FXML
     private CheckBox rememberMeCheckbox;
 
+    private static final String ERROR_BOX_TITLE = "Error";
+
     @FXML
     private void onRegButtonPression() throws IOException {
         ChefRegistrationGraphicController regController = new ChefRegistrationGraphicController();
@@ -38,9 +41,8 @@ public class ChefLoginGraphicController {
         userLoginController.loadUI();
     }
 
-    //TODO: implementazione parte chef da qui
-    /*@FXML
-    private void onLoginButtonPression(){
+    @FXML
+    private void onLoginButtonPression() throws IOException {
         ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
         ChefLoginController controller = factory.createChefLoginController();
 
@@ -48,9 +50,16 @@ public class ChefLoginGraphicController {
         chefCredentials.setUsername(usernameField.getText());
         chefCredentials.setPassword(passField.getText());
 
-        controller.attemptChefLogin(chefCredentials);
+        System.out.println(chefCredentials.getUsername()+" "+chefCredentials.getPassword());
 
-    }*/
+        if(controller.attemptChefLogin(chefCredentials)){
+            ChefHomeGraphicController homeController = new ChefHomeGraphicController();
+            homeController.loadHomeUI();
+        }else{
+            AlertBox.display(ERROR_BOX_TITLE,"Login failed: incorrect credentials");
+        }
+
+    }
 
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("ChefLoginView.fxml"));
