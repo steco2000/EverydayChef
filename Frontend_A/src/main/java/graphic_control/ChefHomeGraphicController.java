@@ -1,6 +1,5 @@
 package graphic_control;
 
-import beans.IngredientBean;
 import beans.RecipeBean;
 import beans.RecipeTableDataBean;
 import control.LoginController;
@@ -63,8 +62,9 @@ public class ChefHomeGraphicController {
     }
 
     @FXML
-    private void onUpdateButtonPression(){
-        //TODO: implementa
+    private void onUpdateButtonPression() throws IOException {
+        RecipeSharingGraphicController controller = new RecipeSharingGraphicController(this);
+        controller.loadUpdateUI(LoginController.getChefLogged().getUsername(), recipeTable.getSelectionModel().getSelectedItem());
     }
 
     @FXML

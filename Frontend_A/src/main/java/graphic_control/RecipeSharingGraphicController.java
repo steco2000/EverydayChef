@@ -3,6 +3,7 @@ package graphic_control;
 import beans.IngredientBean;
 import beans.RecipeBean;
 import beans.RecipeIngredientBean;
+import beans.RecipeTableDataBean;
 import control.LoginController;
 import control.RecipeSharingController;
 import exceptions.RecipeIngredientQuantityException;
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.IngredientBase;
+import model.Recipe;
 import utilities.AlertBox;
 import utilities.ConfirmBox;
 import view.MainApp;
@@ -28,47 +30,40 @@ public class RecipeSharingGraphicController {
 
     @FXML
     private TextField nameField;
-
     @FXML
     private ChoiceBox<String> difficultyBox;
-
     @FXML
     private TextField prepTimeField;
-
     @FXML
     private ChoiceBox<String> timeUnitBox;
-
     @FXML
     private TextField servingsField;
-
     @FXML
     private TextArea preparationArea;
-
     @FXML
     private TextField ingredientNameField;
-
     @FXML
     private TextField ingredientQuantityField;
-
     @FXML
     private ChoiceBox<String> unitBox;
-
     @FXML
     private TableView<RecipeIngredientBean> ingredientTable;
-
     @FXML
     private TableColumn<RecipeIngredientBean, String> ingredientNameColumn;
-
     @FXML
     private TableColumn<RecipeIngredientBean, Double> ingredientQuantityColumn;
-
     @FXML
     private TableColumn<RecipeIngredientBean, String> unitColumn;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button shareButton;
 
     private static final String ERROR_BOX_TITLE = "Error";
     private ObservableList<RecipeIngredientBean> ingredientTableList = FXCollections.observableArrayList();
     private static String chefUsername;
     private ChefHomeGraphicController homeGraphicController;
+    private boolean onUpdateMode = false;
 
     public RecipeSharingGraphicController(ChefHomeGraphicController homeGraphicController){
         this.homeGraphicController = homeGraphicController;
@@ -110,27 +105,55 @@ public class RecipeSharingGraphicController {
 
     @FXML
     private void onShareButtonPression(){
-        RecipeBean newRecipe = new RecipeBean();
-        try{
-            newRecipe.setName(nameField.getText());
-            newRecipe.setChefUsername(chefUsername);
-            newRecipe.setDifficulty(difficultyBox.getValue());
-            Double.parseDouble(prepTimeField.getText());
-            newRecipe.setPreparationTime(prepTimeField.getText()+" "+timeUnitBox.getValue());
-            newRecipe.setServings(servingsField.getText());
-            newRecipe.setPreparationProcedure(preparationArea.getText());
-            List<RecipeIngredientBean> ingredientList = new ArrayList<>();
-            ingredientList.addAll(ingredientTableList);
-            newRecipe.setIngedientList(ingredientList);
-            RecipeSharingControllerFactory factory = new RecipeSharingControllerFactory();
-            RecipeSharingController controller = factory.createRecipeSharingController();
-            controller.shareRecipe(newRecipe);
-            homeGraphicController.loadRecipeUI();
-        }catch(ParseException e){
-            AlertBox.display(ERROR_BOX_TITLE,"Invalid preparation time value.");
-        }catch(IOException e){
-            e.printStackTrace();
+        if(onUpdateMode){
+            //TODO: implementare update da qui
+        }else {
+            RecipeBean newRecipe = new RecipeBean();
+            try {
+                newRecipe.setName(nameField.getText());
+                newRecipe.setChefUsername(chefUsername);
+                newRecipe.setDifficulty(difficultyBox.getValue());
+                Double.parseDouble(prepTimeField.getText());
+                newRecipe.setPreparationTime(prepTimeField.getText() + " " + timeUnitBox.getValue());
+                newRecipe.setServings(servingsField.getText());
+                newRecipe.setPreparationProcedure(preparationArea.getText());
+                List<RecipeIngredientBean> ingredientList = new ArrayList<>();
+                ingredientList.addAll(ingredientTableList);
+                newRecipe.setIngedientList(ingredientList);
+                RecipeSharingControllerFactory factory = new RecipeSharingControllerFactory();
+                RecipeSharingController controller = factory.createRecipeSharingController();
+                controller.shareRecipe(newRecipe);
+                homeGraphicController.loadRecipeUI();
+            } catch (ParseException e) {
+                AlertBox.display(ERROR_BOX_TITLE, "Invalid preparation time value.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @FXML
+    private void onDeleteButtonPression(){
+    }
+
+    public void loadUpdateUI(String username, RecipeBean toUpdate) throws IOException {
+        onUpdateMode = true;
+        this.loadUI(username);
+        deleteButton.setVisible(true);
+        shareButton.setText("Update Recipe");
+        RecipeTableDataBean dataBean = RecipeTableDataBean.getSingletonInstance();
+        RecipeBean recipe = dataBean.getRecipe(toUpdate.getName());
+        nameField.setText(recipe.getName());
+        difficultyBox.setValue(recipe.getDifficulty());
+        String prepTime = recipe.getPreparationTime();
+        int valueEnd = prepTime.indexOf(" ");
+        prepTimeField.setText(prepTime.substring(0,valueEnd));
+        timeUnitBox.setValue(prepTime.substring(valueEnd+1));
+        servingsField.setText(String.valueOf(recipe.getServings()));
+        preparationArea.setText(recipe.getPreparationProcedure());
+        ObservableList<RecipeIngredientBean> observableBeanList = FXCollections.observableArrayList();
+        observableBeanList.addAll(recipe.getIngedientList());
+        ingredientTable.setItems(observableBeanList);
     }
 
     public void loadUI(String username) throws IOException {
@@ -138,6 +161,7 @@ public class RecipeSharingGraphicController {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("ShareRecipeView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
+        deleteButton.setVisible(false);
         difficultyBox.getItems().addAll("Hard","Medium","Easy");
         difficultyBox.setValue("Easy");
         timeUnitBox.getItems().addAll("H","min");
