@@ -28,6 +28,7 @@ public class UserLoginGraphicController {
     private CheckBox rememberMeCheckbox;
 
     private Scene scene;
+    private static final String ERROR_BOX_TITLE = "Login Failed";
 
     @FXML
     private void onLoginButtonPression() throws IOException {
@@ -37,15 +38,21 @@ public class UserLoginGraphicController {
         UserLoginController loginController = controllerFactory.createUserLoginController();
 
         UserCredBean credBean = new UserCredBean();
-        credBean.setUsername(username);
-        credBean.setPassword(password);
-        credBean.setRememberMe(rememberMeCheckbox.isSelected());
+
+        try {
+            credBean.setUsername(username);
+            credBean.setPassword(password);
+            credBean.setRememberMe(rememberMeCheckbox.isSelected());
+        }catch(IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Login failed: incorrect credentials");
+            return;
+        }
 
         if(loginController.attemptUserLogin(credBean)){
             UserHomeGraphicController controller = new UserHomeGraphicController();
             controller.loadUI();
         }else{
-            AlertBox.display("Login Failed","Login failed: incorrect credentials");
+            AlertBox.display(ERROR_BOX_TITLE,"Incorrect credentials");
         }
     }
 

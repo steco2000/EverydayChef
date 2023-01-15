@@ -21,7 +21,7 @@ public class IngredientBean {
     }
 
     public void setName(String name) throws IllegalArgumentException {
-        if(name.length() == 0) throw new IllegalArgumentException();
+        if(name == null || name.length() == 0) throw new IllegalArgumentException();
         this.name = name;
     }
 
@@ -30,7 +30,7 @@ public class IngredientBean {
     }
 
     public void setQuantity(String quantity) throws ParseException, IllegalArgumentException {
-        if(quantity.length() == 0) throw new IllegalArgumentException();
+        if(quantity == null || quantity.length() == 0) throw new IllegalArgumentException();
         try{
             this.quantity = Double.parseDouble(quantity);
         }catch(NumberFormatException e){

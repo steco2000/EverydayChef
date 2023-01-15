@@ -27,7 +27,7 @@ public class ChefBean {
     }
 
     public void setUsername(String username) {
-        if(username.length() == 0) throw new IllegalArgumentException();
+        if(username == null || username.length() == 0) throw new IllegalArgumentException();
         this.username = username;
     }
 
@@ -36,7 +36,7 @@ public class ChefBean {
     }
 
     public void setName(String name) throws IllegalArgumentException{
-        if(name.length() == 0) throw new IllegalArgumentException();
+        if(name == null || name.length() == 0) throw new IllegalArgumentException();
         this.name = name;
     }
 
@@ -45,7 +45,7 @@ public class ChefBean {
     }
 
     public void setSurname(String surname) throws IllegalArgumentException{
-        if(surname.length() == 0) throw new IllegalArgumentException();
+        if(surname == null || surname.length() == 0) throw new IllegalArgumentException();
         this.surname = surname;
     }
 
@@ -82,7 +82,7 @@ public class ChefBean {
     public String getPassword() { return password; }
 
     public void setPassword(String password) {
-        if(password.length() == 0) throw new IllegalArgumentException();
+        if(password == null || password.length() == 0) throw new IllegalArgumentException();
         this.password = password;
     }
 

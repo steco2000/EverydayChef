@@ -1,5 +1,7 @@
 package dao;
 
+import beans.RecipeBean;
+import beans.RecipeIngredientBean;
 import exceptions.ExistingRecipeException;
 import model.Chef;
 import model.Recipe;
@@ -65,6 +67,16 @@ public class RecipeDAO extends RecipeSubject {
         this.notifyObservers();
     }
 
+    public void deleteRecipe(String recipeName) {
+        if(recipeList == null || recipeList.isEmpty()) return;
+        Recipe toRemove = null;
+        for(Recipe r: recipeList){
+            if(r.getName().equals(recipeName)) toRemove = r;
+        }
+        recipeList.remove(toRemove);
+        this.notifyObservers();
+    }
+
     private boolean recipeAlreadyExists(Recipe recipe) {
         try{
             for(Recipe r: recipeList){
@@ -79,4 +91,5 @@ public class RecipeDAO extends RecipeSubject {
     public List<Recipe> getState() {
         return recipeList;
     }
+
 }

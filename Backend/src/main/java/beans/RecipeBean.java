@@ -2,7 +2,6 @@ package beans;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class RecipeBean {
 
@@ -14,11 +13,10 @@ public class RecipeBean {
     private List<RecipeIngredientBean> ingedientList;
     private String preparationProcedure;
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name; }
 
-    public void setName(String name) {
+    public void setName(String name) throws IllegalArgumentException{
+        if(name == null || name.length() == 0) throw new IllegalArgumentException();
         this.name = name;
     }
 
@@ -42,7 +40,7 @@ public class RecipeBean {
         return preparationTime;
     }
 
-    public void setPreparationTime(String preparationTime) {
+    public void setPreparationTime(String preparationTime) throws ParseException {
         this.preparationTime = preparationTime;
     }
 

@@ -6,8 +6,10 @@ import beans.RecipeIngredientBean;
 import beans.RecipeTableDataBean;
 import control.LoginController;
 import control.RecipeSharingController;
+import control.RecipeUpdadingController;
 import exceptions.RecipeIngredientQuantityException;
 import factories.RecipeSharingControllerFactory;
+import factories.RecipeUpdatingControllerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -64,6 +66,7 @@ public class RecipeSharingGraphicController {
     private static String chefUsername;
     private ChefHomeGraphicController homeGraphicController;
     private boolean onUpdateMode = false;
+    private String toUpdateName;
 
     public RecipeSharingGraphicController(ChefHomeGraphicController homeGraphicController){
         this.homeGraphicController = homeGraphicController;
@@ -84,11 +87,13 @@ public class RecipeSharingGraphicController {
             newIngredient.setQuantity(ingredientQuantityField.getText());
         } catch (ParseException e) {
             AlertBox.display(ERROR_BOX_TITLE,"Invalid quantity.");
+            return;
         } catch (RecipeIngredientQuantityException e){
             boolean answer = ConfirmBox.display(newIngredient.getName(), "Are you sure that you want to save the ingredient \""+newIngredient.getName()+"\" without a specified quantity?");
             if(!answer) return;
         } catch(IllegalArgumentException e){
             AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing.");
+            return;
         }
         ingredientTableList.add(newIngredient);
     }
@@ -104,36 +109,61 @@ public class RecipeSharingGraphicController {
     }
 
     @FXML
-    private void onShareButtonPression(){
+    private void onShareButtonPression() throws IOException {
+        if(ingredientTableList.isEmpty()){
+            AlertBox.display(ERROR_BOX_TITLE,"A recipe must have at least one ingredient.");
+            return;
+        }
+        RecipeBean updates = this.getRecipeData();
+        if(updates == null){
+            return;
+        }
         if(onUpdateMode){
-            //TODO: implementare update da qui
+            RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
+            RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
+            updadingController.updateRecipe(toUpdateName,updates);
+            toUpdateName = null;
+            homeGraphicController.loadRecipeUI();
         }else {
-            RecipeBean newRecipe = new RecipeBean();
-            try {
-                newRecipe.setName(nameField.getText());
-                newRecipe.setChefUsername(chefUsername);
-                newRecipe.setDifficulty(difficultyBox.getValue());
-                Double.parseDouble(prepTimeField.getText());
-                newRecipe.setPreparationTime(prepTimeField.getText() + " " + timeUnitBox.getValue());
-                newRecipe.setServings(servingsField.getText());
-                newRecipe.setPreparationProcedure(preparationArea.getText());
-                List<RecipeIngredientBean> ingredientList = new ArrayList<>();
-                ingredientList.addAll(ingredientTableList);
-                newRecipe.setIngedientList(ingredientList);
-                RecipeSharingControllerFactory factory = new RecipeSharingControllerFactory();
-                RecipeSharingController controller = factory.createRecipeSharingController();
-                controller.shareRecipe(newRecipe);
-                homeGraphicController.loadRecipeUI();
-            } catch (ParseException e) {
-                AlertBox.display(ERROR_BOX_TITLE, "Invalid preparation time value.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            RecipeSharingControllerFactory factory = new RecipeSharingControllerFactory();
+            RecipeSharingController controller = factory.createRecipeSharingController();
+            controller.shareRecipe(updates);
+            homeGraphicController.loadRecipeUI();
         }
     }
 
     @FXML
-    private void onDeleteButtonPression(){
+    private void onDeleteButtonPression() throws IOException {
+        if(ConfirmBox.display("Warning","Are you sure you want to delete this recipe?")){
+            RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
+            RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
+            updadingController.deleteRecipe(toUpdateName);
+            toUpdateName = null;
+            homeGraphicController.loadRecipeUI();
+        }
+    }
+
+    private RecipeBean getRecipeData(){
+        RecipeBean newRecipe = new RecipeBean();
+        try{
+            newRecipe.setName(nameField.getText());
+            newRecipe.setChefUsername(chefUsername);
+            newRecipe.setDifficulty(difficultyBox.getValue());
+            Double.parseDouble(prepTimeField.getText());
+            newRecipe.setPreparationTime(prepTimeField.getText() + " " + timeUnitBox.getValue());
+            newRecipe.setServings(servingsField.getText());
+            newRecipe.setPreparationProcedure(preparationArea.getText());
+            List<RecipeIngredientBean> ingredientList = new ArrayList<>();
+            ingredientList.addAll(ingredientTableList);
+            newRecipe.setIngedientList(ingredientList);
+            return newRecipe;
+        } catch (ParseException | NumberFormatException e) {
+            AlertBox.display(ERROR_BOX_TITLE, "Some values in fields are invalid.");
+            return null;
+        } catch(IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE, "Some required fields are missing.");
+            return null;
+        }
     }
 
     public void loadUpdateUI(String username, RecipeBean toUpdate) throws IOException {
@@ -142,7 +172,8 @@ public class RecipeSharingGraphicController {
         deleteButton.setVisible(true);
         shareButton.setText("Update Recipe");
         RecipeTableDataBean dataBean = RecipeTableDataBean.getSingletonInstance();
-        RecipeBean recipe = dataBean.getRecipe(toUpdate.getName());
+        toUpdateName = toUpdate.getName();
+        RecipeBean recipe = dataBean.getRecipe(toUpdateName);
         nameField.setText(recipe.getName());
         difficultyBox.setValue(recipe.getDifficulty());
         String prepTime = recipe.getPreparationTime();
@@ -151,9 +182,9 @@ public class RecipeSharingGraphicController {
         timeUnitBox.setValue(prepTime.substring(valueEnd+1));
         servingsField.setText(String.valueOf(recipe.getServings()));
         preparationArea.setText(recipe.getPreparationProcedure());
-        ObservableList<RecipeIngredientBean> observableBeanList = FXCollections.observableArrayList();
-        observableBeanList.addAll(recipe.getIngedientList());
-        ingredientTable.setItems(observableBeanList);
+        ingredientTableList = FXCollections.observableArrayList();
+        ingredientTableList.addAll(recipe.getIngedientList());
+        ingredientTable.setItems(ingredientTableList);
     }
 
     public void loadUI(String username) throws IOException {

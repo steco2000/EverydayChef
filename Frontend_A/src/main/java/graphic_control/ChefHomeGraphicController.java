@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import utilities.AlertBox;
 import view.MainApp;
 import java.io.IOException;
 import java.util.List;
@@ -63,6 +64,10 @@ public class ChefHomeGraphicController {
 
     @FXML
     private void onUpdateButtonPression() throws IOException {
+        if(recipeTable.getSelectionModel().getSelectedItem() == null){
+            AlertBox.display(ERROR_BOX_TITLE,"No recipe selected.");
+            return;
+        }
         RecipeSharingGraphicController controller = new RecipeSharingGraphicController(this);
         controller.loadUpdateUI(LoginController.getChefLogged().getUsername(), recipeTable.getSelectionModel().getSelectedItem());
     }

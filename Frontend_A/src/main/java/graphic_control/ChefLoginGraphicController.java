@@ -27,7 +27,7 @@ public class ChefLoginGraphicController {
     @FXML
     private CheckBox rememberMeCheckbox;
 
-    private static final String ERROR_BOX_TITLE = "Error";
+    private static final String ERROR_BOX_TITLE = "Login Failed";
 
     @FXML
     private void onRegButtonPression() throws IOException {
@@ -47,8 +47,14 @@ public class ChefLoginGraphicController {
         ChefLoginController controller = factory.createChefLoginController();
 
         ChefBean chefCredentials = new ChefBean();
-        chefCredentials.setUsername(usernameField.getText());
-        chefCredentials.setPassword(passField.getText());
+
+        try {
+            chefCredentials.setUsername(usernameField.getText());
+            chefCredentials.setPassword(passField.getText());
+        }catch(IllegalArgumentException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Incorrect credentials.");
+            return;
+        }
 
         System.out.println(chefCredentials.getUsername()+" "+chefCredentials.getPassword());
 
@@ -56,7 +62,7 @@ public class ChefLoginGraphicController {
             ChefHomeGraphicController homeController = new ChefHomeGraphicController();
             homeController.loadHomeUI();
         }else{
-            AlertBox.display(ERROR_BOX_TITLE,"Login failed: incorrect credentials");
+            AlertBox.display(ERROR_BOX_TITLE,"Incorrect credentials");
         }
 
     }

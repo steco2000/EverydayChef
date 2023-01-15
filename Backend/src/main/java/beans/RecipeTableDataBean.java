@@ -37,7 +37,10 @@ public class RecipeTableDataBean extends RecipeObserver {
         RecipeBean beanToReturn = new RecipeBean();
         beanToReturn.setName(toReturn.getName());
         beanToReturn.setDifficulty(toReturn.getDifficulty());
-        beanToReturn.setPreparationTime(toReturn.getPreparationTime());
+        try {
+            beanToReturn.setPreparationTime(toReturn.getPreparationTime());
+        } catch (ParseException ignored) {
+        }
 
         try {
             beanToReturn.setServings(String.valueOf(toReturn.getServings()));

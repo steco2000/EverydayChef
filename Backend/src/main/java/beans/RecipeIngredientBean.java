@@ -13,7 +13,7 @@ public class RecipeIngredientBean {
     private String measureUnit;
 
     public String getName() throws IllegalArgumentException{
-        if(name.length() == 0) throw new IllegalArgumentException();
+        if(name == null || name.length() == 0) throw new IllegalArgumentException();
         return name;
     }
 

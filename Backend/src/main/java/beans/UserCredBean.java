@@ -16,14 +16,14 @@ public class UserCredBean {
     }
 
     public void setUsername(String username) throws IllegalArgumentException{
-        if(username.length() == 0) throw new IllegalArgumentException();
+        if(username == null || username.length() == 0) throw new IllegalArgumentException();
         this.username = username;
     }
 
     public String getPassword() { return password; }
 
     public void setPassword(String password) throws IllegalArgumentException{
-        if(password.length() == 0) throw new IllegalArgumentException();
+        if(password == null || password.length() == 0) throw new IllegalArgumentException();
         this.password = password;
     }
 
