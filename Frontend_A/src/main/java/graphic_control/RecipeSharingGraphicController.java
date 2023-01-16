@@ -155,7 +155,7 @@ public class RecipeSharingGraphicController {
             newRecipe.setPreparationProcedure(preparationArea.getText());
             List<RecipeIngredientBean> ingredientList = new ArrayList<>();
             ingredientList.addAll(ingredientTableList);
-            newRecipe.setIngedientList(ingredientList);
+            newRecipe.setIngredientList(ingredientList);
             return newRecipe;
         } catch (ParseException | NumberFormatException e) {
             AlertBox.display(ERROR_BOX_TITLE, "Some values in fields are invalid.");
@@ -183,7 +183,7 @@ public class RecipeSharingGraphicController {
         servingsField.setText(String.valueOf(recipe.getServings()));
         preparationArea.setText(recipe.getPreparationProcedure());
         ingredientTableList = FXCollections.observableArrayList();
-        ingredientTableList.addAll(recipe.getIngedientList());
+        ingredientTableList.addAll(recipe.getIngredientList());
         ingredientTable.setItems(ingredientTableList);
     }
 

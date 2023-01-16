@@ -43,7 +43,7 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
 
         RecipeIngredientFactory ingredientFactory = new RecipeIngredientFactory();
         List<RecipeIngredient> ingredientList = new ArrayList<>();
-        for(RecipeIngredientBean i: recipe.getIngedientList()){
+        for(RecipeIngredientBean i: recipe.getIngredientList()){
             RecipeIngredient ingredient = ingredientFactory.createRecipeIngredient(i.getName(),i.getQuantity(),i.getMeasureUnit());
             ingredientList.add(ingredient);
         }

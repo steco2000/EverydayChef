@@ -1,7 +1,5 @@
 package dao;
 
-import beans.RecipeBean;
-import beans.RecipeIngredientBean;
 import exceptions.ExistingRecipeException;
 import model.Chef;
 import model.Recipe;
@@ -73,6 +71,7 @@ public class RecipeDAO extends RecipeSubject {
         for(Recipe r: recipeList){
             if(r.getName().equals(recipeName)) toRemove = r;
         }
+        chef.removeRecipe(toRemove);
         recipeList.remove(toRemove);
         this.notifyObservers();
     }

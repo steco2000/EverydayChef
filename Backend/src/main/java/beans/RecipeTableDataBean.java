@@ -26,10 +26,10 @@ public class RecipeTableDataBean extends RecipeObserver {
         return recipeBeanList;
     }
 
-    public RecipeBean getRecipe(String name){
+    public RecipeBean getRecipe(String name) {
         Recipe toReturn = null;
-        for(Recipe r: recipeList){
-            if(r.getName().equals(name)){
+        for (Recipe r : recipeList) {
+            if (r.getName().equals(name)) {
                 toReturn = r;
                 break;
             }
@@ -44,33 +44,35 @@ public class RecipeTableDataBean extends RecipeObserver {
 
         try {
             beanToReturn.setServings(String.valueOf(toReturn.getServings()));
-        } catch (ParseException ignored){}
+        } catch (ParseException ignored) {
+        }
 
         List<RecipeIngredientBean> ingredientBeanList = new ArrayList<>();
-        for(RecipeIngredient i: toReturn.getIngredientList()){
+        for (RecipeIngredient i : toReturn.getIngredientList()) {
             RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
             ingredientBean.setName(i.getName());
             try {
                 ingredientBean.setQuantity(String.valueOf(i.getQuantity()));
-            } catch (ParseException | RecipeIngredientQuantityException ignored){}
+            } catch (ParseException | RecipeIngredientQuantityException ignored) {
+            }
             ingredientBean.setMeasureUnit(i.getMeasureUnit());
             ingredientBeanList.add(ingredientBean);
         }
 
-        beanToReturn.setIngedientList(ingredientBeanList);
+        beanToReturn.setIngredientList(ingredientBeanList);
         beanToReturn.setPreparationProcedure(toReturn.getPreparationProcedure());
         return beanToReturn;
     }
 
-    public void setSubject(RecipeSubject subject){
-        this.subject = (RecipeDAO) subject;
-        this.recipeList = this.subject.getState();
-    }
-
-
     public static RecipeTableDataBean getSingletonInstance(){
         if(singletonInstance == null) singletonInstance = new RecipeTableDataBean();
         return singletonInstance;
+    }
+
+    @Override
+    public void setSubject(RecipeSubject subject){
+        this.subject = (RecipeDAO) subject;
+        this.recipeList = this.subject.getState();
     }
 
     @Override

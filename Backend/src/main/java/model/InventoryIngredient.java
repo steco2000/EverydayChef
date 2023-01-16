@@ -16,10 +16,6 @@ public class InventoryIngredient extends Ingredient implements IngredientBase, S
         this.notes = notes;
     }
 
-    public void setMeasureUnit(String measureUnit) {
-        this.measureUnit = measureUnit;
-    }
-
     public Date getExpirationDate() {
         return expirationDate;
     }

@@ -36,22 +36,6 @@ public class Chef implements ChefBase, Serializable {
         this.surname = surname;
     }
 
-    public List<Recipe> getRecipes() {
-        return this.recipeList;
-    }
-
-    public boolean addRecipe(Recipe recipe){
-        for(Recipe r: recipeList){
-            if(recipe.getName().equals(r.getName())) return false;
-        }
-        this.recipeList.add(recipe);
-        return true;
-    }
-
-    public void removeRecipe(Recipe recipe){
-        this.recipeList.remove(recipe);
-    }
-
     @Override
     public String getSurname() {
         return this.surname;
@@ -113,4 +97,21 @@ public class Chef implements ChefBase, Serializable {
     }
 
     public void setId(int id){ this.id = id; }
+
+    public List<Recipe> getRecipes() {
+        return this.recipeList;
+    }
+
+    public boolean addRecipe(Recipe recipe){
+        for(Recipe r: recipeList){
+            if(recipe.getName().equals(r.getName())) return false;
+        }
+        this.recipeList.add(recipe);
+        return true;
+    }
+
+    public void removeRecipe(Recipe recipe){
+        this.recipeList.remove(recipe);
+    }
+
 }

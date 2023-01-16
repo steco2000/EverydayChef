@@ -10,7 +10,7 @@ public class RecipeBean {
     private String difficulty;
     private String preparationTime;
     private int servings;
-    private List<RecipeIngredientBean> ingedientList;
+    private List<RecipeIngredientBean> ingredientList;
     private String preparationProcedure;
 
     public String getName() {return name; }
@@ -52,12 +52,12 @@ public class RecipeBean {
         this.servings = Integer.parseInt(servings);
     }
 
-    public List<RecipeIngredientBean> getIngedientList() {
-        return ingedientList;
+    public List<RecipeIngredientBean> getIngredientList() {
+        return ingredientList;
     }
 
-    public void setIngedientList(List<RecipeIngredientBean> ingedientList) {
-        this.ingedientList = ingedientList;
+    public void setIngredientList(List<RecipeIngredientBean> ingredientList) {
+        this.ingredientList = ingredientList;
     }
 
     public String getPreparationProcedure() {
