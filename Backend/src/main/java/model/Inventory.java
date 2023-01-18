@@ -7,7 +7,7 @@ import java.util.List;
 public class Inventory extends InventorySubject implements InventoryBase, Serializable  {
 
     private UserCredentials user;
-    private List<IngredientBase> ingredientList;
+    private List<InventoryIngredient> ingredientList;
 
     public Inventory(UserCredentials user){
         this.ingredientList = new ArrayList<>();
@@ -25,7 +25,7 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
 
     @Override
     public void addIngredient(IngredientBase ingredient){
-        this.ingredientList.add(ingredient);
+        this.ingredientList.add((InventoryIngredient) ingredient);
         this.notifyObservers();
     }
 
@@ -54,7 +54,12 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
 
     @Override
     public List<IngredientBase> getState(){
-        return ingredientList;
+        List<IngredientBase> state = new ArrayList<>();
+        state.addAll(ingredientList);
+        return state;
     }
 
+    public List<InventoryIngredient> getIngredientList() {
+        return ingredientList;
+    }
 }

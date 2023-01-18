@@ -20,9 +20,20 @@ public class IngredientBean {
         return name;
     }
 
+    private String toTitleCase(String givenName) {
+        String[] arr = givenName.split(" ");
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                    .append(arr[i].substring(1)).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
     public void setName(String name) throws IllegalArgumentException {
         if(name == null || name.length() == 0) throw new IllegalArgumentException();
-        this.name = name;
+        this.name = toTitleCase(name);
     }
 
     public double getQuantity() {

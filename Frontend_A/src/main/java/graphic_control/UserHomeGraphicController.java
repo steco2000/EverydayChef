@@ -22,8 +22,16 @@ public class UserHomeGraphicController {
     }
 
     @FXML
-    private void onRecipeBrowsingButtonPression(){
-        //TODO: implementa
+    private void onRecipeBrowsingButtonPression() throws IOException {
+        BrowseRecipesGraphicController browseController = new BrowseRecipesGraphicController();
+        browseController.loadUI();
+    }
+
+    @FXML
+    private void onLogOutButtonPression() throws IOException {
+        System.gc();
+        UserLoginGraphicController controller = new UserLoginGraphicController();
+        controller.loadUI();
     }
 
     public void loadUI() throws IOException {

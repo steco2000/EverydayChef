@@ -5,6 +5,7 @@ import control.LoginController;
 import factories.InventoryFactory;
 import model.Inventory;
 import model.InventoryBase;
+import model.UserCredBase;
 import model.UserCredentials;
 
 import java.io.*;
@@ -12,14 +13,18 @@ import java.io.*;
 public class InventoryDAO {
 
     private String inventoryFileName;
+    private static UserCredentials user;
 
     public InventoryDAO(){
         inventoryFileName = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";
+        user = (UserCredentials) LoginController.getUserLogged();
     }
 
     public void saveInventory(InventoryBase inventory) throws IOException {
         FileOutputStream fileout = new FileOutputStream(inventoryFileName);
         ObjectOutputStream out = new ObjectOutputStream(fileout);
+
+        user.setIngredientsInventory((Inventory) inventory);
 
         out.writeObject(inventory);
         out.close();
@@ -29,7 +34,7 @@ public class InventoryDAO {
     public InventoryBase retrieveInventory(){
         Inventory currInv;
         FileInputStream filein = null;
-        String username = LoginController.getUserLogged().getUsername();
+        String username = user.getUsername();
 
         try{
             filein = new FileInputStream(inventoryFileName);

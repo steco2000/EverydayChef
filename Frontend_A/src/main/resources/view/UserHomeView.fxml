@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
@@ -24,6 +25,8 @@
                                       <Image url="@../img/everydaychef-high-resolution-color-logo-removebg-preview.png" />
                                   </image>
                               </ImageView>
+                        <Region prefHeight="159.0" prefWidth="1016.0" />
+                        <Button mnemonicParsing="false" onAction="#onLogOutButtonPression" prefHeight="25.0" prefWidth="59.0" text="Exit" />
                      </items>
                   </ToolBar>
                   <Label fx:id="welcomeLabel" layoutX="704.0" layoutY="308.0" prefHeight="316.0" prefWidth="453.0" text="Welcome To EverydayChef" textAlignment="CENTER" wrapText="true">
@@ -39,7 +42,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </Button>
-                  <Button layoutX="136.0" layoutY="498.0" mnemonicParsing="false" prefHeight="126.0" prefWidth="323.0" text="Browse Recipes">
+                  <Button layoutX="136.0" layoutY="498.0" mnemonicParsing="false" onAction="#onRecipeBrowsingButtonPression" prefHeight="126.0" prefWidth="323.0" text="Browse Recipes">
                      <font>
                         <Font size="30.0" />
                      </font>

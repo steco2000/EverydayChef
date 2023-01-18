@@ -97,6 +97,13 @@ public class ChefHomeGraphicController {
         //TODO: implementa
     }
 
+    @FXML
+    private void onLogOutButtonPression() throws IOException {
+        System.gc();
+        ChefLoginGraphicController controller = new ChefLoginGraphicController();
+        controller.loadUI();
+    }
+
     public void loadRecipeUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("RecipeManagmentView.fxml"));
         uiLoader.setController(this);
