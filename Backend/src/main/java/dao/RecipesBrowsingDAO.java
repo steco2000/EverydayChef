@@ -10,11 +10,11 @@ import java.util.List;
 
 public class RecipesBrowsingDAO {
 
-    private static final String recipeFileNamePrefix = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\recipes\\recipes_";
+    private static final String RECIPE_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\recipes\\recipes_";
 
     public List<RecipeBase> getRecipeList(int chefId) {
         try {
-            FileInputStream filein = new FileInputStream(recipeFileNamePrefix+chefId+".ser");
+            FileInputStream filein = new FileInputStream(RECIPE_FILE_NAME+chefId+".ser");
             ObjectInputStream objectInputStream = new ObjectInputStream(filein);
             return (List<RecipeBase>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
