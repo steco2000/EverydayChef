@@ -37,15 +37,9 @@ public class RecipeTableDataBean extends RecipeObserver {
         RecipeBean beanToReturn = new RecipeBean();
         beanToReturn.setName(toReturn.getName());
         beanToReturn.setDifficulty(toReturn.getDifficulty());
-        try {
-            beanToReturn.setPreparationTime(toReturn.getPreparationTime());
-        } catch (ParseException ignored) {
-        }
+        beanToReturn.setPreparationTime(toReturn.getPreparationTime());
+        beanToReturn.setServings(String.valueOf(toReturn.getServings()));
 
-        try {
-            beanToReturn.setServings(String.valueOf(toReturn.getServings()));
-        } catch (ParseException ignored) {
-        }
 
         List<RecipeIngredientBean> ingredientBeanList = new ArrayList<>();
         for (RecipeIngredient i : toReturn.getIngredientList()) {
@@ -53,7 +47,8 @@ public class RecipeTableDataBean extends RecipeObserver {
             ingredientBean.setName(i.getName());
             try {
                 ingredientBean.setQuantity(String.valueOf(i.getQuantity()));
-            } catch (ParseException | RecipeIngredientQuantityException ignored) {
+            } catch (ParseException | RecipeIngredientQuantityException ignored){
+                "".isEmpty(); //eccezione ignorata
             }
             ingredientBean.setMeasureUnit(i.getMeasureUnit());
             ingredientBeanList.add(ingredientBean);

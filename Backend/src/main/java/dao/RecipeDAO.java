@@ -20,24 +20,28 @@ public class RecipeDAO extends RecipeSubject {
     }
 
     public RecipeDAO(String chefUsername){
-        ChefDAO chefDAO = new ChefDAO();
-        chef = (Chef) chefDAO.retrieveChef(chefUsername);
+        if(chef == null) this.setChef(chefUsername);
         try {
-            this.updateState(chefUsername);
-        } catch (IOException e) {
-            e.printStackTrace();
+            updateState(chefUsername);
+        } catch (IOException ignored) {
+            "".isEmpty(); //eccezione ignorata
         }
     }
 
-    private void updateState(String chefUsername) throws IOException {
+    private void setChef(String chefUsername) {
+        ChefDAO chefDAO = new ChefDAO();
+        chef = (Chef) chefDAO.retrieveChef(chefUsername);
+    }
+
+    private static void updateState(String chefUsername) throws IOException {
         ChefDAO chefDao = new ChefDAO();
         Chef thisChef = (Chef) chefDao.retrieveChef(chefUsername);
         try {
             FileInputStream filein = new FileInputStream(RECIPE_FILE_NAME+thisChef.getId()+".ser");
             ObjectInputStream inputStream = new ObjectInputStream(filein);
             recipeList = (ArrayList<Recipe>) inputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            return;
+        } catch (ClassNotFoundException ignored) {
+            "".isEmpty(); //eccezione ignorata
         }catch(FileNotFoundException e){
             recipeList = new ArrayList<>();
         }
@@ -58,7 +62,7 @@ public class RecipeDAO extends RecipeSubject {
         fileout.close();
     }
 
-    public void saveRecipe(RecipeBase recipe) throws IOException, ExistingRecipeException {
+    public void saveRecipe(RecipeBase recipe) throws ExistingRecipeException {
         if(recipeAlreadyExists((Recipe) recipe)) throw new ExistingRecipeException();
         recipeList.add((Recipe) recipe);
         chef.addRecipe((Recipe) recipe);

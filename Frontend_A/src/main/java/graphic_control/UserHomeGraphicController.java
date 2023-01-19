@@ -14,7 +14,6 @@ public class UserHomeGraphicController {
     @FXML
     private Label welcomeLabel;
 
-    //TODO: eccezioni
     @FXML
     private void onInventoryButtonPression() throws IOException {
         InventoryGraphicController controller = new InventoryGraphicController();
@@ -29,7 +28,6 @@ public class UserHomeGraphicController {
 
     @FXML
     private void onLogOutButtonPression() throws IOException {
-        System.gc();
         UserLoginGraphicController controller = new UserLoginGraphicController();
         controller.loadUI();
     }

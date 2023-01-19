@@ -22,11 +22,11 @@ public class IngredientBean {
 
     private String toTitleCase(String givenName) {
         String[] arr = givenName.split(" ");
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(Character.toUpperCase(arr[i].charAt(0)))
-                    .append(arr[i].substring(1)).append(" ");
+        for (String s : arr) {
+            sb.append(Character.toUpperCase(s.charAt(0)))
+                    .append(s.substring(1)).append(" ");
         }
         return sb.toString().trim();
     }
@@ -76,9 +76,7 @@ public class IngredientBean {
     public void setExpirationDate(String expirationDate) throws ParseException {
         Date javaDate;
         this.stringExpDate = expirationDate;
-        if(expirationDate.trim().equals("")){
-        }
-        else{
+        if(!expirationDate.trim().equals("")){
             SimpleDateFormat sdfrmt = new SimpleDateFormat("dd/MM/yyyy");
             sdfrmt.setLenient(false);
             javaDate = sdfrmt.parse(expirationDate);

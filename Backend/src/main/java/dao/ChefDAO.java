@@ -42,13 +42,9 @@ public class ChefDAO {
                 return false;
             }
             return true;
-        }catch(ClassNotFoundException e){
-            e.printStackTrace();
-            return false;
         } catch (FileNotFoundException e) {
             return true;
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch(ClassNotFoundException | IOException e){
             return false;
         }
     }
@@ -77,21 +73,13 @@ public class ChefDAO {
             filein = new FileInputStream(CHEF_FILE_NAME + username + ".ser");
             ObjectInputStream inputObjStream = new ObjectInputStream(filein);
             currChef = (Chef) inputObjStream.readObject();
-            System.out.println("Inserite: "+username+" "+password);
-            System.out.println("Lette da file: "+currChef.getUsername()+" "+currChef.getPassword());
             if ((currChef.getPassword().equals(password)) && (currChef.getUsername().equals(username))) {
                 LoginController.setChefLogged(currChef);
                 filein.close();
                 return true;
             }
             return false;
-        }catch (FileNotFoundException e) {
-            return false;
-        } catch (EOFException e) {
-            return false;
-        } catch (ClassNotFoundException e) {
-            return false;
-        } catch (IOException e) {
+        } catch (ClassNotFoundException | IOException e) {
             return false;
         }
     }

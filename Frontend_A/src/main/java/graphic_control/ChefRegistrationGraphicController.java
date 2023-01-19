@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
 import java.text.ParseException;
 
-//TODO: controlla eccezioni
-
 public class ChefRegistrationGraphicController {
 
     @FXML

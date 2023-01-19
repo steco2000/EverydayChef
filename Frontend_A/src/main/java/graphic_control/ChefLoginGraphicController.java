@@ -14,8 +14,6 @@ import view.MainApp;
 
 import java.io.IOException;
 
-//TODO: eccezioni
-
 public class ChefLoginGraphicController {
 
     @FXML
@@ -55,8 +53,6 @@ public class ChefLoginGraphicController {
             AlertBox.display(ERROR_BOX_TITLE,"Incorrect credentials.");
             return;
         }
-
-        System.out.println(chefCredentials.getUsername()+" "+chefCredentials.getPassword());
 
         if(controller.attemptChefLogin(chefCredentials)){
             ChefHomeGraphicController homeController = new ChefHomeGraphicController();

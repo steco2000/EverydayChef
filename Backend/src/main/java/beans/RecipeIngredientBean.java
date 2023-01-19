@@ -19,11 +19,11 @@ public class RecipeIngredientBean {
 
     private String toTitleCase(String givenName) {
         String[] arr = givenName.split(" ");
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(Character.toUpperCase(arr[i].charAt(0)))
-                    .append(arr[i].substring(1)).append(" ");
+        for (String s : arr) {
+            sb.append(Character.toUpperCase(s.charAt(0)))
+                    .append(s.substring(1)).append(" ");
         }
         return sb.toString().trim();
     }

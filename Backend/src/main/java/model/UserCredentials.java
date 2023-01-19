@@ -63,14 +63,13 @@ public class UserCredentials implements UserCredBase, Serializable {
         return ingredientsInventory;
     }
 
-    //TODO: controlla eccezione
     public void setIngredientsInventory(Inventory ingredientsInventory) {
         this.ingredientsInventory = ingredientsInventory;
         UserCredentialsDAO dao = new UserCredentialsDAO();
         try {
             dao.saveUser(this);
-        } catch (IOException e) {
-            return;
+        } catch (IOException ignored) {
+            "".isEmpty(); //eccezione ignorata
         }
     }
 

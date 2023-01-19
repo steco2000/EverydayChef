@@ -14,8 +14,6 @@ import utilities.AlertBox;
 
 import java.io.IOException;
 
-//TODO: eccezioni
-
 public class UserLoginGraphicController {
 
     @FXML

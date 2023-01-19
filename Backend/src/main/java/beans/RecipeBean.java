@@ -40,7 +40,7 @@ public class RecipeBean {
         return preparationTime;
     }
 
-    public void setPreparationTime(String preparationTime) throws ParseException {
+    public void setPreparationTime(String preparationTime) {
         this.preparationTime = preparationTime;
     }
 
@@ -48,7 +48,7 @@ public class RecipeBean {
         return servings;
     }
 
-    public void setServings(String servings) throws ParseException {
+    public void setServings(String servings) throws NumberFormatException {
         this.servings = Integer.parseInt(servings);
     }
 

@@ -5,15 +5,14 @@ import control.LoginController;
 import factories.InventoryFactory;
 import model.Inventory;
 import model.InventoryBase;
-import model.UserCredBase;
 import model.UserCredentials;
 
 import java.io.*;
 
 public class InventoryDAO {
 
-    private String inventoryFileName;
-    private static UserCredentials user;
+    private final String inventoryFileName;
+    private final UserCredentials user;
 
     public InventoryDAO(){
         inventoryFileName = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";

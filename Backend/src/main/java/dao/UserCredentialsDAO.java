@@ -6,15 +6,13 @@ import model.UserCredentials;
 
 import java.io.*;
 
-//TODO: eccezioni
-
 public class UserCredentialsDAO {
 
     private static final String USERS_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\user_credentials_";
 
     public boolean credentialsAreCorrect(String username, String password) {
         UserCredentials currUser;
-        FileInputStream filein = null;
+        FileInputStream filein;
 
         try {
             filein = new FileInputStream(USERS_FILE_NAME+username+".ser");
@@ -27,18 +25,11 @@ public class UserCredentialsDAO {
                     return true;
                 }
             }
-        } catch (FileNotFoundException e) {
-            return false;
-        } catch (EOFException e) {
-            return false;
-        } catch (ClassNotFoundException e) {
-            return false;
-        } catch (IOException e) {
+        } catch (ClassNotFoundException | IOException e) {
             return false;
         }
     }
 
-        //TODO: controlla eccezione
     public void saveUser(UserCredBase user) throws IOException {
         FileOutputStream fileout = new FileOutputStream(USERS_FILE_NAME+user.getUsername()+".ser");
         ObjectOutputStream out = new ObjectOutputStream(fileout);
@@ -66,17 +57,12 @@ public class UserCredentialsDAO {
             try {
                 filein.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
                 return false;
             }
             return true;
-        }catch(ClassNotFoundException e){
-            e.printStackTrace();
-            return false;
         } catch (FileNotFoundException e) {
             return true;
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch(ClassNotFoundException | IOException e){
             return false;
         }
     }

@@ -29,16 +29,6 @@ public class LoginController implements UserLoginController, ChefLoginController
         return dao.credentialsAreCorrect(credentials.getUsername(),credentials.getPassword());
     }
 
-    private int getChefId(ChefDAO dao) throws IOException, ClassNotFoundException {
-        int id;
-        try{
-            id = dao.getLastId();
-        }catch(EOFException | FileNotFoundException e){
-            id = 0;
-        }
-        return id;
-    }
-
     @Override
     public boolean registerChef(ChefBean chefInfo) {
         ChefDAO dao = new ChefDAO();
@@ -53,7 +43,6 @@ public class LoginController implements UserLoginController, ChefLoginController
                 chef.setUsername(chefInfo.getUsername());
                 chef.setEmail(chefInfo.getEmail());
                 chef.setPassword(chefInfo.getPassword());
-                System.out.println("Register chef use case: username "+chef.getUsername()+", password "+chef.getPassword());
                 dao.saveChef(chef);
                 return true;
             }else{
@@ -74,7 +63,6 @@ public class LoginController implements UserLoginController, ChefLoginController
 
     @Override
     public boolean registerUser(UserCredBean credentials) {
-        //TODO: controlla eccezioni
         UserCredentialsDAO dao = new UserCredentialsDAO();
         try {
             if(dao.userNotExists(credentials.getEmail(),credentials.getUsername())) {
@@ -84,7 +72,6 @@ public class LoginController implements UserLoginController, ChefLoginController
                 return true;
             }else return false;
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
     }

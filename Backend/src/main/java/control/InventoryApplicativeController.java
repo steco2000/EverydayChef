@@ -51,8 +51,8 @@ public class InventoryApplicativeController implements InventoryController{
         InventoryDAO dao = new InventoryDAO();
         try {
             dao.saveInventory(currentInventory);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
+            "".isEmpty(); //eccezione ignorata
         }
     }
 

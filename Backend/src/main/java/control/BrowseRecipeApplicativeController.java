@@ -19,7 +19,6 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
 
     @Override
     public List<RecipeBrowsingTableBean> retrieveSuggestedRecipe() {
-        System.out.println("Retrieving recipes");
         Inventory inventory = this.currentUser.getIngredientsInventory();
         ChefDAO chefDAO = new ChefDAO();
         List<RecipeBase> suggestedRecipes = new ArrayList<>();
@@ -28,7 +27,9 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
         try {
             lastId = chefDAO.getLastId();
         } catch (IOException | ClassNotFoundException ignored) {
+            "".isEmpty(); //eccezione ignorata
         }
+
 
         List<RecipeBase> currentChefRecipeList;
         RecipesBrowsingDAO dao = new RecipesBrowsingDAO();
@@ -36,13 +37,9 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
         for (int i = 1; i < lastId + 1; i++) {
             currentChefRecipeList = dao.getRecipeList(i);
             if (currentChefRecipeList.isEmpty()) continue;
-            System.out.println("Got recipes list from chef with id: "+i);
             for (Ingredient ingr : (inventory.getIngredientList())) {
-                System.out.println("Analyzing "+ingr.getName());
                 for(RecipeBase rec: currentChefRecipeList){
-                    System.out.println("Searching in recipe: "+rec.getName()+" by user "+rec.getChef().getUsername());
                     if(rec.getIngredientList().stream().anyMatch(o -> o.getName().contains(ingr.getName()) || ingr.getName().contains(o.getName()))){
-                        System.out.println("Found: "+ingr.getName()+" in "+rec.getName());
                         suggestedRecipes.add(rec);
                     }
                 }

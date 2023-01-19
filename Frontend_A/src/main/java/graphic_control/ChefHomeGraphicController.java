@@ -19,8 +19,6 @@ import view.MainApp;
 import java.io.IOException;
 import java.util.List;
 
-//TODO: eccezioni
-
 public class ChefHomeGraphicController {
 
     @FXML
@@ -99,7 +97,6 @@ public class ChefHomeGraphicController {
 
     @FXML
     private void onLogOutButtonPression() throws IOException {
-        System.gc();
         ChefLoginGraphicController controller = new ChefLoginGraphicController();
         controller.loadUI();
     }

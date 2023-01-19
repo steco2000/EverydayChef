@@ -4,9 +4,6 @@ import java.lang.reflect.MalformedParametersException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,9 +55,7 @@ public class ChefBean {
 
     public void setBirthDate(String birthDate) throws ParseException {
         Date javaDate;
-        if (birthDate.trim().equals("")) {
-        }
-        else{
+        if (!birthDate.trim().equals("")) {
             SimpleDateFormat sdfrmt = new SimpleDateFormat("dd/MM/yyyy");
             sdfrmt.setLenient(false);
             javaDate = sdfrmt.parse(birthDate);

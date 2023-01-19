@@ -13,8 +13,6 @@ import utilities.AlertBox;
 import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
 
-//TODO: eccezioni
-
 public class UserRegistrationGraphicController {
 
     @FXML

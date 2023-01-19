@@ -62,24 +62,18 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
         int i=1;
         String name = newRecipe.getName();
 
-        retry:
         while(true){
             try {
                 if(i==1){
                     recipeDAO.saveRecipe(newRecipe);
-                    break;
                 }
                 else{
                     newRecipe.setName(name+" "+i);
                     recipeDAO.saveRecipe(newRecipe);
-                    break;
                 }
-            } catch (ExistingRecipeException e) {
-                System.out.println("Duplicate recipe detected");
-                i++;
-            }catch (IOException e){
-                e.printStackTrace();
                 break;
+            } catch (ExistingRecipeException e) {
+                i++;
             }
         }
 

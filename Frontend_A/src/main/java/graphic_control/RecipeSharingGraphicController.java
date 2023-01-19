@@ -63,7 +63,7 @@ public class RecipeSharingGraphicController {
 
     private static final String ERROR_BOX_TITLE = "Error";
     private ObservableList<RecipeIngredientBean> ingredientTableList = FXCollections.observableArrayList();
-    private static String chefUsername;
+    private String chefUsername;
     private ChefHomeGraphicController homeGraphicController;
     private boolean onUpdateMode = false;
     private String toUpdateName;
@@ -157,7 +157,7 @@ public class RecipeSharingGraphicController {
             ingredientList.addAll(ingredientTableList);
             newRecipe.setIngredientList(ingredientList);
             return newRecipe;
-        } catch (ParseException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             AlertBox.display(ERROR_BOX_TITLE, "Some values in fields are invalid.");
             return null;
         } catch(IllegalArgumentException e){

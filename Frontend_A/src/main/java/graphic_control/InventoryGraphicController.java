@@ -19,13 +19,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-//TODO: eccezioni
-
 public class InventoryGraphicController {
 
     private InventoryTableDataBean dataBean;
     private InventoryController applController;
-    private static String toUpdateName;
+    private String toUpdateName;
     private static final String ERROR_BOX_TITLE = "Error";
 
     @FXML
