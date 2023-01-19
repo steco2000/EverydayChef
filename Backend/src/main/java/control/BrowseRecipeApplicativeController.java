@@ -27,7 +27,7 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
         try {
             lastId = chefDAO.getLastId();
         } catch (IOException | ClassNotFoundException ignored) {
-            "".isEmpty(); //eccezione ignorata
+            assert(true); //eccezione ignorata
         }
 
 

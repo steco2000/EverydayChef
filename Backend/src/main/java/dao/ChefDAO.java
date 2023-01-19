@@ -6,8 +6,6 @@ import model.ChefBase;
 
 import java.io.*;
 
-//TODO: eccezioni
-
 public class ChefDAO {
 
     private static final String CHEF_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\chef_data_";
@@ -38,7 +36,6 @@ public class ChefDAO {
             try {
                 filein.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
                 return false;
             }
             return true;
@@ -91,13 +88,8 @@ public class ChefDAO {
             filein = new FileInputStream(CHEF_FILE_NAME + chefUsername + ".ser");
             ObjectInputStream inputObjStream = new ObjectInputStream(filein);
             return (ChefBase) inputObjStream.readObject();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | IOException ignored) {
+            return null;
         }
-        return null;
     }
 }

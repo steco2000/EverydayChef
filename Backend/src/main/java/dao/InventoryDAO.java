@@ -48,17 +48,12 @@ public class InventoryDAO {
                 InventoryFactory inventoryFactory = new InventoryFactory();
                 currInv = inventoryFactory.createInventory((UserCredentials) LoginController.getUserLogged());
             } catch (IOException ex) {
-                ex.printStackTrace();
                 return null;
             }
-        }catch(ClassNotFoundException e){
-            e.printStackTrace();
-            return null;
         } catch (FileNotFoundException e) {
             InventoryFactory inventoryFactory = new InventoryFactory();
             currInv = inventoryFactory.createInventory((UserCredentials) LoginController.getUserLogged());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch(ClassNotFoundException | IOException e){
             return null;
         }
         InventoryTableDataBean observer = InventoryTableDataBean.getSingletonInstance();

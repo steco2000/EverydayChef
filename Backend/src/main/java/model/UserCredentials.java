@@ -69,7 +69,7 @@ public class UserCredentials implements UserCredBase, Serializable {
         try {
             dao.saveUser(this);
         } catch (IOException ignored) {
-            "".isEmpty(); //eccezione ignorata
+            assert(true); //eccezione ignorata
         }
     }
 

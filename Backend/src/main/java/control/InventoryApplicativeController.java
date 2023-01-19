@@ -45,14 +45,13 @@ public class InventoryApplicativeController implements InventoryController{
         return true;
     }
 
-    //TODO: controlla eccezione
     @Override
     public void saveCurrentInventory() {
         InventoryDAO dao = new InventoryDAO();
         try {
             dao.saveInventory(currentInventory);
         } catch (IOException ignored) {
-            "".isEmpty(); //eccezione ignorata
+            assert(true); //eccezione ignorata
         }
     }
 

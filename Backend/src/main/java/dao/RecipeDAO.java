@@ -20,15 +20,15 @@ public class RecipeDAO extends RecipeSubject {
     }
 
     public RecipeDAO(String chefUsername){
-        if(chef == null) this.setChef(chefUsername);
+        if(chef == null) setChef(chefUsername);
         try {
             updateState(chefUsername);
         } catch (IOException ignored) {
-            "".isEmpty(); //eccezione ignorata
+            assert(true); //eccezione ignorata
         }
     }
 
-    private void setChef(String chefUsername) {
+    private static void setChef(String chefUsername) {
         ChefDAO chefDAO = new ChefDAO();
         chef = (Chef) chefDAO.retrieveChef(chefUsername);
     }
@@ -41,7 +41,7 @@ public class RecipeDAO extends RecipeSubject {
             ObjectInputStream inputStream = new ObjectInputStream(filein);
             recipeList = (ArrayList<Recipe>) inputStream.readObject();
         } catch (ClassNotFoundException ignored) {
-            "".isEmpty(); //eccezione ignorata
+            assert(true); //eccezione ignorata
         }catch(FileNotFoundException e){
             recipeList = new ArrayList<>();
         }

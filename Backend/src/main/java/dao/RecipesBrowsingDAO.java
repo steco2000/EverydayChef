@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RecipesBrowsingDAO {
 
-    private static String recipeFileNamePrefix = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\recipes\\recipes_";
+    private static final String recipeFileNamePrefix = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\recipes\\recipes_";
 
     public List<RecipeBase> getRecipeList(int chefId) {
         try {

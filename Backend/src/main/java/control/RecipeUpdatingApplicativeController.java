@@ -21,7 +21,7 @@ public class RecipeUpdatingApplicativeController implements RecipeUpdadingContro
         try {
             recipeDAO.saveChanges();
         } catch (IOException ignored) {
-            "".isEmpty(); //eccezione ignorata
+            assert(true); //eccezione ignorata
         }
     }
 

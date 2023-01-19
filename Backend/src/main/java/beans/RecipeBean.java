@@ -1,6 +1,5 @@
 package beans;
 
-import java.text.ParseException;
 import java.util.List;
 
 public class RecipeBean {

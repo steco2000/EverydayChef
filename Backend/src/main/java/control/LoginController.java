@@ -8,8 +8,6 @@ import factories.ChefFactory;
 import factories.UserCredentialsFactory;
 import model.*;
 
-import java.io.EOFException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class LoginController implements UserLoginController, ChefLoginController{
@@ -49,7 +47,6 @@ public class LoginController implements UserLoginController, ChefLoginController
                 return false;
             }
         }catch(IOException e){
-            e.printStackTrace();
             return false;
         }
     }

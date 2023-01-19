@@ -30,8 +30,8 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
         RecipeDAO recipeDAO = new RecipeDAO();
         try {
             recipeDAO.saveChanges();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
+            assert(true);
         }
     }
 

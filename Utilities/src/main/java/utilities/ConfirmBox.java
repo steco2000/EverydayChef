@@ -13,6 +13,9 @@ public class ConfirmBox {
 
     static boolean answer;
 
+    private ConfirmBox(){
+    }
+
     public static boolean display(String title, String message){
         Stage box = new Stage();
         box.initModality(Modality.APPLICATION_MODAL);

@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public interface ChefBase {
+public interface ChefBase extends Serializable {
 
     void setName(String name);
     String getName();
