@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <BorderPane layoutX="458.0" layoutY="290.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+                <Pane BorderPane.alignment="CENTER">
+                    <children>
+                        <ToolBar prefHeight="102.0" prefWidth="1315.0">
+                            <items>
+                                <ImageView fitHeight="159.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/everydaychef-high-resolution-color-logo-removebg-preview.png" />
+                                    </image>
+                                </ImageView>
+                                <Region prefHeight="159.0" prefWidth="1016.0" />
+                            </items>
+                        </ToolBar>
+                  <Label fx:id="chefPageNameLabel" layoutX="52.0" layoutY="263.0" text="*name* *surname*">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="53.0" layoutY="194.0" text="Chef">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="53.0" layoutY="326.0" text="Born:">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="chefPageBirthDateLabel" layoutX="144.0" layoutY="326.0" text="*birth date*">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="53.0" layoutY="362.0" text="E-mail:">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="chefPageEmailLabel" layoutX="144.0" layoutY="362.0" text="*e-mail*">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="chefPageBioArea" layoutX="53.0" layoutY="430.0" prefHeight="274.0" prefWidth="1210.0" />
+                  <Label layoutX="52.0" layoutY="397.0" text="Bio Informations">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="50.0" layoutY="735.0" mnemonicParsing="false" onAction="#onChefPageBackButtonPression" prefHeight="31.0" prefWidth="150.0" text="Back" />
+                    </children>
+                </Pane>
+         </left>
+        </BorderPane>
+    </children>
+</AnchorPane>

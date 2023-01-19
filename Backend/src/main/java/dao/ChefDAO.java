@@ -92,4 +92,10 @@ public class ChefDAO {
             return null;
         }
     }
+
+    public int retrieveChefId(String chefUsername){
+        Chef chef = (Chef) this.retrieveChef(chefUsername);
+        return chef.getId();
+    }
+
 }

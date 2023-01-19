@@ -20,6 +20,8 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
     @Override
     public List<RecipeBrowsingTableBean> retrieveSuggestedRecipe() {
         Inventory inventory = this.currentUser.getIngredientsInventory();
+        RecipeInfoRetrievingApplicativeController infoController = new RecipeInfoRetrievingApplicativeController();
+        infoController.setInventoryList(inventory.getIngredientList());
         ChefDAO chefDAO = new ChefDAO();
         List<RecipeBase> suggestedRecipes = new ArrayList<>();
 
@@ -45,8 +47,6 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
                 }
             }
         }
-
-        //passare le ricette consigliate al controllore delle ricette
 
         List<RecipeBrowsingTableBean> beanList = new ArrayList<>();
         for(RecipeBase r: suggestedRecipes){

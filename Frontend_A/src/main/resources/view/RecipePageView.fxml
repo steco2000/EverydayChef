@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1315.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <BorderPane layoutX="458.0" layoutY="290.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+                <Pane BorderPane.alignment="CENTER">
+                    <children>
+                        <ToolBar prefHeight="102.0" prefWidth="1315.0">
+                            <items>
+                                <ImageView fitHeight="159.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/everydaychef-high-resolution-color-logo-removebg-preview.png" />
+                                    </image>
+                                </ImageView>
+                                <Region prefHeight="159.0" prefWidth="1016.0" />
+                            </items>
+                        </ToolBar>
+                  <Label fx:id="recipeNameLabel" layoutX="28.0" layoutY="177.0" text="*Recipe Name*">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="28.0" layoutY="230.0" text="Difficulty:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="difficultyLabel" layoutX="220.0" layoutY="230.0" text="*difficulty*">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="28.0" layoutY="268.0" text="Preparation Time:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="prepTimeLabel" layoutX="220.0" layoutY="268.0" text="*prep. time*">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="28.0" layoutY="307.0" text="Number of Servings:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="servingsLabel" layoutX="220.0" layoutY="307.0" text="*servings*">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="preparationArea" layoutX="28.0" layoutY="420.0" prefHeight="318.0" prefWidth="622.0" />
+                  <Label layoutX="28.0" layoutY="383.0" text="Preparation Procedure">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Separator layoutX="661.0" layoutY="169.0" orientation="VERTICAL" prefHeight="643.0" prefWidth="0.0" />
+                  <Label layoutX="676.0" layoutY="181.0" text="Missing ingredients" textFill="RED">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="missingIngredientsTable" layoutX="676.0" layoutY="213.0" prefHeight="159.0" prefWidth="609.0">
+                    <columns>
+                      <TableColumn fx:id="missingIngredientNameCol" prefWidth="361.0" text="Name" />
+                      <TableColumn fx:id="missingIngredientQuantityCol" prefWidth="118.0" text="Missing Quantity" />
+                        <TableColumn fx:id="missingIngredientUnitCol" minWidth="0.0" prefWidth="129.0" text="Measure Unit" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="676.0" layoutY="383.0" text="Ingredient List">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="28.0" layoutY="347.0" text="Created by:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="chefLabel" layoutX="220.0" layoutY="347.0" onMouseClicked="#onChefLabelClick" text="*chefName* *chefSurname*" textFill="#0062ff">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <TableView fx:id="ingredientListTable" layoutX="676.0" layoutY="420.0" prefHeight="319.0" prefWidth="609.0">
+                     <columns>
+                        <TableColumn fx:id="ingredientNamecol" prefWidth="361.0" text="Name" />
+                        <TableColumn fx:id="ingredientQuantityCol" prefWidth="118.0" text="Required Quantity" />
+                        <TableColumn fx:id="ingredientUnitCol" minWidth="0.0" prefWidth="129.0" text="Measure Unit" />
+                     </columns>
+                  </TableView>
+                  <Button layoutX="34.0" layoutY="749.0" mnemonicParsing="false" onAction="#onRecipePageBackButtonPression" prefHeight="31.0" prefWidth="150.0" text="Back" />
+                    </children>
+                </Pane>
+         </top>
+        </BorderPane>
+    </children>
+</AnchorPane>

@@ -20,7 +20,7 @@ public class RecipeDAO extends RecipeSubject {
     }
 
     public RecipeDAO(String chefUsername){
-        if(chef == null) setChef(chefUsername);
+        if(chef == null || !(chef.getUsername().equals(chefUsername))) setChef(chefUsername);
         try {
             updateState(chefUsername);
         } catch (IOException ignored) {
