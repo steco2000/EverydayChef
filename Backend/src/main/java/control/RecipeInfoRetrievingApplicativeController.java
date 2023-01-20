@@ -5,10 +5,12 @@ import beans.RecipeBean;
 import beans.RecipeBrowsingTableBean;
 import beans.RecipeIngredientBean;
 import dao.ChefDAO;
+import dao.RecipeDAO;
 import dao.RecipesBrowsingDAO;
 import exceptions.RecipeIngredientQuantityException;
 import model.*;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +26,8 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
     public RecipeBean retrieveRecipeInfo(RecipeBrowsingTableBean recipeBrowsingBean) {
         RecipesBrowsingDAO recipesBrowsingDAO = new RecipesBrowsingDAO();
         RecipeBase recipe = recipesBrowsingDAO.getRecipeInfo(recipeBrowsingBean.getName(),recipeBrowsingBean.getChefUsername());
+        RecipeDAO recipeWriterDAO = new RecipeDAO(recipe.getChef().getUsername());
+        recipeWriterDAO.incrementRecipeViews(recipe.getName());
         RecipeBean toReturn = new RecipeBean();
         toReturn.setName(recipe.getName());
         toReturn.setServings(String.valueOf(recipe.getServings()));

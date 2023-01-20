@@ -95,4 +95,14 @@ public class RecipeDAO extends RecipeSubject {
         return recipeList;
     }
 
+    public void incrementRecipeViews(String recipe) {
+        Recipe toIncrement = recipeList.stream().filter(o -> o.getName().equals(recipe)).findFirst().orElse(null);
+        try {
+            toIncrement.incrementViews();
+            this.saveChanges();
+            System.out.println(toIncrement.getName()+" "+toIncrement.getViews());
+        } catch (IOException | NullPointerException ignored) {
+            assert(true); //eccezione ignorata
+        }
+    }
 }

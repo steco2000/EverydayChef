@@ -12,6 +12,7 @@ public class Recipe implements RecipeBase, Serializable {
     private int servings;
     private List<RecipeIngredient> ingredientList;
     private String preparationProcedure;
+    private int views;
 
     public Recipe(){
     }
@@ -24,6 +25,7 @@ public class Recipe implements RecipeBase, Serializable {
         this.servings = servings;
         this.ingredientList = ingredientList;
         this.preparationProcedure = preparationProcedure;
+        this.views = 0;
     }
 
     @Override
@@ -95,4 +97,13 @@ public class Recipe implements RecipeBase, Serializable {
     public void setPreparationProcedure(String preparationProcedure) {
         this.preparationProcedure = preparationProcedure;
     }
+
+    public void incrementViews(){
+        this.views++;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
 }

@@ -8,6 +8,8 @@ import model.InventoryBase;
 import model.UserCredentials;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class InventoryDAO {
 
@@ -15,7 +17,9 @@ public class InventoryDAO {
     private final UserCredentials user;
 
     public InventoryDAO(){
-        inventoryFileName = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";
+        //Percorso file "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";
+        Path relativeInventoryFilePath = Paths.get("Backend\\src\\main\\resources");
+        inventoryFileName = relativeInventoryFilePath.toAbsolutePath()+"\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";
         user = (UserCredentials) LoginController.getUserLogged();
     }
 

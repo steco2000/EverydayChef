@@ -91,8 +91,9 @@ public class ChefHomeGraphicController {
     }
 
     @FXML
-    private void onRecipeStatsButtonPression(){
-        //TODO: implementa
+    private void onRecipeStatsButtonPression() throws IOException {
+        RecipeStatisticsGraphicController statisticsGraphicController = new RecipeStatisticsGraphicController(this,LoginController.getChefLogged().getUsername());
+        statisticsGraphicController.loadUI();
     }
 
     @FXML

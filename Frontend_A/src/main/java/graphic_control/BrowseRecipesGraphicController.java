@@ -80,6 +80,7 @@ public class BrowseRecipesGraphicController {
     private ChefBean recipeChef;
     private RecipeBean selectedRecipeBean;
     private List<RecipeIngredientBean> missingIngredients;
+    private List<RecipeBrowsingTableBean> suggestedRecipes;
 
     @FXML
     private void onShowRecipeButtonPression() throws IOException {
@@ -143,7 +144,10 @@ public class BrowseRecipesGraphicController {
         BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
         BrowseRecipeController browseRecipeController = factory.createBrowseRecipeController();
         ObservableList<RecipeBrowsingTableBean> observableBeanList = FXCollections.observableArrayList();
-        observableBeanList.addAll(browseRecipeController.retrieveSuggestedRecipe());
+        if(this.suggestedRecipes == null){
+            this.suggestedRecipes = browseRecipeController.retrieveSuggestedRecipe();
+        }
+        observableBeanList.addAll(this.suggestedRecipes);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         chefColumn.setCellValueFactory(new PropertyValueFactory<>("chefCompleteName"));
         chefUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("chefUsername"));
