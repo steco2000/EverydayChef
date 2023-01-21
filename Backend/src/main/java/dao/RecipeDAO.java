@@ -1,5 +1,6 @@
 package dao;
 
+import control.LoginController;
 import exceptions.ExistingRecipeException;
 import model.Chef;
 import model.Recipe;
@@ -7,19 +8,24 @@ import model.RecipeBase;
 import model.RecipeSubject;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeDAO extends RecipeSubject {
 
-    private static final String RECIPE_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\recipes\\recipes_";
     private static Chef chef;
     private static List<Recipe> recipeList;
+    private final String recipeFileName;
 
     public RecipeDAO(){
+        Path relativeRecipeFilePath = Paths.get("Backend\\src\\main\\resources\\recipes\\recipes_");
+        recipeFileName = relativeRecipeFilePath.toAbsolutePath().toString();
     }
 
     public RecipeDAO(String chefUsername){
+        this();
         if(chef == null || !(chef.getUsername().equals(chefUsername))) setChef(chefUsername);
         try {
             updateState(chefUsername);
@@ -33,11 +39,11 @@ public class RecipeDAO extends RecipeSubject {
         chef = (Chef) chefDAO.retrieveChef(chefUsername);
     }
 
-    private static void updateState(String chefUsername) throws IOException {
+    private void updateState(String chefUsername) throws IOException {
         ChefDAO chefDao = new ChefDAO();
         Chef thisChef = (Chef) chefDao.retrieveChef(chefUsername);
         try {
-            FileInputStream filein = new FileInputStream(RECIPE_FILE_NAME+thisChef.getId()+".ser");
+            FileInputStream filein = new FileInputStream(this.recipeFileName+thisChef.getId()+".ser");
             ObjectInputStream inputStream = new ObjectInputStream(filein);
             recipeList = (ArrayList<Recipe>) inputStream.readObject();
         } catch (ClassNotFoundException ignored) {
@@ -49,11 +55,11 @@ public class RecipeDAO extends RecipeSubject {
 
 
     public void saveChanges() throws IOException {
-        FileOutputStream fileout = new FileOutputStream(RECIPE_FILE_NAME+chef.getId()+".ser");
+        FileOutputStream fileout = new FileOutputStream(recipeFileName+chef.getId()+".ser");
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 
         ChefDAO chefDao = new ChefDAO();
-        chefDao.saveChef(chef);
+        chefDao.saveChef(chef,true);
 
         this.notifyObservers();
 

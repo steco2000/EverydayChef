@@ -17,9 +17,8 @@ public class InventoryDAO {
     private final UserCredentials user;
 
     public InventoryDAO(){
-        //Percorso file "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";
-        Path relativeInventoryFilePath = Paths.get("Backend\\src\\main\\resources");
-        inventoryFileName = relativeInventoryFilePath.toAbsolutePath()+"\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser";
+        Path relativeInventoryFilePath = Paths.get("Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser");
+        inventoryFileName = relativeInventoryFilePath.toAbsolutePath().toString();
         user = (UserCredentials) LoginController.getUserLogged();
     }
 

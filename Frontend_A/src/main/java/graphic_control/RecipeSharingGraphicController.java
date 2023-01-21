@@ -96,6 +96,9 @@ public class RecipeSharingGraphicController {
             return;
         }
         ingredientTableList.add(newIngredient);
+        ingredientNameField.clear();
+        ingredientQuantityField.clear();
+        unitBox.setValue("Kg");
     }
 
     @FXML

@@ -41,7 +41,7 @@ public class LoginController implements UserLoginController, ChefLoginController
                 chef.setUsername(chefInfo.getUsername());
                 chef.setEmail(chefInfo.getEmail());
                 chef.setPassword(chefInfo.getPassword());
-                dao.saveChef(chef);
+                dao.saveChef(chef, false);
                 return true;
             }else{
                 return false;

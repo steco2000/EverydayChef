@@ -9,8 +9,20 @@ import java.util.List;
 
 public class RecipeSearchingApplicativeController implements RecipeSearchingController{
 
+    private String toTitleCase(String givenSearch) {
+        String[] arr = givenSearch.split(" ");
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : arr) {
+            sb.append(Character.toUpperCase(s.charAt(0)))
+                    .append(s.substring(1)).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
     @Override
-    public List<RecipeBrowsingTableBean> retrieveSearchResult(String search) {
+    public List<RecipeBrowsingTableBean> retrieveSearchResult(String givenSearch) {
+        String search = toTitleCase(givenSearch);
         RecipesBrowsingDAO browsingDAO = new RecipesBrowsingDAO();
         List<RecipeBase> searchResult = browsingDAO.getSearchResult(search);
         List<RecipeBrowsingTableBean> resultList = new ArrayList<>();

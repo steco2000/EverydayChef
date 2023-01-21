@@ -14,9 +14,20 @@ public class RecipeBean {
 
     public String getName() {return name; }
 
+    private String toTitleCase(String givenName) {
+        String[] arr = givenName.split(" ");
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : arr) {
+            sb.append(Character.toUpperCase(s.charAt(0)))
+                    .append(s.substring(1)).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
     public void setName(String name) throws IllegalArgumentException{
         if(name == null || name.length() == 0) throw new IllegalArgumentException();
-        this.name = name;
+        this.name = this.toTitleCase(name);
     }
 
     public String getChefUsername() {

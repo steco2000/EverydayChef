@@ -5,14 +5,23 @@ import model.Chef;
 import model.ChefBase;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ChefDAO {
 
-    private static final String CHEF_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\chef_data_";
-    private static final String LAST_ID_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\last_chef_id.ser";
+    private final String chefFileName;
+    private final String lastIdFileName;
+
+    public ChefDAO(){
+        Path relativeChefFilePath = Paths.get("Backend\\src\\main\\resources\\chef_data_");
+        chefFileName = relativeChefFilePath.toAbsolutePath().toString();
+        Path relativeLastIdFilePath = Paths.get("Backend\\src\\main\\resources\\last_chef_id.ser");
+        lastIdFileName = relativeLastIdFilePath.toAbsolutePath().toString();
+    }
 
     public int getLastId() throws IOException, ClassNotFoundException {
-        FileInputStream filein = new FileInputStream(LAST_ID_FILE_NAME);
+        FileInputStream filein = new FileInputStream(lastIdFileName);
         ObjectInputStream in = new ObjectInputStream(filein);
 
         return (int) in.readObject();
@@ -23,7 +32,7 @@ public class ChefDAO {
         FileInputStream filein = null;
 
         try{
-            filein = new FileInputStream(CHEF_FILE_NAME+username+".ser");
+            filein = new FileInputStream(chefFileName+username+".ser");
             while(true){
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currChef = (Chef) inputObjStream.readObject();
@@ -46,20 +55,22 @@ public class ChefDAO {
         }
     }
 
-    public void saveChef(ChefBase chef) throws IOException {
-        FileOutputStream fileout = new FileOutputStream(CHEF_FILE_NAME+chef.getUsername()+".ser", true);
+    public void saveChef(ChefBase chef, boolean overwrite) throws IOException {
+        FileOutputStream fileout = new FileOutputStream(chefFileName+chef.getUsername()+".ser", true);
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 
-        FileOutputStream fileoutID = new FileOutputStream(LAST_ID_FILE_NAME);
-        ObjectOutputStream outID = new ObjectOutputStream(fileoutID);
+        if(!overwrite) {
+            FileOutputStream fileoutID = new FileOutputStream(lastIdFileName);
+            ObjectOutputStream outID = new ObjectOutputStream(fileoutID);
+
+            outID.writeObject(chef.getId());
+            outID.close();
+            fileoutID.close();
+        }
 
         out.writeObject(chef);
         out.close();
         fileout.close();
-
-        outID.writeObject(chef.getId());
-        outID.close();
-        fileoutID.close();
     }
 
     public boolean credentialsAreCorrect(String username, String password) {
@@ -67,7 +78,7 @@ public class ChefDAO {
         FileInputStream filein = null;
 
         try {
-            filein = new FileInputStream(CHEF_FILE_NAME + username + ".ser");
+            filein = new FileInputStream(chefFileName + username + ".ser");
             ObjectInputStream inputObjStream = new ObjectInputStream(filein);
             currChef = (Chef) inputObjStream.readObject();
             if ((currChef.getPassword().equals(password)) && (currChef.getUsername().equals(username))) {
@@ -85,7 +96,7 @@ public class ChefDAO {
     public ChefBase retrieveChef(String chefUsername) {
         FileInputStream filein;
         try {
-            filein = new FileInputStream(CHEF_FILE_NAME + chefUsername + ".ser");
+            filein = new FileInputStream(chefFileName + chefUsername + ".ser");
             ObjectInputStream inputObjStream = new ObjectInputStream(filein);
             return (ChefBase) inputObjStream.readObject();
         } catch (ClassNotFoundException | IOException ignored) {

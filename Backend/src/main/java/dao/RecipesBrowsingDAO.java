@@ -3,6 +3,8 @@ package dao;
 import model.RecipeBase;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,11 +12,16 @@ import java.util.stream.Collectors;
 
 public class RecipesBrowsingDAO {
 
-    private static final String RECIPE_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\recipes\\recipes_";
+    private final String recipeFileName;
+
+    public RecipesBrowsingDAO(){
+        Path relativeRecipeFilePath = Paths.get("Backend\\src\\main\\resources\\recipes\\recipes_");
+        recipeFileName = relativeRecipeFilePath.toAbsolutePath().toString();
+    }
 
     public List<RecipeBase> getRecipeList(int chefId) {
         try {
-            FileInputStream filein = new FileInputStream(RECIPE_FILE_NAME+chefId+".ser");
+            FileInputStream filein = new FileInputStream(recipeFileName+chefId+".ser");
             ObjectInputStream objectInputStream = new ObjectInputStream(filein);
             return (List<RecipeBase>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -40,7 +47,7 @@ public class RecipesBrowsingDAO {
             int lastChefId = chefDAO.getLastId();
             for(int i=1; i<lastChefId+1; i++){
                 try{
-                    FileInputStream filein = new FileInputStream(RECIPE_FILE_NAME+i+".ser");
+                    FileInputStream filein = new FileInputStream(recipeFileName+i+".ser");
                     ObjectInputStream inputStream = new ObjectInputStream(filein);
                     currentRecipeList = (List<RecipeBase>) inputStream.readObject();
                     List<RecipeBase> matchings = new ArrayList<>();

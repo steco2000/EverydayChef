@@ -5,17 +5,24 @@ import model.UserCredBase;
 import model.UserCredentials;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class UserCredentialsDAO {
 
-    private static final String USERS_FILE_NAME = "C:\\Users\\darkd\\OneDrive\\Desktop\\Progetto ISPW\\EverydayChef\\Backend\\src\\main\\resources\\user_credentials_";
+    private final String usersFileName;
+
+    public UserCredentialsDAO(){
+        Path relativeUsersFilePath = Paths.get("Backend\\src\\main\\resources\\user_credentials_");
+        usersFileName = relativeUsersFilePath.toAbsolutePath().toString();
+    }
 
     public boolean credentialsAreCorrect(String username, String password) {
         UserCredentials currUser;
         FileInputStream filein;
 
         try {
-            filein = new FileInputStream(USERS_FILE_NAME+username+".ser");
+            filein = new FileInputStream(usersFileName+username+".ser");
             while (true) {
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currUser = (UserCredentials) inputObjStream.readObject();
@@ -31,7 +38,7 @@ public class UserCredentialsDAO {
     }
 
     public void saveUser(UserCredBase user) throws IOException {
-        FileOutputStream fileout = new FileOutputStream(USERS_FILE_NAME+user.getUsername()+".ser");
+        FileOutputStream fileout = new FileOutputStream(usersFileName+user.getUsername()+".ser");
         ObjectOutputStream out = new ObjectOutputStream(fileout);
 
         out.writeObject(user);
@@ -44,7 +51,7 @@ public class UserCredentialsDAO {
         FileInputStream filein = null;
 
         try{
-            filein = new FileInputStream(USERS_FILE_NAME+username+".ser");
+            filein = new FileInputStream(usersFileName+username+".ser");
             while(true){
                 ObjectInputStream inputObjStream = new ObjectInputStream(filein);
                 currUser = (UserCredentials) inputObjStream.readObject();
