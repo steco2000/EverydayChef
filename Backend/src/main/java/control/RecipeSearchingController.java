@@ -1,7 +1,6 @@
 package control;
 
 import beans.RecipeBrowsingTableBean;
-import model.RecipeBase;
 
 import java.util.List;
 

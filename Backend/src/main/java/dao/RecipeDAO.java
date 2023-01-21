@@ -1,6 +1,5 @@
 package dao;
 
-import control.LoginController;
 import exceptions.ExistingRecipeException;
 import model.Chef;
 import model.Recipe;
@@ -28,7 +27,7 @@ public class RecipeDAO extends RecipeSubject {
         this();
         if(chef == null || !(chef.getUsername().equals(chefUsername))) setChef(chefUsername);
         try {
-            updateState(chefUsername);
+            updateState(chefUsername, this.recipeFileName);
         } catch (IOException ignored) {
             assert(true); //eccezione ignorata
         }
@@ -39,11 +38,11 @@ public class RecipeDAO extends RecipeSubject {
         chef = (Chef) chefDAO.retrieveChef(chefUsername);
     }
 
-    private void updateState(String chefUsername) throws IOException {
+    private static void updateState(String chefUsername, String recipeFileName) throws IOException {
         ChefDAO chefDao = new ChefDAO();
         Chef thisChef = (Chef) chefDao.retrieveChef(chefUsername);
         try {
-            FileInputStream filein = new FileInputStream(this.recipeFileName+thisChef.getId()+".ser");
+            FileInputStream filein = new FileInputStream(recipeFileName+thisChef.getId()+".ser");
             ObjectInputStream inputStream = new ObjectInputStream(filein);
             recipeList = (ArrayList<Recipe>) inputStream.readObject();
         } catch (ClassNotFoundException ignored) {
@@ -106,7 +105,6 @@ public class RecipeDAO extends RecipeSubject {
         try {
             toIncrement.incrementViews();
             this.saveChanges();
-            System.out.println(toIncrement.getName()+" "+toIncrement.getViews());
         } catch (IOException | NullPointerException ignored) {
             assert(true); //eccezione ignorata
         }

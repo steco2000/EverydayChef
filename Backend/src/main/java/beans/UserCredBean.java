@@ -9,7 +9,6 @@ public class UserCredBean {
     private String username;
     private String password;
     private String email;
-    private boolean rememberMe;
 
     public String getUsername() {
         return username;
@@ -43,11 +42,4 @@ public class UserCredBean {
         return matcher.matches();
     }
 
-    public boolean getRememberMe() {
-        return rememberMe;
-    }
-
-    public void setRememberMe(boolean rememberMe) {
-        this.rememberMe = rememberMe;
-    }
 }

@@ -10,7 +10,6 @@ import dao.RecipesBrowsingDAO;
 import exceptions.RecipeIngredientQuantityException;
 import model.*;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,34 +68,31 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
         return toReturn;
     }
 
+    private RecipeIngredientBean getMissingQuantityIngredient(RecipeIngredientBean recipeIngredient, InventoryIngredient inventoryIngredient){
+        RecipeIngredientBean newMissing = new RecipeIngredientBean();
+        newMissing.setName(recipeIngredient.getName());
+        try {
+            double difference = (recipeIngredient.getQuantity()*100) - (inventoryIngredient.getQuantity()*100);
+            newMissing.setQuantity(String.valueOf(difference/100));
+        } catch (ParseException | RecipeIngredientQuantityException ignored) {
+            assert(true); //eccezione ignorata
+        }
+        newMissing.setMeasureUnit(recipeIngredient.getMeasureUnit());
+        return newMissing;
+    }
+
     @Override
     public List<RecipeIngredientBean> retrieveMissingIngredients(RecipeBrowsingTableBean recipe) {
         List<RecipeIngredientBean> missingIngredients = new ArrayList<>();
         for(RecipeIngredientBean recipeIngredient: this.selectedRecipe.getIngredientList()){
             if(inventoryList.stream().noneMatch(o -> o.getName().equals(recipeIngredient.getName()))){
-                //se l'ingrediente non è presente nell'inventario
-                RecipeIngredientBean newMissing = new RecipeIngredientBean();
-                newMissing.setName(recipeIngredient.getName());
-                try {
-                    newMissing.setQuantity(String.valueOf(recipeIngredient.getQuantity()));
-                } catch (ParseException | RecipeIngredientQuantityException ignored) {
-                    assert(true); //eccezione ignorata
-                }
-                newMissing.setMeasureUnit(recipeIngredient.getMeasureUnit());
-                missingIngredients.add(newMissing);
+                //se l'ingrediente non è presente nell'inventario lo aggiungo così com'è
+                missingIngredients.add(recipeIngredient);
             }else{
-                //se l'ingrediente è presente
+                //se l'ingrediente è presente ma la quantità non basta, aggiungo il bean con la quantità mancante
                 for (InventoryIngredient inventoryIngredient : inventoryList) {
                     if ((recipeIngredient.getName().equals(inventoryIngredient.getName())) && (recipeIngredient.getQuantity() > inventoryIngredient.getQuantity())){
-                        RecipeIngredientBean newMissing = new RecipeIngredientBean();
-                        newMissing.setName(recipeIngredient.getName());
-                        try {
-                            double difference = (recipeIngredient.getQuantity()*100) - (inventoryIngredient.getQuantity()*100);
-                            newMissing.setQuantity(String.valueOf(difference/100));
-                        } catch (ParseException | RecipeIngredientQuantityException ignored) {
-                            assert(true); //eccezione ignorata
-                        }
-                        newMissing.setMeasureUnit(recipeIngredient.getMeasureUnit());
+                        RecipeIngredientBean newMissing = this.getMissingQuantityIngredient(recipeIngredient, inventoryIngredient);
                         missingIngredients.add(newMissing);
                     }
                 }
@@ -105,7 +101,7 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
         return missingIngredients;
     }
 
-    public void setInventoryList(List<InventoryIngredient> inventoryList){
+    public static void setInventoryList(List<InventoryIngredient> inventoryList){
         RecipeInfoRetrievingApplicativeController.inventoryList = inventoryList;
     }
 

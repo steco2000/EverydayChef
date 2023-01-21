@@ -22,9 +22,6 @@ public class UserLoginGraphicController {
     @FXML
     private PasswordField passField;
 
-    @FXML
-    private CheckBox rememberMeCheckbox;
-
     private Scene scene;
     private static final String ERROR_BOX_TITLE = "Login Failed";
 
@@ -40,7 +37,6 @@ public class UserLoginGraphicController {
         try {
             credBean.setUsername(username);
             credBean.setPassword(password);
-            credBean.setRememberMe(rememberMeCheckbox.isSelected());
         }catch(IllegalArgumentException e){
             AlertBox.display(ERROR_BOX_TITLE,"Login failed: incorrect credentials");
             return;

@@ -51,7 +51,6 @@ public class LoginController implements UserLoginController, ChefLoginController
         }
     }
 
-    //TODO: gestire remember me
     @Override
     public boolean attemptUserLogin(UserCredBean credentials) {
         UserCredentialsDAO dao = new UserCredentialsDAO();

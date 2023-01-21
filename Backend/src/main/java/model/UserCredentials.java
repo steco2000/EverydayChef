@@ -10,7 +10,6 @@ public class UserCredentials implements UserCredBase, Serializable {
     private String username;
     private String password;
     private String email;
-    private boolean rememberMe;
     private Inventory ingredientsInventory;
 
     public UserCredentials(String us, String pw, String email){
@@ -47,16 +46,6 @@ public class UserCredentials implements UserCredBase, Serializable {
     @Override
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public void setRememberMe(boolean rememberMe) {
-        this.rememberMe = rememberMe;
-    }
-
-    @Override
-    public boolean getRememberMe() {
-        return this.rememberMe;
     }
 
     public Inventory getIngredientsInventory() {

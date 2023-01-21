@@ -6,7 +6,6 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,27 +38,30 @@ public class RecipesBrowsingDAO {
         return null;
     }
 
+    private List<RecipeBase> getSearchMatchings(String searchValue, int chefId){
+        try{
+            FileInputStream filein = new FileInputStream(recipeFileName+chefId+".ser");
+            ObjectInputStream inputStream = new ObjectInputStream(filein);
+            List<RecipeBase> currentRecipeList = (List<RecipeBase>) inputStream.readObject();
+            List<RecipeBase> matchings = new ArrayList<>();
+            matchings.addAll(currentRecipeList.stream().filter(o -> (o.getName().contains(searchValue) || searchValue.contains(o.getName()))).collect(Collectors.toList()));
+            return matchings;
+        } catch (IOException | ClassNotFoundException e) {
+            return new ArrayList<>();
+        }
+    }
+
     public List<RecipeBase> getSearchResult(String searchValue){
         ChefDAO chefDAO = new ChefDAO();
-        List<RecipeBase> currentRecipeList;
         List<RecipeBase> searchResult = new ArrayList<>();
         try {
             int lastChefId = chefDAO.getLastId();
             for(int i=1; i<lastChefId+1; i++){
-                try{
-                    FileInputStream filein = new FileInputStream(recipeFileName+i+".ser");
-                    ObjectInputStream inputStream = new ObjectInputStream(filein);
-                    currentRecipeList = (List<RecipeBase>) inputStream.readObject();
-                    List<RecipeBase> matchings = new ArrayList<>();
-                    matchings.addAll(currentRecipeList.stream().filter(o -> (o.getName().contains(searchValue) || searchResult.contains(o.getName()))).collect(Collectors.toList()));
-                    if(!matchings.isEmpty()) searchResult.addAll(matchings);
-                } catch (IOException e) {
-                    continue;
-                }
+                List<RecipeBase> matchings = this.getSearchMatchings(searchValue,i);
+                if(!matchings.isEmpty()) searchResult.addAll(matchings);
             }
         } catch (IOException | ClassNotFoundException ignored) {
-            System.out.println("Catch 2");
-            assert(true);
+            assert(true);   //eccezione ignorata
         }
         return searchResult;
     }

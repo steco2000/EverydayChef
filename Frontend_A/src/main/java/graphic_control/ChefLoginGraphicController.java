@@ -22,9 +22,6 @@ public class ChefLoginGraphicController {
     @FXML
     private PasswordField passField;
 
-    @FXML
-    private CheckBox rememberMeCheckbox;
-
     private static final String ERROR_BOX_TITLE = "Login Failed";
 
     @FXML

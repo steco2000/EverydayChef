@@ -10,7 +10,5 @@ public interface UserCredBase extends Serializable {
     void setPassword(String password);
     String getEmail();
     void setEmail(String email);
-    void setRememberMe(boolean rememberMe);
-    boolean getRememberMe();
 
 }
