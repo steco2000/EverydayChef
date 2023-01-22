@@ -1,3 +1,5 @@
+package console_app_view;
+
 import java.io.Console;
 import java.util.Scanner;
 

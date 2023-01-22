@@ -22,7 +22,7 @@
                      <items>
                               <ImageView fitHeight="159.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
                                   <image>
-                                      <Image url="@../img/everydaychef-high-resolution-color-logo-removebg-preview.png" />
+                                      <Image url="@../../img/everydaychef-high-resolution-color-logo-removebg-preview.png" />
                                   </image>
                               </ImageView>
                         <Region prefHeight="159.0" prefWidth="1016.0" />
