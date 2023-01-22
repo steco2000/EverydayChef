@@ -1,6 +1,6 @@
 package graphic_control;
 
-import view.MainApp;
+import main.view.MainApp;
 import control.LoginController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

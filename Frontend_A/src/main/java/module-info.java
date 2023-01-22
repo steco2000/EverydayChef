@@ -5,8 +5,8 @@ module Frontend_A {
     requires Backend;
     requires Utilities;
 
-    opens view to javafx.fxml;
-    exports view;
+    opens main.view to javafx.fxml;
+    exports main.view;
     opens graphic_control to javafx.fxml;
     exports graphic_control;
 }

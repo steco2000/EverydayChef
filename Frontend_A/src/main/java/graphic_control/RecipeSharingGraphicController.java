@@ -1,10 +1,8 @@
 package graphic_control;
 
-import beans.IngredientBean;
 import beans.RecipeBean;
 import beans.RecipeIngredientBean;
 import beans.RecipeTableDataBean;
-import control.LoginController;
 import control.RecipeSharingController;
 import control.RecipeUpdadingController;
 import exceptions.RecipeIngredientQuantityException;
@@ -17,11 +15,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.IngredientBase;
-import model.Recipe;
 import utilities.AlertBox;
 import utilities.ConfirmBox;
-import view.MainApp;
+import main.view.MainApp;
 
 import java.io.IOException;
 import java.text.ParseException;

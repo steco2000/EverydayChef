@@ -1,7 +1,6 @@
 package graphic_control;
 
 import beans.RecipeStatisticsTableBean;
-import control.LoginController;
 import control.RecipeStatisticsController;
 import factories.RecipeStatisticsControllerFactory;
 import javafx.collections.FXCollections;
@@ -12,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import view.MainApp;
+import main.view.MainApp;
 
 import java.io.IOException;
 import java.util.Collections;

@@ -1,7 +1,7 @@
 package graphic_control;
 
 import javafx.scene.control.*;
-import view.MainApp;
+import main.view.MainApp;
 import beans.IngredientBean;
 import control.InventoryController;
 import factories.InventoryControllerFactory;

@@ -1,4 +1,4 @@
-package view;
+package main.view;
 
 import graphic_control.UserLoginGraphicController;
 import javafx.application.Application;

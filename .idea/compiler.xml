@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Backend" />
         <module name="Utilities" />
+        <module name="Frontend_B" />
         <module name="Frontend_A" />
       </profile>
     </annotationProcessing>

@@ -12,6 +12,7 @@
         <module>Backend</module>
         <module>Frontend_A</module>
         <module>Utilities</module>
+        <module>Frontend_B</module>
     </modules>
 
     <properties>
