@@ -92,7 +92,7 @@ public class RecipeSharingGraphicController {
             boolean answer = ConfirmBox.display(newIngredient.getName(), "Are you sure that you want to save the ingredient \""+newIngredient.getName()+"\" without a specified quantity?");
             if(!answer) return;
         } catch(IllegalArgumentException e){
-            AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing.");
+            AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are missing or not valid.");
             return;
         }
         ingredientTableList.add(newIngredient);

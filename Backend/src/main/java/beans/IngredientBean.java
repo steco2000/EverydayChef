@@ -42,13 +42,16 @@ public class IngredientBean {
 
     public void setQuantity(String quantity) throws ParseException, IllegalArgumentException {
         if(quantity == null || quantity.length() == 0) throw new IllegalArgumentException();
+        double givenQuantity;
         try{
-            this.quantity = Double.parseDouble(quantity);
+            givenQuantity = Double.parseDouble(quantity);
         }catch(NumberFormatException e){
             NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
             Number number = format.parse(quantity);
-            this.quantity = number.doubleValue();
+            givenQuantity = number.doubleValue();
         }
+        if(givenQuantity <= 0) throw new IllegalArgumentException();
+        this.quantity = givenQuantity;
     }
 
     public String getMeasureUnit() {

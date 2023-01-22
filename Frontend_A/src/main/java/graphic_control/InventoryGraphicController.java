@@ -175,11 +175,8 @@ public class InventoryGraphicController {
             ingredientBean.setExpirationDate(dateField.getText());
             ingredientBean.setNotes(notesField.getText());
             ingredientBean.setNotes(notesField.getText());
-        }catch(IllegalArgumentException e){
-            AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing.");
-            return;
-        }catch(ParseException e){
-            AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are not valid.");
+        }catch(IllegalArgumentException | ParseException e){
+            AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are missing or not valid.");
             return;
         }
         if(applController.addIngredient(ingredientBean)) {

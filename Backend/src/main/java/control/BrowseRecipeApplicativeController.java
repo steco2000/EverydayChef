@@ -17,12 +17,23 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
         this.currentUser = (UserCredentials) LoginController.getUserLogged();
     }
 
+    private List<RecipeBrowsingTableBean> setUpSuggestedBeanList(List<RecipeBase> suggestedRecipes){
+        List<RecipeBrowsingTableBean> beanList = new ArrayList<>();
+        for(RecipeBase r: suggestedRecipes){
+            RecipeBrowsingTableBean bean = new RecipeBrowsingTableBean();
+            bean.setName(r.getName());
+            bean.setChefCompleteName(r.getChef().getName()+" "+r.getChef().getSurname());
+            bean.setChefUsername(r.getChef().getUsername());
+            beanList.add(bean);
+        }
+        return beanList;
+    }
+
     @Override
     public List<RecipeBrowsingTableBean> retrieveSuggestedRecipe() {
         Inventory inventory = this.currentUser.getIngredientsInventory();
         if(inventory == null) return new ArrayList<>();
-        RecipeInfoRetrievingApplicativeController infoController = new RecipeInfoRetrievingApplicativeController();
-        infoController.setInventoryList(inventory.getIngredientList());
+        RecipeInfoRetrievingApplicativeController.setInventoryList(inventory.getIngredientList());
         ChefDAO chefDAO = new ChefDAO();
         List<RecipeBase> suggestedRecipes = new ArrayList<>();
 
@@ -49,16 +60,7 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
             }
         }
 
-        List<RecipeBrowsingTableBean> beanList = new ArrayList<>();
-        for(RecipeBase r: suggestedRecipes){
-            RecipeBrowsingTableBean bean = new RecipeBrowsingTableBean();
-            bean.setName(r.getName());
-            bean.setChefCompleteName(r.getChef().getName()+" "+r.getChef().getSurname());
-            bean.setChefUsername(r.getChef().getUsername());
-            beanList.add(bean);
-        }
-
-        return beanList;
+        return this.setUpSuggestedBeanList(suggestedRecipes);
     }
 
 }
