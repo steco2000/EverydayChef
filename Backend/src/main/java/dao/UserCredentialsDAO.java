@@ -67,7 +67,6 @@ public class UserCredentialsDAO {
             }
             return true;
         } catch(ClassNotFoundException | IOException e){
-            e.printStackTrace();
             return false;
         }
     }

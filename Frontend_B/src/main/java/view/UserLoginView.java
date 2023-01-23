@@ -40,13 +40,13 @@ public class UserLoginView {
             switch (answer){
                 case 1:
                     boolean result = this.loginAttempt();
-                    System.out.println(result); //todo: carica user home
+                    System.out.println(result);
                     break;
                 case 2:
                     UserRegisterView regView = new UserRegisterView();
                     regView.display();
                     break;
-                case 3:
+                default:
                     //todo carica chef login
                     break;
             }
@@ -67,10 +67,7 @@ public class UserLoginView {
         UserLoginControllerFactory factory = new UserLoginControllerFactory();
         UserLoginController loginController = factory.createUserLoginController();
 
-        if(loginController.attemptUserLogin(credBean)){
-            return true;
-        }
-        return false;
+        return loginController.attemptUserLogin(credBean);
     }
 
 }
