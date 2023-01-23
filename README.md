@@ -1,9 +1,8 @@
-# EverydayChef
+# EverydayChef (Stefano Colamartini 0278902)
 Analisi Sonarcloud: https://sonarcloud.io/project/overview?id=steco2000_EverydayChef
 
-Istruzioni per la compilazione della console app (Frontend_B):
-1) Entrare nella directory sorgente ("java")
-2) Per compilare digitare il comando "make"
-3) Per lanciare digitare il comando "make run"
-
-Per eliminare tutti i file .class, entrare nella directory view e digitare il comando "make clean"
+Moduli:
+- Frontend_A: applicazione JavaFX
+- Frontend_B (WORK IN PROGRESS): console app
+- Backend: libreria comune
+- Utilities: librerie di utility varie per JavaFX
