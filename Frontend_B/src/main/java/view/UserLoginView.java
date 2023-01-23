@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class UserLoginView {
 
     private Scanner sc;
+    private UserCredBean credBean;
 
     public UserLoginView(){
         this.sc = new Scanner(System.in);
@@ -27,28 +28,37 @@ public class UserLoginView {
             try{
                 answer = Integer.parseInt(sc.nextLine());
             }catch(NumberFormatException e){
-                System.out.println("Invalid answer, digit something to continue to continue\n");
+                System.out.println("Invalid answer, digit something to continue to continue");
                 this.sc.nextLine();
                 continue;
             }
 
             if(answer < 1 || answer > 3){
-                System.out.println("Invalid answer, digit something to continue to continue\n");
+                System.out.println("Invalid answer, digit something to continue to continue");
                 this.sc.nextLine();
             }
 
-            switch (answer){
-                case 1:
-                    boolean result = this.loginAttempt();
-                    System.out.println(result);
-                    break;
-                case 2:
+            switch (answer) {
+                case 1 -> {
+                    if(this.loginAttempt()){
+                        UserHomeView homeView = new UserHomeView(this.credBean);
+                        homeView.display();
+                    }else{
+                        System.out.println("Login failed, incorrect credentials");
+                        System.out.println("Press enter or digit something to continue");
+                        sc.nextLine();
+                    }
+                }
+                case 2 -> {
+                    System.out.println();
                     UserRegisterView regView = new UserRegisterView();
                     regView.display();
-                    break;
-                default:
-                    //todo carica chef login
-                    break;
+                }
+                default -> {
+                    System.out.println();
+                    ChefLoginView chefLoginView = new ChefLoginView();
+                    chefLoginView.display();
+                }
             }
         }
     }
@@ -60,7 +70,7 @@ public class UserLoginView {
         System.out.print("Password: ");
         String password = this.sc.nextLine();
 
-        UserCredBean credBean = new UserCredBean();
+        this.credBean = new UserCredBean();
         credBean.setUsername(username);
         credBean.setPassword(password);
 
