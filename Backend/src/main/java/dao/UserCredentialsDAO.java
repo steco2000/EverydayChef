@@ -13,7 +13,7 @@ public class UserCredentialsDAO {
     private final String usersFileName;
 
     public UserCredentialsDAO(){
-        Path relativeUsersFilePath = Paths.get("Backend\\src\\main\\resources\\user_credentials_");
+        Path relativeUsersFilePath = Paths.get("Backend\\src\\main\\resources\\user_credentials\\user_credentials_");
         usersFileName = relativeUsersFilePath.toAbsolutePath().toString();
     }
 
@@ -48,28 +48,26 @@ public class UserCredentialsDAO {
 
     public boolean userNotExists(String email, String username){
         UserCredentials currUser;
-        FileInputStream filein = null;
+        FileInputStream filein;
+        ObjectInputStream objStream;
+
+        File folder = new File(Paths.get("Backend\\src\\main\\resources\\user_credentials\\").toAbsolutePath().toString());
+        File[] listOfFiles = folder.listFiles();
 
         try{
-            filein = new FileInputStream(usersFileName+username+".ser");
-            while(true){
-                ObjectInputStream inputObjStream = new ObjectInputStream(filein);
-                currUser = (UserCredentials) inputObjStream.readObject();
+            for(File f: listOfFiles){
+                if(f.getName().equals(".placeholder")) continue;
+                filein = new FileInputStream(Paths.get("Backend\\src\\main\\resources\\user_credentials\\"+f.getName()).toAbsolutePath().toString());
+                objStream = new ObjectInputStream(filein);
+                currUser = (UserCredentials) objStream.readObject();
                 if((currUser.getEmail().equals(email)) || (currUser.getUsername().equals(username))){
                     filein.close();
                     return false;
                 }
             }
-        }catch (EOFException e) {
-            try {
-                filein.close();
-            } catch (IOException ex) {
-                return false;
-            }
-            return true;
-        } catch (FileNotFoundException e) {
             return true;
         } catch(ClassNotFoundException | IOException e){
+            e.printStackTrace();
             return false;
         }
     }

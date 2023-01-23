@@ -30,7 +30,7 @@ public class UserCredBean {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws MalformedParametersException{
         if(!isValid(email)) throw new MalformedParametersException();
         this.email = email;
     }
