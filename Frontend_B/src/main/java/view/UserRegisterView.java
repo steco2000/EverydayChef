@@ -1,6 +1,7 @@
 package view;
 
 import beans.UserCredBean;
+import code_reuse.InputReusableUtilities;
 import control.UserLoginController;
 import factories.UserLoginControllerFactory;
 
@@ -43,9 +44,8 @@ public class UserRegisterView {
         System.out.println("Username "+username);
         System.out.println("Password: "+password);
         System.out.println("Are you sure to proceed? (y/n)");
-        String answer = sc.nextLine();
 
-        if(answer.equals("y") || answer.equals("Y")) {
+        if(InputReusableUtilities.yes(this.sc)) {
             UserCredBean credBean = new UserCredBean();
             credBean.setUsername(username);
             credBean.setPassword(password);

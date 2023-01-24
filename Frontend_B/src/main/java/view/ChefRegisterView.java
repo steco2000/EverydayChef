@@ -1,6 +1,7 @@
 package view;
 
 import beans.ChefBean;
+import code_reuse.InputReusableUtilities;
 import control.ChefLoginController;
 import factories.ChefLoginControllerFactory;
 
@@ -75,14 +76,14 @@ public class ChefRegisterView {
         System.out.println("Email: " + newChef.getEmail());
         System.out.println("Username: " + newChef.getUsername());
         System.out.println("Password: " + newChef.getPassword());
-        System.out.println("Are you sure to proceed?");
+        System.out.println("Are you sure to proceed? (y/n)");
 
-        this.manageRegistrationAnswer(sc.nextLine(),newChef);
+        this.manageRegistrationAnswer(newChef);
 
     }
 
-    private void manageRegistrationAnswer(String answer, ChefBean newChef){
-        if (answer.equals("y") || answer.equals("Y")) {
+    private void manageRegistrationAnswer(ChefBean newChef){
+        if (InputReusableUtilities.yes(this.sc)) {
             ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
             ChefLoginController chefLoginController = factory.createChefLoginController();
             if (chefLoginController.registerChef(newChef)) {

@@ -33,7 +33,7 @@ public class UserLoginView {
                 }
                 case 1 -> {
                     if(this.loginAttempt()){
-                        UserHomeView homeView = new UserHomeView(this.credBean);
+                        UserHomeView homeView = new UserHomeView();
                         homeView.display();
                     }else{
                         System.out.println("Login failed, incorrect credentials");

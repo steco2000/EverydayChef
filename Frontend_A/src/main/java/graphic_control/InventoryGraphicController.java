@@ -174,7 +174,6 @@ public class InventoryGraphicController {
             ingredientBean.setMeasureUnit(unitBox.getValue());
             ingredientBean.setExpirationDate(dateField.getText());
             ingredientBean.setNotes(notesField.getText());
-            ingredientBean.setNotes(notesField.getText());
         }catch(IllegalArgumentException | ParseException e){
             AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are missing or not valid.");
             return;
@@ -182,7 +181,7 @@ public class InventoryGraphicController {
         if(applController.addIngredient(ingredientBean)) {
             this.loadUI();
         }else{
-            AlertBox.display(ERROR_BOX_TITLE,"InventoryIngredient already present in the inventory, please update it instead of adding a new one.");
+            AlertBox.display(ERROR_BOX_TITLE,"Ingredient already present in the inventory, please update it instead of adding a new one.");
         }
     }
 

@@ -1,24 +1,22 @@
 package view;
 
-import beans.UserCredBean;
 import code_reuse.InputReusableUtilities;
+import control.LoginController;
 
 import java.util.Scanner;
 
 public class UserHomeView {
 
     private Scanner sc;
-    private UserCredBean loggedUser;
 
-    public UserHomeView(UserCredBean loggedUser){
+    public UserHomeView(){
         this.sc = new Scanner(System.in);
-        this.loggedUser = loggedUser;
     }
 
     public void display(){
         while(true) {
             System.out.println();
-            System.out.println("Welcome to EverydayChef, " + loggedUser.getUsername() + "!");
+            System.out.println("Welcome to EverydayChef, " + LoginController.getUserLogged().getUsername() + "!");
             System.out.println("Press:");
             System.out.println("0) To exit");
             System.out.println("1) To manage your ingredients inventory");
@@ -34,10 +32,11 @@ public class UserHomeView {
                     loginView.display();
                 }
                 case 1 -> {
-                    //todo: carica schermata ricette
+                    InventoryView inventoryView = new InventoryView();
+                    inventoryView.display();
                 }
                 default -> {
-                    //todo: carica inventario
+                    //carica ricette
                 }
             }
 
