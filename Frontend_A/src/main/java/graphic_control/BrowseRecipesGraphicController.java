@@ -17,6 +17,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import utilities.AlertBox;
 import main.view.MainApp;
 
@@ -160,7 +163,13 @@ public class BrowseRecipesGraphicController {
         Scene scene = new Scene(uiLoader.load(),1315,810);
         this.setUpMissingIngredientsTable(missingIngredients);
         this.setUpIngredientsTable(recipe.getIngredientList());
-        chefLabel.setText(recipeChef.getName()+" "+recipeChef.getSurname());
+        Text chefName = new Text(recipeChef.getName()+" "+recipeChef.getSurname());
+        chefName.setFill(Color.BLUE);
+        chefName.setUnderline(true);
+        Font chefNameFont = new Font(18);
+        chefName.setFont(chefNameFont);
+        chefLabel.setText("");
+        chefLabel.setGraphic(chefName);
         recipeNameLabel.setText(recipe.getName());
         difficultyLabel.setText(recipe.getDifficulty());
         prepTimeLabel.setText(recipe.getPreparationTime());
