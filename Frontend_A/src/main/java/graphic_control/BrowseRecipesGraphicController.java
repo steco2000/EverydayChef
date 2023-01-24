@@ -144,10 +144,10 @@ public class BrowseRecipesGraphicController {
     }
 
     private void getSuggestedRecipes() {
-        BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
-        BrowseRecipeController browseRecipeController = factory.createBrowseRecipeController();
         ObservableList<RecipeBrowsingTableBean> observableBeanList = FXCollections.observableArrayList();
         if(this.suggestedRecipes == null){
+            BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
+            BrowseRecipeController browseRecipeController = factory.createBrowseRecipeController();
             this.suggestedRecipes = browseRecipeController.retrieveSuggestedRecipe();
         }
         observableBeanList.addAll(this.suggestedRecipes);

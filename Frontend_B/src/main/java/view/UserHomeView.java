@@ -36,7 +36,8 @@ public class UserHomeView {
                     inventoryView.display();
                 }
                 default -> {
-                    //carica ricette
+                    BrowseRecipesView browseRecipesView = new BrowseRecipesView();
+                    browseRecipesView.display(false);
                 }
             }
 
