@@ -25,16 +25,12 @@ public class ChefLoginView {
             System.out.println("1) To log in as chef");
             System.out.println("2) To register as chef");
             System.out.println("3) To Sign up as user");
-            int answer;
-            try{
-                answer = InputReusableUtilities.getAnswer(this.sc,1,3);
-            }catch(NumberFormatException e){
-                System.out.println("Invalid answer, digit something to continue to continue");
-                this.sc.nextLine();
-                continue;
-            }
+            int answer = InputReusableUtilities.getAnswer(this.sc,1,3);
 
             switch (answer) {
+                case -1 ->{
+                    assert(true); //errore nella risposta, non faccio niente e passo alla prossima iterazione;
+                }
                 case 1 -> {
                     boolean result = this.chefLoginAttempt();
                     System.out.println(result); //todo carica chef home

@@ -25,16 +25,12 @@ public class UserLoginView {
             System.out.println("1) To log in");
             System.out.println("2) To register");
             System.out.println("3) To Sign up as Chef");
-            int answer;
-            try{
-                answer = InputReusableUtilities.getAnswer(this.sc,1,3);
-            }catch(NumberFormatException e){
-                System.out.println("Invalid answer, press enter or digit something to continue");
-                sc.nextLine();
-                continue;
-            }
+            int answer = InputReusableUtilities.getAnswer(this.sc,1,3);
 
             switch (answer) {
+                case -1 -> {
+                    assert(true); //errore nella risposta, non faccio niente e passo alla prossima iterazione
+                }
                 case 1 -> {
                     if(this.loginAttempt()){
                         UserHomeView homeView = new UserHomeView(this.credBean);

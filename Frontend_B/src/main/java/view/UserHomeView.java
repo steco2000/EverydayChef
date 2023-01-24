@@ -23,16 +23,12 @@ public class UserHomeView {
             System.out.println("0) To exit");
             System.out.println("1) To manage your ingredients inventory");
             System.out.println("2) To browse through the recipes");
-            int answer;
-            try {
-                answer = InputReusableUtilities.getAnswer(this.sc,0,2);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid answer, digit something to continue to continue");
-                this.sc.nextLine();
-                continue;
-            }
+            int answer = InputReusableUtilities.getAnswer(this.sc,0,2);
 
             switch (answer) {
+                case -1 -> {
+                    assert(true); //errore nella risposta, non faccio niente e vado alla prossima iterazione
+                }
                 case 0 -> {
                     UserLoginView loginView = new UserLoginView();
                     loginView.display();
