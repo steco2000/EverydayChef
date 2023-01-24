@@ -1,6 +1,7 @@
 package view;
 
 import beans.ChefBean;
+import code_reuse.InputReusableUtilities;
 import control.ChefLoginController;
 import factories.ChefLoginControllerFactory;
 
@@ -24,18 +25,13 @@ public class ChefLoginView {
             System.out.println("1) To log in as chef");
             System.out.println("2) To register as chef");
             System.out.println("3) To Sign up as user");
-            int answer = 0;
+            int answer;
             try{
-                answer = Integer.parseInt(sc.nextLine());
+                answer = InputReusableUtilities.getAnswer(this.sc,1,3);
             }catch(NumberFormatException e){
                 System.out.println("Invalid answer, digit something to continue to continue");
                 this.sc.nextLine();
                 continue;
-            }
-
-            if(answer < 1 || answer > 3){
-                System.out.println("Invalid answer, digit something to continue to continue\n");
-                this.sc.nextLine();
             }
 
             switch (answer) {
@@ -58,14 +54,11 @@ public class ChefLoginView {
 
     private boolean chefLoginAttempt() {
         System.out.println("Log in as chef");
-        System.out.print("Username: ");
-        String username = this.sc.nextLine();
-        System.out.print("Password: ");
-        String password = this.sc.nextLine();
+        String[] credentials = InputReusableUtilities.getCredentials(this.sc);
 
         ChefBean credBean = new ChefBean();
-        credBean.setUsername(username);
-        credBean.setPassword(password);
+        credBean.setUsername(credentials[0]);
+        credBean.setPassword(credentials[1]);
 
         ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
         ChefLoginController loginController = factory.createChefLoginController();

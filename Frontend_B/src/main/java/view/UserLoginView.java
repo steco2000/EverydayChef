@@ -1,6 +1,7 @@
 package view;
 
 import beans.UserCredBean;
+import code_reuse.InputReusableUtilities;
 import control.UserLoginController;
 import factories.UserLoginControllerFactory;
 
@@ -24,18 +25,13 @@ public class UserLoginView {
             System.out.println("1) To log in");
             System.out.println("2) To register");
             System.out.println("3) To Sign up as Chef");
-            int answer = 0;
+            int answer;
             try{
-                answer = Integer.parseInt(sc.nextLine());
+                answer = InputReusableUtilities.getAnswer(this.sc,1,3);
             }catch(NumberFormatException e){
-                System.out.println("Invalid answer, digit something to continue to continue");
-                this.sc.nextLine();
+                System.out.println("Invalid answer, press enter or digit something to continue");
+                sc.nextLine();
                 continue;
-            }
-
-            if(answer < 1 || answer > 3){
-                System.out.println("Invalid answer, digit something to continue to continue");
-                this.sc.nextLine();
             }
 
             switch (answer) {
@@ -65,14 +61,11 @@ public class UserLoginView {
 
     private boolean loginAttempt() {
         System.out.println("Log in");
-        System.out.print("Username: ");
-        String username = this.sc.nextLine();
-        System.out.print("Password: ");
-        String password = this.sc.nextLine();
+        String[] credentials = InputReusableUtilities.getCredentials(this.sc);
 
         this.credBean = new UserCredBean();
-        credBean.setUsername(username);
-        credBean.setPassword(password);
+        credBean.setUsername(credentials[0]);
+        credBean.setPassword(credentials[1]);
 
         UserLoginControllerFactory factory = new UserLoginControllerFactory();
         UserLoginController loginController = factory.createUserLoginController();

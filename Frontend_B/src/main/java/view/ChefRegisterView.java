@@ -77,7 +77,11 @@ public class ChefRegisterView {
         System.out.println("Password: " + newChef.getPassword());
         System.out.println("Are you sure to proceed?");
 
-        String answer = sc.nextLine();
+        this.manageRegistrationAnswer(sc.nextLine(),newChef);
+
+    }
+
+    private void manageRegistrationAnswer(String answer, ChefBean newChef){
         if (answer.equals("y") || answer.equals("Y")) {
             ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
             ChefLoginController chefLoginController = factory.createChefLoginController();
@@ -93,6 +97,7 @@ public class ChefRegisterView {
             ChefLoginView chefLoginView = new ChefLoginView();
             chefLoginView.display();
         }
-
     }
+
 }
+

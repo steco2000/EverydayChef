@@ -1,6 +1,7 @@
 package view;
 
 import beans.UserCredBean;
+import code_reuse.InputReusableUtilities;
 
 import java.util.Scanner;
 
@@ -22,18 +23,13 @@ public class UserHomeView {
             System.out.println("0) To exit");
             System.out.println("1) To manage your ingredients inventory");
             System.out.println("2) To browse through the recipes");
-            int answer = 0;
+            int answer;
             try {
-                answer = Integer.parseInt(sc.nextLine());
+                answer = InputReusableUtilities.getAnswer(this.sc,0,2);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid answer, digit something to continue to continue");
                 this.sc.nextLine();
                 continue;
-            }
-
-            if(answer < 0 || answer > 2){
-                System.out.println("Invalid answer, digit something to continue to continue");
-                this.sc.nextLine();
             }
 
             switch (answer) {
