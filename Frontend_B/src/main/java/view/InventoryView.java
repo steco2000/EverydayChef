@@ -42,6 +42,7 @@ public class InventoryView {
 
             switch (answer){
                 case 0 -> {
+                    applController.saveCurrentInventory();
                     UserHomeView userHomeView = new UserHomeView();
                     userHomeView.display();
                 }

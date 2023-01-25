@@ -57,11 +57,22 @@ public class RecipePageView {
                 BrowseRecipesView browseRecipesView = new BrowseRecipesView();
                 browseRecipesView.display(false);
             }
-            case 1 -> {
-                //todo mostra page chef
-                this.display();
-            }
+            case 1 -> this.displayChefPage();
         }
+    }
+
+    private void displayChefPage() {
+        System.out.println();
+        System.out.println("Chef Page:");
+        System.out.println(this.chef.getName()+" "+this.chef.getSurname());
+        System.out.println("Born: "+this.chef.getBirthDate());
+        System.out.println("Email: "+this.chef.getEmail());
+        System.out.println("Bio informations:");
+        System.out.println(this.chef.getInfo());
+        System.out.println();
+        System.out.println("Press enter to go back");
+        this.sc.nextLine();
+        this.display();
     }
 
     private void displayIngredientTable(List<RecipeIngredientBean> data) {
