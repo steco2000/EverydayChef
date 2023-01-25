@@ -36,6 +36,7 @@ public class UserLoginView {
                         UserHomeView homeView = new UserHomeView();
                         homeView.display();
                     }else{
+                        System.out.println();
                         System.out.println("Login failed, incorrect credentials");
                         System.out.println("Press enter or digit something to continue");
                         sc.nextLine();

@@ -103,7 +103,7 @@ public class ChefHomeGraphicController {
     }
 
     public void loadRecipeUI() throws IOException {
-        FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("RecipeManagmentView.fxml"));
+        FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("RecipeManagementView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
         this.setUpRecipeTable();

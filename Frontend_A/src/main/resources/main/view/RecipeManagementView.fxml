@@ -32,7 +32,7 @@
                                 <TableColumn fx:id="recipesColumn" prefWidth="1281.0" text="Recipes" />
                             </columns>
                         </TableView>
-                        <Label layoutX="14.0" layoutY="201.0" text="Recipe Managment">
+                        <Label layoutX="14.0" layoutY="201.0" text="Recipe Management">
                             <font>
                                 <Font size="20.0" />
                             </font>

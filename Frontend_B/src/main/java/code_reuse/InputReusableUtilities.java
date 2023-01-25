@@ -35,4 +35,24 @@ public class InputReusableUtilities {
         return creds;
     }
 
+    public static String measureUnitInput(Scanner sc){
+        while(true) {
+            System.out.println("Measure Unit - press:");
+            System.out.println("1) For Kg");
+            System.out.println("2) For L");
+            System.out.println("3) For not specified");
+            int answer = InputReusableUtilities.getAnswer(sc, 1, 3);
+            switch (answer) {
+                case -1:
+                    continue;
+                case 1:
+                    return "Kg";
+                case 2:
+                    return "L";
+                default:
+                    return "";
+            }
+        }
+    }
+
 }

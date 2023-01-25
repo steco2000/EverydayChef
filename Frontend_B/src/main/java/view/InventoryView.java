@@ -36,11 +36,15 @@ public class InventoryView {
             System.out.println("Press:");
             System.out.println("0) To go back home");
             System.out.println("1) To add an ingredient");
-            System.out.println("2) To remove an ingredient");
-            System.out.println("3) To save changes");
-            int answer = InputReusableUtilities.getAnswer(this.sc, 0, 3);
+            System.out.println("2) To update an ingredient");
+            System.out.println("3) To remove an ingredient");
+            System.out.println("4) To save changes");
+            int answer = InputReusableUtilities.getAnswer(this.sc, 0, 4);
 
             switch (answer){
+                case -1 -> {
+                    assert(true); //errore nella risposta non faccio nulla
+                }
                 case 0 -> {
                     applController.saveCurrentInventory();
                     UserHomeView userHomeView = new UserHomeView();
@@ -51,32 +55,13 @@ public class InventoryView {
                     System.out.println("Ingredient adding");
                     this.manageIngredientAdd();
                 }
-                case 2 -> this.manageIngredientRemoving();
+                case 2 -> this.manageIngredientUpdating();
+                case 3 -> this.manageIngredientRemoving();
                 default -> {
                     applController.saveCurrentInventory();
                     System.out.println("Save completed, press enter to continue");
                     this.sc.nextLine();
                 }
-            }
-        }
-    }
-
-    private String measureUnitInput(){
-        while(true) {
-            System.out.println("Measure Unit - press:");
-            System.out.println("1) For Kg");
-            System.out.println("2) For L");
-            System.out.println("3) For not specified");
-            int answer = InputReusableUtilities.getAnswer(this.sc, 1, 3);
-            switch (answer) {
-                case -1:
-                    continue;
-                case 1:
-                    return "Kg";
-                case 2:
-                    return "L";
-                default:
-                    return "";
             }
         }
     }
@@ -87,9 +72,9 @@ public class InventoryView {
             try {
                 System.out.print("Name: ");
                 newIngredient.setName(sc.nextLine());
-                System.out.print("Quantity: ");
+                System.out.print("Quantity (only value, without measure unit): ");
                 newIngredient.setQuantity(sc.nextLine());
-                newIngredient.setMeasureUnit(this.measureUnitInput());
+                newIngredient.setMeasureUnit(InputReusableUtilities.measureUnitInput(this.sc));
                 System.out.print("Expiration date: ");
                 newIngredient.setExpirationDate(this.sc.nextLine());
                 System.out.println("Notes (do not press enter to start a new line!): ");
@@ -108,6 +93,86 @@ public class InventoryView {
                 this.sc.nextLine();
             }
             this.display();
+        }
+    }
+
+    private void manageIngredientUpdating() {
+        System.out.println();
+        System.out.print("Digit the index of the ingredient you want to update: ");
+        int answer = InputReusableUtilities.getAnswer(this.sc, 1, this.ingredientList.size());
+        if (answer == -1){
+            return;
+        }
+
+        IngredientBean toUpdate = this.ingredientList.get(answer - 1);
+        IngredientBean updates = new IngredientBean();
+        updates.setName(toUpdate.getName());
+        try {
+            updates.setName(toUpdate.getName());
+            updates.setQuantity(String.valueOf(toUpdate.getQuantity()));
+            updates.setExpirationDate(toUpdate.getStringExpDate());
+            updates.setMeasureUnit(toUpdate.getMeasureUnit());
+            updates.setNotes(toUpdate.getNotes());
+        } catch (ParseException e) {
+            assert(true); //eccezione ignorata, dati da memoria già validati
+        }
+
+        while(true) {
+            System.out.println();
+            System.out.println("You selected:");
+            System.out.println(updates.getName()+", "+updates.getQuantity()+" "+updates.getMeasureUnit());
+            System.out.println("Expiration date: "+updates.getStringExpDate());
+            System.out.println("Notes:");
+            System.out.println(updates.getNotes());
+            System.out.println();
+            System.out.println("Press:");
+            System.out.println("0) To cancel");
+            System.out.println("1) To modify the quantity");
+            System.out.println("2) To modify the expiration date");
+            System.out.println("3) To modify the notes");
+            System.out.println("4) To confirm changes");
+            int answer2 = InputReusableUtilities.getAnswer(this.sc,0,4);
+
+            switch (answer2){
+                case -1 -> {
+                    assert(true); //errore nella risposta, non faccio nulla
+                }
+                case 0 -> {
+                    return;
+                }
+                case 1 -> {
+                    System.out.println();
+                    System.out.println("Digit the new quantity below (only value, without measure unit):");
+                    try {
+                        updates.setQuantity(this.sc.nextLine());
+                    } catch (ParseException e) {
+                        System.out.println();
+                        System.out.println("Invalid quantity, press enter to continue");
+                        this.sc.nextLine();
+                    }
+                    updates.setMeasureUnit(InputReusableUtilities.measureUnitInput(this.sc));
+                }
+                case 2 -> {
+                    System.out.println();
+                    System.out.println("Digit the new expiration date below");
+                    try {
+                        updates.setExpirationDate(this.sc.nextLine());
+                    } catch (ParseException e) {
+                        System.out.println();
+                        System.out.println("Invalid date, press enter to continue");
+                        this.sc.nextLine();
+                    }
+                }
+                case 3 -> {
+                    System.out.println();
+                    System.out.println("Digit the new notes below (do not press enter to start a new line!)");
+                    updates.setNotes(this.sc.nextLine());
+                }
+                case 4 -> {
+                    this.applController.updateIngredient(toUpdate.getName(),updates);
+                    return;
+                }
+            }
         }
     }
 

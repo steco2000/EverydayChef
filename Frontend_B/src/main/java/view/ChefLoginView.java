@@ -32,8 +32,15 @@ public class ChefLoginView {
                     assert(true); //errore nella risposta, non faccio niente e passo alla prossima iterazione;
                 }
                 case 1 -> {
-                    boolean result = this.chefLoginAttempt();
-                    System.out.println(result); //todo carica chef home
+                    if(this.chefLoginAttempt()){
+                        ChefHomeView chefHomeView = new ChefHomeView();
+                        chefHomeView.display();
+                    }else {
+                        System.out.println();
+                        System.out.println("Login failed, incorrect credentials");
+                        System.out.println("Press enter or digit something to continue");
+                        sc.nextLine();
+                    }
                 }
                 case 2 -> {
                     System.out.println();
