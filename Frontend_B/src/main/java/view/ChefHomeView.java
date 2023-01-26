@@ -1,5 +1,6 @@
 package view;
 
+import beans.RecipeStatisticsTableBean;
 import code_reuse.InputReusableUtilities;
 import control.LoginController;
 
@@ -36,8 +37,9 @@ public class ChefHomeView {
                     RecipeManagementView recipeManagementView = new RecipeManagementView(LoginController.getChefLogged().getUsername());
                     recipeManagementView.display();
                 }
-                case 2 -> {
-                    //todo carica schermata statistiche ricette
+                default -> {
+                    RecipeStatisticsView recipeStatisticsView = new RecipeStatisticsView(this, LoginController.getChefLogged().getUsername());
+                    recipeStatisticsView.display();
                 }
             }
         }

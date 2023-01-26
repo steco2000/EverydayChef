@@ -61,7 +61,7 @@ public class RecipeManagementView {
                 if(ans == -1) this.display();
                 RecipeBean toUpdate = this.recipeList.get(ans-1);
                 toUpdate = dataBean.getRecipe(toUpdate.getName());
-                UpdateRecipeView updateRecipeView = new UpdateRecipeView(this);
+                UpdateRecipeView updateRecipeView = new UpdateRecipeView(this, this.chefUsername);
                 updateRecipeView.display(toUpdate);
             }
             default -> {

@@ -15,10 +15,12 @@ public class UpdateRecipeView {
     private Scanner sc;
     private RecipeManagementView recipeManagementView;
     private RecipeBean updates;
+    private String chefUsername;
 
-    public UpdateRecipeView(RecipeManagementView recipeManagementView){
+    public UpdateRecipeView(RecipeManagementView recipeManagementView, String chefUsername){
         this.sc = new Scanner(System.in);
         this.recipeManagementView = recipeManagementView;
+        this.chefUsername = chefUsername;
     }
 
     public void display(RecipeBean toUpdate) {
@@ -28,7 +30,7 @@ public class UpdateRecipeView {
         updates.setPreparationTime(toUpdate.getPreparationTime());
         updates.setServings(String.valueOf(toUpdate.getServings()));
         updates.setPreparationProcedure(toUpdate.getPreparationProcedure());
-        updates.setChefUsername(toUpdate.getChefUsername());
+        updates.setChefUsername(this.chefUsername);
         updates.setIngredientList(toUpdate.getIngredientList());
         while(true){
             System.out.println();
