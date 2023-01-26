@@ -40,6 +40,10 @@ public class RecipeIngredientBean {
     public void setQuantity(String quantity, boolean ...notSpecified) throws ParseException, RecipeIngredientQuantityException {
         //Per acluni ingredienti come olio e sale la quantità può non essere specificata, tuttavia l'utente viene avvertito
         if(quantity.length() == 0 && notSpecified.length == 0) throw new RecipeIngredientQuantityException();
+        else if(notSpecified.length!=0 && notSpecified[0]){
+            this.quantity = 0;
+            return;
+        }
         double givenQuantity;
         try{
             givenQuantity = Double.parseDouble(quantity);
@@ -48,7 +52,7 @@ public class RecipeIngredientBean {
             Number number = format.parse(quantity);
             givenQuantity = number.doubleValue();
         }
-        if(givenQuantity <= 0) throw new IllegalArgumentException();
+        if(givenQuantity < 0) throw new IllegalArgumentException();
         this.quantity = givenQuantity;
     }
 

@@ -30,7 +30,6 @@ public class RecipeManagementView {
         System.out.println();
         System.out.println("Recipe Management");
         System.out.println();
-        System.out.println("Those are your reipes: ");
 
         this.displayRecipeTable();
 
@@ -57,7 +56,13 @@ public class RecipeManagementView {
                 shareRecipeView.display(this.chefUsername);
             }
             case 2 -> {
-                //todo update
+                System.out.println("Digit the index of the recipe to update");
+                int ans = InputReusableUtilities.getAnswer(this.sc,1,this.recipeList.size());
+                if(ans == -1) this.display();
+                RecipeBean toUpdate = this.recipeList.get(ans-1);
+                toUpdate = dataBean.getRecipe(toUpdate.getName());
+                UpdateRecipeView updateRecipeView = new UpdateRecipeView(this);
+                updateRecipeView.display(toUpdate);
             }
             default -> {
                 RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
@@ -72,8 +77,12 @@ public class RecipeManagementView {
 
     private void displayRecipeTable() {
         recipeList = dataBean.getTableData();
+        if(recipeList.isEmpty()) return;
+        int i = 1;
+        System.out.println("Those are your reipes: ");
         for(RecipeBean r: recipeList){
-            System.out.println(r.getName());
+            System.out.println(i+") "+r.getName());
+            i++;
         }
         System.out.println();
     }

@@ -39,10 +39,9 @@ public class ShareRecipeView {
                 continue;
             }
             System.out.println("Difficulty:");
-            this.newRecipe.setDifficulty(this.getDifficulty());
+            this.newRecipe.setDifficulty(InputReusableUtilities.difficultyInput(this.sc));
             System.out.println();
-            System.out.println("Preparation time:");
-            this.newRecipe.setPreparationTime(this.getPreparationTime());
+            this.newRecipe.setPreparationTime(InputReusableUtilities.preparationTimeInput(this.sc));
             System.out.println();
             System.out.print("Number of servings: ");
             try {
@@ -78,62 +77,36 @@ public class ShareRecipeView {
 
     private List<RecipeIngredientBean> getIngredientList() {
         List<RecipeIngredientBean> ingredientList = new ArrayList<>();
-        while(true){
+        while (true) {
             System.out.println("Ingredient List:");
             this.displayIngredientList(ingredientList);
             System.out.println("Press:");
             System.out.println("1) To add an ingredient");
             System.out.println("2) To remove an ingredient");
             System.out.println("3) To confirm the list");
-            int ans = InputReusableUtilities.getAnswer(this.sc,1,3);
+            int ans = InputReusableUtilities.getAnswer(this.sc, 1, 3);
 
-            switch(ans){
+            switch (ans) {
                 case -1 -> {
-                    assert(true); //errore nella risposta, non faccio nulla
+                    assert (true); //errore nella risposta, non faccio nulla
                 }
-                case 1 -> ingredientList.add(this.getIngredientData());
+                case 1 -> ingredientList.add(InputReusableUtilities.getIngredientData(this.sc));
                 case 2 -> {
-                    if(ingredientList.isEmpty()) continue;
+                    if (ingredientList.isEmpty()) continue;
                     System.out.println();
                     System.out.println("Digit the index of the ingredient to remove");
-                    int ingrIdx = InputReusableUtilities.getAnswer(this.sc,1,ingredientList.size());
-                    if(ingrIdx == -1){
+                    int ingrIdx = InputReusableUtilities.getAnswer(this.sc, 1, ingredientList.size());
+                    if (ingrIdx == -1) {
                         continue;
                     }
-                    ingredientList.remove(ingrIdx-1);
+                    ingredientList.remove(ingrIdx - 1);
                 }
-                case 3 -> {
+                default -> {
                     return ingredientList;
                 }
             }
         }
     }
-
-    private RecipeIngredientBean getIngredientData() {
-        RecipeIngredientBean newIngredient = new RecipeIngredientBean();
-        while(true){
-            try{
-                System.out.println();
-                System.out.print("Name: ");
-                newIngredient.setName(this.sc.nextLine());
-                System.out.print("Quantity (type 0 if you don't want to specify it): ");
-                newIngredient.setQuantity(sc.nextLine());
-                newIngredient.setMeasureUnit(InputReusableUtilities.measureUnitInput(this.sc));
-                System.out.println("Are you sure to proceed? (y/n)");
-                if(InputReusableUtilities.yes(this.sc)) return newIngredient;
-            }catch(IllegalArgumentException e){
-                System.out.println();
-                System.out.println("Name can't be empty, press enter to continue");
-                this.sc.nextLine();
-            } catch (ParseException | RecipeIngredientQuantityException e) {
-                System.out.println();
-                System.out.println("Invalid quantity, press enter to continue");
-                this.sc.nextLine();
-            }
-
-        }
-    }
-
 
     private void displayIngredientList(List<RecipeIngredientBean> ingredientList){
         if(ingredientList.isEmpty()) return;
@@ -143,70 +116,6 @@ public class ShareRecipeView {
             idx++;
         }
         System.out.println();
-    }
-
-    private String getPreparationTime() {
-        String measureUnit = "";
-        String value;
-
-        while(true) {
-            if(!measureUnit.isEmpty()) break;
-            System.out.println("This recipe requires hours or minutes? Press:");
-            System.out.println("1) For minutes");
-            System.out.println("2) For hours");
-            int ans = InputReusableUtilities.getAnswer(this.sc, 1, 2);
-
-            switch (ans) {
-                case -1 -> {
-                   assert(true); //errore nella risposta, non faccio nulla
-                }
-                case 1 -> {
-                    measureUnit = "min";
-                }
-                case 2 -> measureUnit = "H";
-            }
-        }
-
-        while(true) {
-            System.out.println("How many?");
-            value = sc.nextLine();
-            try{
-                Double.parseDouble(value);
-                break;
-            }catch (NumberFormatException e){
-                System.out.println();
-                System.out.println("Invalid value, press enter to continue");
-                this.sc.nextLine();
-            }
-        }
-
-        return value+" "+measureUnit;
-
-    }
-
-    private String getDifficulty() {
-        while(true) {
-            System.out.println("Press:");
-            System.out.println("1) To set Easy");
-            System.out.println("2) To set Medium");
-            System.out.println("3) To set Hard");
-            int diff = InputReusableUtilities.getAnswer(this.sc,1,3);
-
-            switch (diff){
-                case -1 -> {
-                    assert(true); //errore nella risposta non faccio nulla
-                }
-                case 1 -> {
-                    return "Easy";
-                }
-                case 2 -> {
-                    return "Medium";
-                }
-                default -> {
-                    return "Hard";
-                }
-            }
-        }
     }
 
 }
