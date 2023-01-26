@@ -4,8 +4,6 @@ import beans.RecipeStatisticsTableBean;
 import control.RecipeStatisticsController;
 import factories.RecipeStatisticsControllerFactory;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,6 +30,7 @@ public class RecipeStatisticsView {
         System.out.println();
         System.out.println("Press enter to go back home");
         this.sc.nextLine();
+        chefHomeView.display();
     }
 
 }
