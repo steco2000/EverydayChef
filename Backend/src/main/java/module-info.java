@@ -1,4 +1,5 @@
 module Backend {
+    requires java.sql;
     exports control;
     exports model;
     exports beans;

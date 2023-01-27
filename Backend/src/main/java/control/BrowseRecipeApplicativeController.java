@@ -2,7 +2,10 @@ package control;
 
 import beans.RecipeBrowsingTableBean;
 import dao.ChefDAO;
+import dao.FileSystemInventoryDAO;
+import dao.InventoryDAO;
 import dao.RecipesBrowsingDAO;
+import factories.InventoryDAOFactory;
 import model.*;
 
 import java.io.IOException;
@@ -31,7 +34,9 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
 
     @Override
     public List<RecipeBrowsingTableBean> retrieveSuggestedRecipe() {
-        Inventory inventory = this.currentUser.getIngredientsInventory();
+        InventoryDAOFactory inventoryDAOFactory = new InventoryDAOFactory();
+        InventoryDAO inventoryDAO = inventoryDAOFactory.createInventoryDAO();
+        Inventory inventory = (Inventory) inventoryDAO.retrieveInventory();
         if(inventory == null) return new ArrayList<>();
         RecipeInfoRetrievingApplicativeController.setInventoryList(inventory.getIngredientList());
         ChefDAO chefDAO = new ChefDAO();

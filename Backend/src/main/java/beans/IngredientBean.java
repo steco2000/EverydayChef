@@ -50,7 +50,7 @@ public class IngredientBean {
             Number number = format.parse(quantity);
             givenQuantity = number.doubleValue();
         }
-        if(givenQuantity <= 0) throw new IllegalArgumentException();
+        if(givenQuantity < 0) throw new IllegalArgumentException();
         this.quantity = givenQuantity;
     }
 

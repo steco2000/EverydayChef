@@ -1,18 +1,19 @@
 package control;
 
 import beans.IngredientBean;
+import dao.DBMSInventoryDAO;
 import dao.InventoryDAO;
 import factories.IngredientFactory;
+import factories.InventoryDAOFactory;
 import model.*;
-
-import java.io.IOException;
 
 public class InventoryApplicativeController implements InventoryController{
 
     private final InventoryBase currentInventory;
 
     public InventoryApplicativeController(){
-        InventoryDAO dao = new InventoryDAO();
+        InventoryDAOFactory daoFactory = new InventoryDAOFactory();
+        InventoryDAO dao = daoFactory.createInventoryDAO();
         currentInventory = dao.retrieveInventory();
     }
 
@@ -47,12 +48,9 @@ public class InventoryApplicativeController implements InventoryController{
 
     @Override
     public void saveCurrentInventory() {
-        InventoryDAO dao = new InventoryDAO();
-        try {
-            dao.saveInventory(currentInventory);
-        } catch (IOException ignored) {
-            assert(true); //eccezione ignorata
-        }
+        InventoryDAOFactory daoFactory = new InventoryDAOFactory();
+        InventoryDAO dao = daoFactory.createInventoryDAO();
+        dao.saveInventory(currentInventory);
     }
 
 }
