@@ -15,12 +15,12 @@ public class DBMSInventoryDAO extends InventoryDAO{
     private static final String USERNAME = "admin";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/inventoryDB";
-    private String pwPath;
+    private static String pwPath;
     private static String pass;
 
     public DBMSInventoryDAO(){
         super();
-        if(pass == null) this.makePassword();
+        if(pass == null) makePassword();
         try {
             this.makeDataConsistent();
         } catch (IOException | ClassNotFoundException ignored) {
@@ -28,8 +28,8 @@ public class DBMSInventoryDAO extends InventoryDAO{
         }
     }
 
-    private void makePassword() {
-        this.pwPath = Paths.get("Backend\\src\\main\\resources\\inventoryDB\\dbpass.ser").toAbsolutePath().toString();
+    private static void makePassword() {
+        pwPath = Paths.get("Backend\\src\\main\\resources\\inventoryDB\\dbpass.ser").toAbsolutePath().toString();
         try{
             FileInputStream filein = new FileInputStream(pwPath);
             ObjectInputStream objIn = new ObjectInputStream(filein);
@@ -37,13 +37,13 @@ public class DBMSInventoryDAO extends InventoryDAO{
             filein.close();
             objIn.close();
         }catch(FileNotFoundException e){
-            this.storePassword();
+            storePassword();
         } catch (IOException | ClassNotFoundException ignored) {
             assert(true); //eccezione ignorata
         }
     }
 
-    private void storePassword() {
+    private static void storePassword() {
         try {
             FileOutputStream filein = new FileOutputStream(pwPath);
             ObjectOutputStream objOut = new ObjectOutputStream(filein);
