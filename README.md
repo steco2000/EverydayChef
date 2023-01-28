@@ -3,6 +3,6 @@ Analisi Sonarcloud: https://sonarcloud.io/project/overview?id=steco2000_Everyday
 
 Moduli:
 - Frontend_A: applicazione JavaFX
-- Frontend_B (WORK IN PROGRESS): console app
+- Frontend_B: console app
 - Backend: libreria comune
 - Utilities: librerie di utility varie per JavaFX
