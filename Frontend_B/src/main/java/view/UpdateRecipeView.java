@@ -4,10 +4,8 @@ import beans.RecipeBean;
 import beans.RecipeIngredientBean;
 import code_reuse.InputReusableUtilities;
 import control.RecipeUpdadingController;
-import exceptions.RecipeIngredientQuantityException;
 import factories.RecipeUpdatingControllerFactory;
 
-import java.text.ParseException;
 import java.util.Scanner;
 
 public class UpdateRecipeView {
@@ -88,10 +86,9 @@ public class UpdateRecipeView {
                     if(updates.getIngredientList().isEmpty()) continue;
                     System.out.println("Digit the index of the ingredient to remove");
                     int ingrIdx = InputReusableUtilities.getAnswer(this.sc,1,updates.getIngredientList().size());
-                    if(ingrIdx == -1) continue;
-                    updates.getIngredientList().remove(ingrIdx-1);
+                    if(ingrIdx != -1) updates.getIngredientList().remove(ingrIdx-1);
                 }
-                case 8 -> {
+                default -> {
                     RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
                     RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
                     updadingController.updateRecipe(toUpdate.getName(),updates);

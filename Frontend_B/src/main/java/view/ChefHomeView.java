@@ -1,6 +1,5 @@
 package view;
 
-import beans.RecipeStatisticsTableBean;
 import code_reuse.InputReusableUtilities;
 import control.LoginController;
 

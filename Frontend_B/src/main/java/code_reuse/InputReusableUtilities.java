@@ -8,6 +8,12 @@ import java.util.Scanner;
 
 public class InputReusableUtilities {
 
+    private static final String INVALID_VALUE_MESSAGE = "Invalid value, press enter to continue";
+
+    private InputReusableUtilities(){
+        assert(true); //costruttore privato per nascondere quello pubblico implicito
+    }
+
     public static boolean yes(Scanner sc){
         String answer = sc.nextLine();
         return (answer.equals("y") || answer.equals("Y"));
@@ -35,8 +41,7 @@ public class InputReusableUtilities {
         String username = sc.nextLine();
         System.out.print("Password: ");
         String password = sc.nextLine();
-        String[] creds = {username, password};
-        return creds;
+        return new String[] {username, password};
     }
 
     public static String measureUnitInput(Scanner sc){
@@ -74,7 +79,7 @@ public class InputReusableUtilities {
                     assert(true); //errore nella risposta, non faccio nulla
                 }
                 case 1 -> measureUnit = "min";
-                case 2 -> measureUnit = "H";
+                default -> measureUnit = "H";
             }
         }
         while(true){
@@ -83,11 +88,11 @@ public class InputReusableUtilities {
             try{
                 value = Double.parseDouble(sc.nextLine());
                 if(value <= 0){
-                    System.out.println("Invalid value, press enter to continue");
+                    System.out.println(INVALID_VALUE_MESSAGE);
                     sc.nextLine();
                 }
             }catch(NumberFormatException e){
-                System.out.println("Invalid value, press enter to continue");
+                System.out.println(INVALID_VALUE_MESSAGE);
                 sc.nextLine();
             }
         }
@@ -135,7 +140,7 @@ public class InputReusableUtilities {
                 if(InputReusableUtilities.yes(sc)) return newIngredient;
             }catch(IllegalArgumentException e){
                 System.out.println();
-                System.out.println("Invalid value, press enter to continue");
+                System.out.println(INVALID_VALUE_MESSAGE);
                 sc.nextLine();
             } catch (ParseException | RecipeIngredientQuantityException e) {
                 System.out.println();

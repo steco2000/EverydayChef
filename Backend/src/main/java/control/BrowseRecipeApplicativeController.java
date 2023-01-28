@@ -2,7 +2,6 @@ package control;
 
 import beans.RecipeBrowsingTableBean;
 import dao.ChefDAO;
-import dao.FileSystemInventoryDAO;
 import dao.InventoryDAO;
 import dao.RecipesBrowsingDAO;
 import factories.InventoryDAOFactory;

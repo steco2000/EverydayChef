@@ -1,7 +1,6 @@
 package control;
 
 import beans.IngredientBean;
-import dao.DBMSInventoryDAO;
 import dao.InventoryDAO;
 import factories.IngredientFactory;
 import factories.InventoryDAOFactory;

@@ -29,7 +29,7 @@ public class ChefLoginView {
 
             switch (answer) {
                 case -1 ->{
-                    assert(true); //errore nella risposta, non faccio niente e passo alla prossima iterazione;
+                    assert(true); //errore nella risposta, non faccio niente e passo alla prossima iterazione
                 }
                 case 1 -> {
                     if(this.chefLoginAttempt()){

@@ -68,7 +68,9 @@ public class InventoryView {
 
     private void manageIngredientAdd() {
         IngredientBean newIngredient = new IngredientBean();
+        boolean dataAcquired = false;
         while(true){
+            if(dataAcquired) break;
             try {
                 System.out.print("Name: ");
                 newIngredient.setName(sc.nextLine());
@@ -79,12 +81,11 @@ public class InventoryView {
                 newIngredient.setExpirationDate(this.sc.nextLine());
                 System.out.println("Notes (do not press enter to start a new line!): ");
                 newIngredient.setNotes(sc.nextLine());
+                dataAcquired = true;
             } catch (IllegalArgumentException | ParseException e) {
                 System.out.println("Invalid value, press enter to continue");
                 this.sc.nextLine();
-                continue;
             }
-            break;
         }
         System.out.println("Are you sure to proceed? (y/n)");
         if(InputReusableUtilities.yes(this.sc)) {
@@ -168,7 +169,7 @@ public class InventoryView {
                     System.out.println("Digit the new notes below (do not press enter to start a new line!)");
                     updates.setNotes(this.sc.nextLine());
                 }
-                case 4 -> {
+                default -> {
                     this.applController.updateIngredient(toUpdate.getName(),updates);
                     return;
                 }

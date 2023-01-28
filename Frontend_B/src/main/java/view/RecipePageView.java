@@ -52,12 +52,11 @@ public class RecipePageView {
         System.out.println("1) To view chef info");
         int answer = InputReusableUtilities.getAnswer(this.sc,0,1);
 
-        switch (answer){
-            case 0 -> {
-                BrowseRecipesView browseRecipesView = new BrowseRecipesView();
-                browseRecipesView.display(false);
-            }
-            case 1 -> this.displayChefPage();
+        if (answer == 0) {
+            BrowseRecipesView browseRecipesView = new BrowseRecipesView();
+            browseRecipesView.display(false);
+        } else {
+            this.displayChefPage();
         }
     }
 

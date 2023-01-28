@@ -13,7 +13,7 @@ public abstract class InventoryDAO {
     protected UserCredentials user;
     protected final String lastUsedDaoFileName;
 
-    public InventoryDAO(){
+    protected InventoryDAO(){
         this.user = (UserCredentials) LoginController.getUserLogged();
         Path relativeLastDAOFilePath = Paths.get("Backend\\src\\main\\resources\\last_inventoryDAO_flags\\last_inventoryDAO_flag_"+user.getUsername()+".ser");
         lastUsedDaoFileName = relativeLastDAOFilePath.toAbsolutePath().toString();

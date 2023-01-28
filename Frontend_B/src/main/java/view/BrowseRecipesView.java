@@ -1,15 +1,10 @@
 package view;
 
-import beans.ChefBean;
-import beans.RecipeBean;
 import beans.RecipeBrowsingTableBean;
-import beans.RecipeIngredientBean;
 import code_reuse.InputReusableUtilities;
 import control.BrowseRecipeController;
-import control.RecipeInfoRetrievingController;
 import control.RecipeSearchingController;
 import factories.BrowseRecipeControllerFactory;
-import factories.RecipeInfoRetrievingControllerFactory;
 import factories.RecipeSearchingControllerFactory;
 
 import java.util.List;
@@ -51,7 +46,7 @@ public class BrowseRecipesView {
             case 1 -> {
                 this.manageShowRecipe(fromSearch);
             }
-            case 2 -> {
+            default -> {
                 System.out.println();
                 System.out.println("Digit your search below:");
                 String searchValue = sc.nextLine();
@@ -61,52 +56,57 @@ public class BrowseRecipesView {
     }
 
     private void manageShowRecipe(boolean fromSearch) {
-        int answer;
         while(true){
-            if(fromSearch){
-                if(this.searchResult.isEmpty()){
-                    System.out.println();
-                    System.out.println("There are no results from your search, try again. Press enter to continue");
-                    this.sc.nextLine();
-                    this.display(false);
-                }
-                System.out.println();
-                System.out.println("Digit the recipe's index");
-                answer = InputReusableUtilities.getAnswer(this.sc,1,this.searchResult.size());
-                if(answer == -1){
-                    System.out.println();
-                    System.out.println("Invalid answer, press enter to continue");
-                    this.sc.nextLine();
-                    continue;
-                }
-
-                RecipeBrowsingTableBean recipeSelected = this.searchResult.get(answer-1);
-                RecipePageView recipePageView = new RecipePageView(recipeSelected);
-                recipePageView.display();
-
-            }else{
-                if(this.suggestedRecipes.isEmpty()){
-                    System.out.println();
-                    System.out.println("There are no suggested recipes, try to search something. Press enter to continue");
-                    this.sc.nextLine();
-                    this.display(false);
-                }
-                System.out.println();
-                System.out.println("Digit the recipe's index");
-                answer = InputReusableUtilities.getAnswer(this.sc,1,this.suggestedRecipes.size());
-                if(answer == -1){
-                    System.out.println();
-                    System.out.println("Invalid answer, press enter to continue");
-                    this.sc.nextLine();
-                    continue;
-                }
-
-                RecipeBrowsingTableBean recipeSelected = this.suggestedRecipes.get(answer-1);
-                RecipePageView recipePageView = new RecipePageView(recipeSelected);
-                recipePageView.display();
-
-            }
+            if(fromSearch) this.fromSearchRecipeBrowsing();
+            else this.suggestedRecipesBrowsing();
+            break;
         }
+    }
+
+    private void fromSearchRecipeBrowsing(){
+        int answer;
+        if(this.searchResult.isEmpty()){
+            System.out.println();
+            System.out.println("There are no results from your search, try again. Press enter to continue");
+            this.sc.nextLine();
+            this.display(false);
+        }
+        System.out.println();
+        System.out.println("Digit the recipe's index");
+        answer = InputReusableUtilities.getAnswer(this.sc,1,this.searchResult.size());
+        if(answer == -1){
+            System.out.println();
+            System.out.println("Invalid answer, press enter to continue");
+            this.sc.nextLine();
+            return;
+        }
+
+        RecipeBrowsingTableBean recipeSelected = this.searchResult.get(answer-1);
+        RecipePageView recipePageView = new RecipePageView(recipeSelected);
+        recipePageView.display();
+    }
+
+    private void suggestedRecipesBrowsing() {
+        int answer;
+        if(this.suggestedRecipes.isEmpty()){
+            System.out.println();
+            System.out.println("There are no suggested recipes, try to search something. Press enter to continue");
+            this.sc.nextLine();
+            this.display(false);
+        }
+        System.out.println();
+        System.out.println("Digit the recipe's index");
+        answer = InputReusableUtilities.getAnswer(this.sc,1,this.suggestedRecipes.size());
+        if(answer == -1){
+            System.out.println();
+            System.out.println("Invalid answer, press enter to continue");
+            this.sc.nextLine();
+            return;
+        }
+
+        RecipeBrowsingTableBean recipeSelected = this.suggestedRecipes.get(answer-1);
+        RecipePageView recipePageView = new RecipePageView(recipeSelected);
+        recipePageView.display();
     }
 
     private void displaySearchResults(String search) {
@@ -146,3 +146,4 @@ public class BrowseRecipesView {
     }
 
 }
+

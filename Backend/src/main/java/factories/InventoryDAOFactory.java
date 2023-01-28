@@ -14,24 +14,26 @@ public class InventoryDAOFactory {
     //nel costruttore viene stabilito in modo casuale se verranno creati dao dbms o file system, se "runtimeSelectedDAO" è true allora verranno creati solo dao file system, altrimenti dbms
 
     public InventoryDAOFactory(){
-        if(!daoSelected){
-            Random rand = new Random();
-            double decider = rand.nextDouble();
+        if(!daoSelected) this.decideDAOType();
+    }
 
-            int randomValue;
-            if(decider >= 0.5) randomValue = 1;
-            else randomValue = 0;
+    private void decideDAOType() {
+        Random rand = new Random();
+        double decider = rand.nextDouble();
 
-            if (randomValue != 0){
-                runtimeSelectedDA0 = true;
-                System.out.println("File system InventoryDAO started");
-            } else{
-                runtimeSelectedDA0 = false;
-                System.out.println("DBMS InventoryDAO started");
-            }
+        int randomValue;
+        if(decider >= 0.5) randomValue = 1;
+        else randomValue = 0;
 
-            daoSelected = true;
+        if (randomValue != 0){
+            runtimeSelectedDA0 = true;
+            System.out.println("File system InventoryDAO started");
+        } else{
+            runtimeSelectedDA0 = false;
+            System.out.println("DBMS InventoryDAO started");
         }
+
+        daoSelected = true;
     }
 
     public InventoryDAO createInventoryDAO(){

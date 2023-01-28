@@ -12,15 +12,23 @@ import model.*;
 
 public class DBMSInventoryDAO extends InventoryDAO{
 
-    private static final String USER = "admin";
+    private static final String USERNAME = "admin";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/inventoryDB";
-    private final String pwPath;
+    private String pwPath;
     private static String pass;
 
     public DBMSInventoryDAO(){
         super();
+        if(pass == null) this.makePassword();
+        try {
+            this.makeDataConsistent();
+        } catch (IOException | ClassNotFoundException ignored) {
+            assert(true); //eccezione ignorata
+        }
+    }
 
+    private void makePassword() {
         this.pwPath = Paths.get("Backend\\src\\main\\resources\\inventoryDB\\dbpass.ser").toAbsolutePath().toString();
         try{
             FileInputStream filein = new FileInputStream(pwPath);
@@ -33,19 +41,13 @@ public class DBMSInventoryDAO extends InventoryDAO{
         } catch (IOException | ClassNotFoundException ignored) {
             assert(true); //eccezione ignorata
         }
-
-        try {
-            this.makeDataConsistent();
-        } catch (IOException | ClassNotFoundException ignored) {
-            assert(true); //eccezione ignorata
-        }
     }
 
     private void storePassword() {
         try {
             FileOutputStream filein = new FileOutputStream(pwPath);
             ObjectOutputStream objOut = new ObjectOutputStream(filein);
-            objOut.writeObject(USER);
+            objOut.writeObject(USERNAME);
             filein.close();
             objOut.close();
         } catch (IOException ignored) {
@@ -61,7 +63,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
 
         try{
             Class.forName(DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, pass);
+            conn = DriverManager.getConnection(DB_URL, USERNAME, pass);
             stmt = conn.createStatement();
             stmt.execute("insert into UserCredentials(username,password,email) values('"+user.getUsername()+"','"+user.getPassword()+"','"+user.getEmail()+"')");
             stmt.execute("insert into inventory(user) values('"+user.getUsername()+"')");
@@ -102,7 +104,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
 
         try{
             Class.forName(DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, pass);
+            conn = DriverManager.getConnection(DB_URL, USERNAME, pass);
             stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery("select * from InventoryIngredient where inventory = '"+user.getUsername()+"'");
             if(!result.isBeforeFirst()){
