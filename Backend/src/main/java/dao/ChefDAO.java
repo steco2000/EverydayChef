@@ -14,9 +14,9 @@ public class ChefDAO {
     private final String lastIdFileName;
 
     public ChefDAO(){
-        Path relativeChefFilePath = Paths.get("Backend\\src\\main\\resources\\chef_data_");
+        Path relativeChefFilePath = Paths.get("Backend\\src\\main\\resources\\chef_data\\chef_data_");
         chefFileName = relativeChefFilePath.toAbsolutePath().toString();
-        Path relativeLastIdFilePath = Paths.get("Backend\\src\\main\\resources\\last_chef_id.ser");
+        Path relativeLastIdFilePath = Paths.get("Backend\\src\\main\\resources\\chef_data\\last_chef_id.ser");
         lastIdFileName = relativeLastIdFilePath.toAbsolutePath().toString();
     }
 

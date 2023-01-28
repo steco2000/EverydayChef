@@ -1,9 +1,7 @@
 package dao;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
+import java.nio.file.Paths;
 import java.sql.*;
 
 import beans.InventoryTableDataBean;
@@ -12,20 +10,45 @@ import factories.IngredientFactory;
 import factories.InventoryFactory;
 import model.*;
 
-//dipendenze: IngredientBase, IngredientFactory
-
 public class DBMSInventoryDAO extends InventoryDAO{
 
     private static final String USER = "admin";
-    private static final String PASS = "admin";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/inventoryDB";
+    private final String pwPath;
+    private static String pass;
 
     public DBMSInventoryDAO(){
         super();
+
+        this.pwPath = Paths.get("Backend\\src\\main\\resources\\inventoryDB\\dbpass.ser").toAbsolutePath().toString();
+        try{
+            FileInputStream filein = new FileInputStream(pwPath);
+            ObjectInputStream objIn = new ObjectInputStream(filein);
+            pass = (String) objIn.readObject();
+            filein.close();
+            objIn.close();
+        }catch(FileNotFoundException e){
+            this.storePassword();
+        } catch (IOException | ClassNotFoundException ignored) {
+            assert(true); //eccezione ignorata
+        }
+
         try {
             this.makeDataConsistent();
         } catch (IOException | ClassNotFoundException ignored) {
+            assert(true); //eccezione ignorata
+        }
+    }
+
+    private void storePassword() {
+        try {
+            FileOutputStream filein = new FileOutputStream(pwPath);
+            ObjectOutputStream objOut = new ObjectOutputStream(filein);
+            objOut.writeObject(USER);
+            filein.close();
+            objOut.close();
+        } catch (IOException ignored) {
             assert(true); //eccezione ignorata
         }
     }
@@ -34,11 +57,11 @@ public class DBMSInventoryDAO extends InventoryDAO{
     public void saveInventory(InventoryBase inventory){
         user.setIngredientsInventory((Inventory) inventory);
         Statement stmt = null;
-        Connection conn = null;
+        Connection conn;
 
         try{
             Class.forName(DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, pass);
             stmt = conn.createStatement();
             stmt.execute("insert into UserCredentials(username,password,email) values('"+user.getUsername()+"','"+user.getPassword()+"','"+user.getEmail()+"')");
             stmt.execute("insert into inventory(user) values('"+user.getUsername()+"')");
@@ -79,7 +102,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
 
         try{
             Class.forName(DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, pass);
             stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery("select * from InventoryIngredient where inventory = '"+user.getUsername()+"'");
             if(!result.isBeforeFirst()){

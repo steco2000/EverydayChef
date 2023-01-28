@@ -126,7 +126,7 @@ public class InputReusableUtilities {
                 System.out.println();
                 System.out.print("Name: ");
                 newIngredient.setName(sc.nextLine());
-                System.out.print("Quantity (don't type anything if you don't want to specify it): ");
+                System.out.print("Quantity (only value without measure unit, don't type anything if you don't want to specify it): ");
                 String quantity = sc.nextLine();
                 if(quantity.length() == 0) newIngredient.setQuantity("",true);
                 else newIngredient.setQuantity(quantity);

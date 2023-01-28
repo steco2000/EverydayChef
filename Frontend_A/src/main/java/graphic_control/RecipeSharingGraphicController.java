@@ -148,7 +148,11 @@ public class RecipeSharingGraphicController {
             newRecipe.setName(nameField.getText());
             newRecipe.setChefUsername(chefUsername);
             newRecipe.setDifficulty(difficultyBox.getValue());
-            Double.parseDouble(prepTimeField.getText());
+            double prepTimeValue = Double.parseDouble(prepTimeField.getText());
+            if(prepTimeValue <= 0){
+                AlertBox.display(ERROR_BOX_TITLE,"Invalid preparation time value");
+                return null;
+            }
             newRecipe.setPreparationTime(prepTimeField.getText() + " " + timeUnitBox.getValue());
             newRecipe.setServings(servingsField.getText());
             newRecipe.setPreparationProcedure(preparationArea.getText());

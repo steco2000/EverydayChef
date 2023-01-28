@@ -76,7 +76,8 @@ public class IngredientBean {
         this.stringExpDate = dateFormat.format(expirationDate);
     }
 
-    public void setExpirationDate(String expirationDate) throws ParseException {
+    public void setExpirationDate(String expirationDate) throws ParseException, IllegalArgumentException {
+        if(expirationDate.isEmpty()) throw new IllegalArgumentException();
         Date javaDate;
         this.stringExpDate = expirationDate;
         if(!expirationDate.trim().equals("")){
