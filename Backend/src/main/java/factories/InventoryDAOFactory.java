@@ -42,10 +42,8 @@ public class InventoryDAOFactory {
 
         if (randomValue != 0){
             runtimeSelectedDA0 = true;
-            System.out.println("File system InventoryDAO started");
         } else{
             runtimeSelectedDA0 = false;
-            System.out.println("DBMS InventoryDAO started");
         }
 
         daoSelected = true;

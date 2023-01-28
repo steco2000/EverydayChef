@@ -17,7 +17,7 @@ public class FileSystemInventoryDAO extends InventoryDAO{
 
     public FileSystemInventoryDAO(){
         super();
-        Path relativeInventoryFilePath = Paths.get("Backend\\src\\main\\resources\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser");
+        Path relativeInventoryFilePath = Paths.get("Backend\\src\\main\\resources\\inventories\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser");
         inventoryFileName = relativeInventoryFilePath.toAbsolutePath().toString();
         try {
             this.makeDataConsistent();
