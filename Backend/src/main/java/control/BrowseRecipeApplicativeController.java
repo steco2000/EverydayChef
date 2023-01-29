@@ -13,12 +13,6 @@ import java.util.List;
 
 public class BrowseRecipeApplicativeController implements BrowseRecipeController{
 
-    private final UserCredentials currentUser;
-
-    public BrowseRecipeApplicativeController(){
-        this.currentUser = (UserCredentials) LoginController.getUserLogged();
-    }
-
     private List<RecipeBrowsingTableBean> setUpSuggestedBeanList(List<RecipeBase> suggestedRecipes){
         List<RecipeBrowsingTableBean> beanList = new ArrayList<>();
         for(RecipeBase r: suggestedRecipes){

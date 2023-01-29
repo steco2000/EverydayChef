@@ -21,11 +21,11 @@ import java.util.List;
 public class RecipeStatisticsGraphicController {
 
     @FXML
-    TableView<RecipeStatisticsTableBean> recipeTable;
+    private TableView<RecipeStatisticsTableBean> recipeTable;
     @FXML
-    TableColumn<RecipeStatisticsTableBean, String> nameColumn;
+    private TableColumn<RecipeStatisticsTableBean, String> nameColumn;
     @FXML
-    TableColumn<RecipeStatisticsTableBean, Integer> viewsColumn;
+    private TableColumn<RecipeStatisticsTableBean, Integer> viewsColumn;
 
     private final ChefHomeGraphicController homeGraphicController;
     private final String chefUsername;
