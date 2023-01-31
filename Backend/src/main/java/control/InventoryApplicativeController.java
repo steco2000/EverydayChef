@@ -4,7 +4,8 @@ import beans.IngredientBean;
 import dao.InventoryDAO;
 import factories.IngredientFactory;
 import factories.InventoryDAOFactory;
-import model.*;
+import model.IngredientBase;
+import model.InventoryBase;
 
 public class InventoryApplicativeController implements InventoryController{
 

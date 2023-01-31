@@ -58,7 +58,7 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
                 recipe.getPreparationProcedure()
         );
 
-        RecipeDAO recipeDAO = new RecipeDAO();
+        RecipeDAO recipeDAO = new RecipeDAO(recipe.getChefUsername());
         int i=1;
         String name = newRecipe.getName();
 
