@@ -51,10 +51,8 @@ public class InventoryDAOFactory {
 
     public InventoryDAO createInventoryDAO(){
         if(runtimeSelectedDA0){
-            System.out.println("File system");
             return new FileSystemInventoryDAO();
         }else{
-            System.out.println("DBMS");
             return new DBMSInventoryDAO();
         }
     }
