@@ -92,8 +92,16 @@ public class RecipeSharingGraphicController {
             AlertBox.display(ERROR_BOX_TITLE,"Invalid quantity.");
             return;
         } catch (RecipeIngredientQuantityException e){
-            boolean answer = ConfirmBox.display(newIngredient.getName(), "Are you sure that you want to save the ingredient \""+newIngredient.getName()+"\" without a specified quantity?");
+            boolean answer = ConfirmBox.display(newIngredient.getName(), "Are you sure that you want to save the ingredient \""+newIngredient.getName()+"\" without a specified quantity? It will be set as just enough");
             if(!answer) return;
+            else {
+                try {
+                    newIngredient.setQuantity("J. E.",true);
+                    newIngredient.setMeasureUnit("");
+                } catch (ParseException | RecipeIngredientQuantityException ignored) {
+                    assert(true); //eccezione ignorata dato che la quantità è settata in questo modo appositamente
+                }
+            }
         } catch(IllegalArgumentException e){
             AlertBox.display(ERROR_BOX_TITLE,"Some values in fields are missing or not valid.");
             return;
