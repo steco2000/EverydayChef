@@ -28,6 +28,9 @@ import java.util.List;
 
 public class BrowseRecipesGraphicController {
 
+    @FXML
+    private Label mainLabel;
+
     //schermata ricette consigliate
     @FXML
     private TableView<RecipeBrowsingTableBean> recipeTable;
@@ -102,6 +105,7 @@ public class BrowseRecipesGraphicController {
 
     @FXML
     private void onSearchButtonPression(){
+        mainLabel.setText("Search results");
         if(searchBar.getText().isEmpty()) return;
         RecipeSearchingControllerFactory factory = new RecipeSearchingControllerFactory();
         RecipeSearchingController controller = factory.createRecipeSearchingController();

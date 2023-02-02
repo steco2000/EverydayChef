@@ -51,7 +51,7 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
 
             for (Ingredient ingr : (inventory.getIngredientList())) {
                 for(RecipeBase rec: currentChefRecipeList){
-                    if(rec.getIngredientList().stream().anyMatch(o -> o.getName().contains(ingr.getName()) || ingr.getName().contains(o.getName()))){
+                    if(rec.getIngredientList().stream().anyMatch(o -> o.getName().contains(ingr.getName()) || ingr.getName().contains(o.getName())) && !suggestedRecipes.contains(rec)){
                         suggestedRecipes.add(rec);
                     }
                 }

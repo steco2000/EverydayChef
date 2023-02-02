@@ -35,7 +35,7 @@
                         <TableColumn fx:id="chefUsernameColumn" minWidth="0.0" prefWidth="0.0" text="Chef Username" />
                             </columns>
                         </TableView>
-                        <Label layoutX="14.0" layoutY="201.0" text="Browse Recipes">
+                        <Label fx:id="mainLabel" layoutX="14.0" layoutY="201.0" text="Recommended recipes based on your inventory">
                             <font>
                                 <Font size="20.0" />
                             </font>
