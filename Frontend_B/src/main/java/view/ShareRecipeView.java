@@ -101,7 +101,7 @@ public class ShareRecipeView {
         if(ingredientList.isEmpty()) return;
         int idx = 1;
         for(RecipeIngredientBean i: ingredientList){
-            System.out.println(idx+") "+i.getName()+", "+i.getQuantity()+" "+i.getMeasureUnit());
+            System.out.println(idx+") "+i.getName()+", "+i.getStringQuantity()+" "+i.getMeasureUnit());
             idx++;
         }
         System.out.println();

@@ -46,7 +46,11 @@ public class RecipeTableDataBean extends RecipeObserver {
             RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
             ingredientBean.setName(i.getName());
             try {
-                ingredientBean.setQuantity(String.valueOf(i.getQuantity()));
+                if(i.getQuantity() != -1) {
+                    ingredientBean.setQuantity(String.valueOf(i.getQuantity()),false);
+                }else{
+                    ingredientBean.setQuantity(String.valueOf(i.getQuantity()),true);
+                }
             } catch (ParseException | RecipeIngredientQuantityException ignored){
                 assert(true); //eccezione ignorata
             }

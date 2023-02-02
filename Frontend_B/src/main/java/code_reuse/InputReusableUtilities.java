@@ -131,11 +131,15 @@ public class InputReusableUtilities {
                 System.out.println();
                 System.out.print("Name: ");
                 newIngredient.setName(sc.nextLine());
-                System.out.print("Quantity (only value without measure unit, don't type anything if you don't want to specify it): ");
+                System.out.print("Quantity (only value without measure unit, type -1 if you want to set \"Just Enough\"): ");
                 String quantity = sc.nextLine();
-                if(quantity.length() == 0) newIngredient.setQuantity("",true);
-                else newIngredient.setQuantity(quantity);
-                newIngredient.setMeasureUnit(InputReusableUtilities.measureUnitInput(sc));
+                if(Double.parseDouble(quantity)!=-1) {
+                    newIngredient.setQuantity(quantity,false);
+                    newIngredient.setMeasureUnit(InputReusableUtilities.measureUnitInput(sc));
+                }else{
+                    newIngredient.setQuantity(quantity,true);
+                    newIngredient.setMeasureUnit("");
+                }
                 System.out.println("Are you sure to proceed? (y/n)");
                 if(InputReusableUtilities.yes(sc)) return newIngredient;
             }catch(IllegalArgumentException e){

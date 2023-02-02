@@ -61,7 +61,7 @@ public class BrowseRecipesGraphicController {
     @FXML
     private TableColumn<RecipeIngredientBean, String> missingIngredientNameCol;
     @FXML
-    private TableColumn<RecipeIngredientBean, Double> missingIngredientQuantityCol;
+    private TableColumn<RecipeIngredientBean, String> missingIngredientQuantityCol;
     @FXML
     private TableColumn<RecipeIngredientBean, String> missingIngredientUnitCol;
     @FXML
@@ -69,7 +69,7 @@ public class BrowseRecipesGraphicController {
     @FXML
     private TableColumn<RecipeIngredientBean, String> ingredientNamecol;
     @FXML
-    private TableColumn<RecipeIngredientBean, Double> ingredientQuantityCol;
+    private TableColumn<RecipeIngredientBean, String> ingredientQuantityCol;
     @FXML
     private TableColumn<RecipeIngredientBean, String> ingredientUnitCol;
 
@@ -185,7 +185,7 @@ public class BrowseRecipesGraphicController {
 
     private void setUpIngredientsTable(List<RecipeIngredientBean> ingredientList) {
         ingredientNamecol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        ingredientQuantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        ingredientQuantityCol.setCellValueFactory(new PropertyValueFactory<>("stringQuantity"));
         ingredientUnitCol.setCellValueFactory(new PropertyValueFactory<>("measureUnit"));
         ObservableList<RecipeIngredientBean> beanObservableList = FXCollections.observableArrayList();
         beanObservableList.addAll(ingredientList);
@@ -194,7 +194,7 @@ public class BrowseRecipesGraphicController {
 
     private void setUpMissingIngredientsTable(List<RecipeIngredientBean> missingIngredients) {
         missingIngredientNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        missingIngredientQuantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        missingIngredientQuantityCol.setCellValueFactory(new PropertyValueFactory<>("stringQuantity"));
         missingIngredientUnitCol.setCellValueFactory(new PropertyValueFactory<>("measureUnit"));
         ObservableList<RecipeIngredientBean> beanObservableList = FXCollections.observableArrayList();
         beanObservableList.addAll(missingIngredients);

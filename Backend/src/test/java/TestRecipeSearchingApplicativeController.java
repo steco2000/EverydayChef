@@ -65,7 +65,7 @@ public class TestRecipeSearchingApplicativeController {
         RecipeIngredientBean pasta = new RecipeIngredientBean();
         pasta.setName("Pasta");
         try {
-            pasta.setQuantity("0.32");
+            pasta.setQuantity("0.32",false);
             pasta.setMeasureUnit("Kg");
         } catch (ParseException | RecipeIngredientQuantityException ignored) {
             assert(true);

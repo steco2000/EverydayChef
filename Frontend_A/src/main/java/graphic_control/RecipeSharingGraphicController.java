@@ -43,13 +43,15 @@ public class RecipeSharingGraphicController {
     @FXML
     private TextField ingredientQuantityField;
     @FXML
+    private RadioButton justEnoughButton;
+    @FXML
     private ChoiceBox<String> unitBox;
     @FXML
     private TableView<RecipeIngredientBean> ingredientTable;
     @FXML
     private TableColumn<RecipeIngredientBean, String> ingredientNameColumn;
     @FXML
-    private TableColumn<RecipeIngredientBean, Double> ingredientQuantityColumn;
+    private TableColumn<RecipeIngredientBean, String> ingredientQuantityColumn;
     @FXML
     private TableColumn<RecipeIngredientBean, String> unitColumn;
     @FXML
@@ -79,8 +81,13 @@ public class RecipeSharingGraphicController {
                     return;
                 }
             }
-            newIngredient.setMeasureUnit(unitBox.getValue());
-            newIngredient.setQuantity(ingredientQuantityField.getText());
+            if(!justEnoughButton.isSelected()){
+                newIngredient.setMeasureUnit(unitBox.getValue());
+                newIngredient.setQuantity(ingredientQuantityField.getText(),false);
+            }else{
+                newIngredient.setQuantity("J. E.",true);
+                newIngredient.setMeasureUnit("");
+            }
         } catch (ParseException e) {
             AlertBox.display(ERROR_BOX_TITLE,"Invalid quantity.");
             return;
@@ -94,7 +101,19 @@ public class RecipeSharingGraphicController {
         ingredientTableList.add(newIngredient);
         ingredientNameField.clear();
         ingredientQuantityField.clear();
+        justEnoughButton.setSelected(false);
         unitBox.setValue("Kg");
+    }
+
+    @FXML
+    private void onJustEnoughButtonPression(){
+        if(justEnoughButton.isSelected()){
+            ingredientQuantityField.setDisable(true);
+            unitBox.setDisable(true);
+        }else{
+            ingredientQuantityField.setDisable(false);
+            unitBox.setDisable(false);
+        }
     }
 
     @FXML
@@ -203,7 +222,7 @@ public class RecipeSharingGraphicController {
         unitBox.getItems().addAll("Kg","L","");
         unitBox.setValue("Kg");
         ingredientNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        ingredientQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        ingredientQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("stringQuantity"));
         unitColumn.setCellValueFactory(new PropertyValueFactory<>("measureUnit"));
         ingredientTable.setItems(ingredientTableList);
         MainApp.getPrimaryStage().setScene(scene);

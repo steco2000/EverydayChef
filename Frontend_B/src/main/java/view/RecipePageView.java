@@ -76,7 +76,7 @@ public class RecipePageView {
 
     private void displayIngredientTable(List<RecipeIngredientBean> data) {
         for(RecipeIngredientBean i: data){
-            System.out.println("- "+i.getName()+", "+i.getQuantity()+" "+i.getMeasureUnit());
+            System.out.println("- "+i.getName()+", "+i.getStringQuantity()+" "+i.getMeasureUnit());
         }
     }
 

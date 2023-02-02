@@ -77,7 +77,7 @@ public class TestRecipeInfoRetrievingApplicativeController {
         RecipeIngredientBean farina = new RecipeIngredientBean();
         farina.setName("Farina");
         try {
-            farina.setQuantity("0.4");
+            farina.setQuantity("0.4",false);
             farina.setMeasureUnit("Kg");
         } catch (ParseException | RecipeIngredientQuantityException ignored) {
             assert(true);
@@ -85,7 +85,7 @@ public class TestRecipeInfoRetrievingApplicativeController {
         RecipeIngredientBean uovo = new RecipeIngredientBean();
         uovo.setName("Uovo");
         try {
-            uovo.setQuantity("4");
+            uovo.setQuantity("4",false);
             uovo.setMeasureUnit("");
         } catch (ParseException | RecipeIngredientQuantityException ignored) {
             assert(true);

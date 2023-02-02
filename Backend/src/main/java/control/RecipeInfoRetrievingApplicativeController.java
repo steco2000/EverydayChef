@@ -38,7 +38,11 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
             RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
             ingredientBean.setName(i.getName());
             try {
-                ingredientBean.setQuantity(String.valueOf(i.getQuantity()));
+                if(i.getQuantity() != -1) {
+                    ingredientBean.setQuantity(String.valueOf(i.getQuantity()),false);
+                }else{
+                    ingredientBean.setQuantity("J. E.",true);
+                }
             } catch (ParseException | RecipeIngredientQuantityException ignored) {
                 assert(true);
             }
@@ -72,10 +76,15 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
         RecipeIngredientBean newMissing = new RecipeIngredientBean();
         newMissing.setName(recipeIngredient.getName());
         try {
-            double difference = (recipeIngredient.getQuantity()*100) - (inventoryIngredient.getQuantity()*100);
-            newMissing.setQuantity(String.valueOf(difference/100));
-        } catch (ParseException | RecipeIngredientQuantityException ignored) {
-            assert(true); //eccezione ignorata
+            if (recipeIngredient.getQuantity() != -1) {
+
+                double difference = (recipeIngredient.getQuantity() * 100) - (inventoryIngredient.getQuantity() * 100);
+                newMissing.setQuantity(String.valueOf(difference / 100),false);
+
+            }else newMissing.setQuantity("J. E.",true);
+
+        }catch (ParseException | RecipeIngredientQuantityException ignored) {
+            assert (true); //eccezione ignorata
         }
         newMissing.setMeasureUnit(recipeIngredient.getMeasureUnit());
         return newMissing;

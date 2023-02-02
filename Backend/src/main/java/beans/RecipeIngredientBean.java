@@ -10,11 +10,16 @@ public class RecipeIngredientBean {
 
     private String name;
     private double quantity;
+    private String stringQuantity;
     private String measureUnit;
 
     public String getName() throws IllegalArgumentException{
         if(name == null || name.length() == 0) throw new IllegalArgumentException();
         return name;
+    }
+
+    public String getStringQuantity() {
+        return stringQuantity;
     }
 
     private String toTitleCase(String givenName) {
@@ -37,23 +42,31 @@ public class RecipeIngredientBean {
         return quantity;
     }
 
-    public void setQuantity(String quantity, boolean ...notSpecified) throws ParseException, RecipeIngredientQuantityException {
-        //Per acluni ingredienti come olio e sale la quantità può non essere specificata, tuttavia l'utente viene avvertito
-        if(quantity.length() == 0 && notSpecified.length == 0) throw new RecipeIngredientQuantityException();
-        else if(notSpecified.length!=0 && notSpecified[0]){
-            this.quantity = 0;
-            return;
+    public void setQuantity(String quantity, boolean justEnough) throws ParseException, RecipeIngredientQuantityException {
+        if(quantity.length() == 0) throw new RecipeIngredientQuantityException();
+        if(quantity.equals("J. E.")){
+            this.quantity = -1;
+            this.stringQuantity = quantity;
+        }else {
+            double givenQuantity;
+            try {
+                givenQuantity = Double.parseDouble(quantity);
+            } catch (NumberFormatException e) {
+                NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+                Number number = format.parse(quantity);
+                givenQuantity = number.doubleValue();
+            }
+
+            if (givenQuantity <= 0 && !justEnough) throw new IllegalArgumentException();
+
+            if(givenQuantity == -1 && justEnough){
+                this.quantity = givenQuantity;
+                this.stringQuantity = "J. E.";
+            }else {
+                this.quantity = givenQuantity;
+                this.stringQuantity = String.valueOf(givenQuantity);
+            }
         }
-        double givenQuantity;
-        try{
-            givenQuantity = Double.parseDouble(quantity);
-        }catch(NumberFormatException e){
-            NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-            Number number = format.parse(quantity);
-            givenQuantity = number.doubleValue();
-        }
-        if(givenQuantity < 0) throw new IllegalArgumentException();
-        this.quantity = givenQuantity;
     }
 
     public String getMeasureUnit() {

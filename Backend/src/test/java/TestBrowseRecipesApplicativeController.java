@@ -82,7 +82,7 @@ public class TestBrowseRecipesApplicativeController {
         RecipeIngredientBean farina = new RecipeIngredientBean();
         farina.setName("Farina manitoba");
         try {
-            farina.setQuantity("0.3");
+            farina.setQuantity("0.3",false);
             farina.setMeasureUnit("Kg");
         } catch (ParseException | RecipeIngredientQuantityException ignored) {
             assert(true);
