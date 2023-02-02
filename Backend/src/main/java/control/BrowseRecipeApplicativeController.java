@@ -26,7 +26,7 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
     }
 
     private boolean recipeContainsIngredient(RecipeBase rec, Ingredient ingr, List<RecipeBase> suggestedRecipes){
-        return ((rec.getIngredientList().stream().anyMatch(o -> o.getName().contains(ingr.getName()) || ingr.getName().contains(o.getName()))) && !suggestedRecipes.contains(rec));
+        return (rec.getIngredientList().stream().anyMatch(o -> ((o.getName().contains(ingr.getName()) || ingr.getName().contains(o.getName())) && o.getQuantity()!=-1)) && !suggestedRecipes.contains(rec));
     }
 
     @Override
