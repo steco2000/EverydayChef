@@ -108,9 +108,12 @@ public class RecipeSharingGraphicController {
         }
         ingredientTableList.add(newIngredient);
         ingredientNameField.clear();
+        ingredientNameField.setDisable(false);
         ingredientQuantityField.clear();
+        ingredientNameField.setDisable(false);
         justEnoughButton.setSelected(false);
         unitBox.setValue("Kg");
+        unitBox.setDisable(false);
     }
 
     @FXML
