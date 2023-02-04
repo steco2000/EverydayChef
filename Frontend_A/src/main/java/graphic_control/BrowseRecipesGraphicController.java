@@ -110,12 +110,16 @@ public class BrowseRecipesGraphicController {
         RecipeSearchingControllerFactory factory = new RecipeSearchingControllerFactory();
         RecipeSearchingController controller = factory.createRecipeSearchingController();
         List<RecipeBrowsingTableBean> searchResult = controller.retrieveSearchResult(searchBar.getText());
-        ObservableList<RecipeBrowsingTableBean> beanObservableList = FXCollections.observableArrayList();
-        beanObservableList.addAll(searchResult);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        chefColumn.setCellValueFactory(new PropertyValueFactory<>("chefCompleteName"));
-        chefUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("chefUsername"));
-        recipeTable.setItems(beanObservableList);
+        if(searchResult.isEmpty()){
+            AlertBox.display("No results","No recipes found.");
+        }else {
+            ObservableList<RecipeBrowsingTableBean> beanObservableList = FXCollections.observableArrayList();
+            beanObservableList.addAll(searchResult);
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            chefColumn.setCellValueFactory(new PropertyValueFactory<>("chefCompleteName"));
+            chefUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("chefUsername"));
+            recipeTable.setItems(beanObservableList);
+        }
     }
 
     @FXML
@@ -208,6 +212,7 @@ public class BrowseRecipesGraphicController {
         this.getSuggestedRecipes();
         chefUsernameColumn.setVisible(false);
         MainApp.getPrimaryStage().setScene(scene);
+        if(this.recipeTable.getItems().isEmpty()) AlertBox.display("No recommended recipe found","It seems that there aren't recipes that we can recommend to you.\n Remember to always update your ingredients inventory to get personalized recommendations on recipes you can cook!");
     }
 
 }
