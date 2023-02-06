@@ -3,7 +3,6 @@ package dao;
 import control.LoginController;
 import model.Chef;
 import model.ChefBase;
-import model.UserCredentials;
 
 import java.io.*;
 import java.nio.file.Path;
