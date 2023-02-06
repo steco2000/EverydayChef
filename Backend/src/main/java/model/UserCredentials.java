@@ -48,6 +48,8 @@ public class UserCredentials implements UserCredBase, Serializable {
         this.email = email;
     }
 
+    public Inventory getIngredientsInventory(){ return this.ingredientsInventory; }
+
     public void setIngredientsInventory(Inventory ingredientsInventory) {
         this.ingredientsInventory = ingredientsInventory;
         UserCredentialsDAO dao = new UserCredentialsDAO();

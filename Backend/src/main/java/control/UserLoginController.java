@@ -4,7 +4,7 @@ import beans.UserCredBean;
 
 public interface UserLoginController {
     
-    public boolean attemptUserLogin(UserCredBean credentials);
-    public boolean registerUser(UserCredBean credentials);
+    boolean attemptUserLogin(UserCredBean credentials);
+    boolean registerUser(UserCredBean credentials);
     
 }

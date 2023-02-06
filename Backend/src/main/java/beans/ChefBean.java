@@ -96,9 +96,8 @@ public class ChefBean {
         return matcher.matches();
     }
 
-    public boolean setEmail(String email) throws MalformedParametersException{
+    public void setEmail(String email) throws MalformedParametersException{
         if(!isValid(email)) throw new MalformedParametersException();
         this.email = email;
-        return true;
     }
 }

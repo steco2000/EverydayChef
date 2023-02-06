@@ -16,18 +16,22 @@ public class InventoryIngredient extends Ingredient implements IngredientBase, S
         this.notes = notes;
     }
 
+    @Override
     public Date getExpirationDate() {
         return expirationDate;
     }
 
+    @Override
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
 
+    @Override
     public String getNotes() {
         return notes;
     }
 
+    @Override
     public void setNotes(String notes) {
         this.notes = notes;
     }

@@ -3,6 +3,7 @@ package dao;
 import control.LoginController;
 import model.Chef;
 import model.ChefBase;
+import model.UserCredentials;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -29,26 +30,23 @@ public class ChefDAO {
 
     public boolean chefNotExists(String email, String username){
         Chef currChef;
-        FileInputStream filein = null;
+        FileInputStream filein;
+        ObjectInputStream objStream;
+
+        File folder = new File(Paths.get("Backend\\src\\main\\resources\\chef_data\\").toAbsolutePath().toString());
+        File[] listOfFiles = folder.listFiles();
 
         try{
-            filein = new FileInputStream(chefFileName+username+".ser");
-            while(true){
-                ObjectInputStream inputObjStream = new ObjectInputStream(filein);
-                currChef = (Chef) inputObjStream.readObject();
+            for(File f: listOfFiles){
+                if(f.getName().equals(".placeholder") || f.getName().equals("last_chef_id.ser")) continue;
+                filein = new FileInputStream(Paths.get("Backend\\src\\main\\resources\\chef_data\\"+f.getName()).toAbsolutePath().toString());
+                objStream = new ObjectInputStream(filein);
+                currChef = (Chef) objStream.readObject();
                 if((currChef.getEmail().equals(email)) || (currChef.getUsername().equals(username))){
                     filein.close();
                     return false;
                 }
             }
-        }catch (EOFException e) {
-            try {
-                filein.close();
-            } catch (IOException ex) {
-                return false;
-            }
-            return true;
-        } catch (FileNotFoundException e) {
             return true;
         } catch(ClassNotFoundException | IOException e){
             return false;
