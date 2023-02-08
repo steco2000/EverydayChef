@@ -13,6 +13,8 @@ import main.view.MainApp;
 
 import java.io.IOException;
 
+//controller grafico della schermata di login dell'utente chef
+
 public class ChefLoginGraphicController {
 
     @FXML
@@ -23,18 +25,23 @@ public class ChefLoginGraphicController {
 
     private static final String ERROR_BOX_TITLE = "Login Failed";
 
+    //alla pressione del tasto di visualizzazione viene caricata la relativa schermata
     @FXML
     private void onRegButtonPression() throws IOException {
         ChefRegistrationGraphicController regController = new ChefRegistrationGraphicController();
         regController.loadUI();
     }
 
+    //alla pressione del tasto "Log in as user" viene caricata la relativa schermata
     @FXML
     private void onUserLoginButtonPression() throws IOException {
         UserLoginGraphicController userLoginController = new UserLoginGraphicController();
         userLoginController.loadUI();
     }
 
+    /*
+    Alla pressione del tasto di login, i valori inseriti nei campi della schermata vengono incapsulati nel bean e passati al controller applicativo per il tentativo di login.
+     */
     @FXML
     private void onLoginButtonPression() throws IOException {
         ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
@@ -42,6 +49,7 @@ public class ChefLoginGraphicController {
 
         ChefBean chefCredentials = new ChefBean();
 
+        //se il bean riconosce dati considerati illegali dal sistema verrà lanciata l'eccezione
         try {
             chefCredentials.setUsername(usernameField.getText());
             chefCredentials.setPassword(passField.getText());
@@ -50,6 +58,7 @@ public class ChefLoginGraphicController {
             return;
         }
 
+        //se il tentativo di login fallisce il metodo del controller ritorna falso
         if(controller.attemptChefLogin(chefCredentials)){
             ChefHomeGraphicController homeController = new ChefHomeGraphicController();
             homeController.loadHomeUI();
@@ -59,6 +68,7 @@ public class ChefLoginGraphicController {
 
     }
 
+    //metodo chegestisce caricamento e visualizzazione della schermata
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("ChefLoginView.fxml"));
         uiLoader.setController(this);

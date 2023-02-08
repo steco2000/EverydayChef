@@ -19,6 +19,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+//controller grafico delle schermate di gestione dell'inventario ingredienti, aggiunta ingredienti all'inventario e modifica di ingredienti esistenti
+
 public class InventoryGraphicController {
 
     private InventoryTableDataBean dataBean;
@@ -39,7 +41,6 @@ public class InventoryGraphicController {
 
     @FXML
     private TableView<IngredientBean> inventoryTable;
-
     @FXML
     private TableColumn<IngredientBean, String> nameColumn;
     @FXML
@@ -51,12 +52,21 @@ public class InventoryGraphicController {
     @FXML
     private TableColumn<IngredientBean, String> notesColumn;
 
+    /*
+    Già nel costruttore di questo controllore viene avviata la procedura di caching dell'inventario dell'utente loggato. Viene creato il controller applicativo e si recupera il bean
+    che fa da observer all'inventario per i dati da visualizzare sull'interfaccia. Per questo successive modifiche all'inventario necessitanto di essere salvate dal controller
+    applicativo, a seguito di una richiesta esplicita da parte del controller grafico.
+     */
     public InventoryGraphicController(){
         InventoryControllerFactory controllerFactory = new InventoryControllerFactory();
         applController = controllerFactory.createInventoryController();
         dataBean = InventoryTableDataBean.getSingletonInstance();
     }
 
+    /*
+    Caricamento e visualizzazione della schermata di gestione dell'inventario. La prima operazione pratica che viene eseguita è quella di recuperare i dati relativi all'inventario
+    dell'utente corrente per renderli disponibili nella tabella.
+     */
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("InventoryView.fxml"));
         uiLoader.setController(this);
@@ -65,6 +75,7 @@ public class InventoryGraphicController {
         MainApp.getPrimaryStage().setScene(scene);
     }
 
+    //con questo metodo si inizializza la tabella dell'inventario e si recuperano i dati da inserire in essa
     private void setUpTable() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -74,6 +85,7 @@ public class InventoryGraphicController {
         inventoryTable.setItems(this.getObservableTableData());
     }
 
+    //questo metodo sfrutta il bean "dataBean", che fa da observer all'inventario dell'utente, per recuperare i dati aggiornati che verranno inseriti nella tabella
     private ObservableList<IngredientBean> getObservableTableData() {
         ObservableList<IngredientBean> observableList = FXCollections.observableArrayList();
         List<IngredientBean> dataList = null;
@@ -89,6 +101,7 @@ public class InventoryGraphicController {
         return observableList;
     }
 
+    //tasto back premuto -> si ricarica la schermata home
     @FXML
     public void onBackButtonPression() throws IOException {
         applController.saveCurrentInventory();
@@ -96,16 +109,24 @@ public class InventoryGraphicController {
         controller.loadUI();
     }
 
+    //quando l'utente preme il tasto per aggiungere un ingrediente si carica la relativa schermata
     @FXML
     public void onAddIngredientButtonPression() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("AddIngredientView.fxml"));
         uiLoader.setController(this);
         Scene scene = new Scene(uiLoader.load(),1315,810);
+
+        //il choicebox relativo all'unità di misura degli ingredienti viene riempito con i valori consentiti dal sistema
         unitBox.getItems().addAll("Kg","L","");
         unitBox.setValue("Kg");
+
         MainApp.getPrimaryStage().setScene(scene);
     }
 
+    /*
+    Nel caso in cui l'utente prema il tasto per modificare un ingrediente già presente, oltre a caricare la schermata, devono essere recuperati e mostrati nei relativi campi
+    tutti i dati riguardanti quell'ingrediente. Se non è stato selezionato alcun ingrediente dalla tabella non si fa nulla
+    */
     @FXML
     public void onUpdateButtonPression() throws IOException {
         IngredientBean ingredientToUpdate = inventoryTable.getSelectionModel().getSelectedItem();
@@ -135,6 +156,11 @@ public class InventoryGraphicController {
         MainApp.getPrimaryStage().setScene(scene);
     }
 
+    /*
+    Questo metodo gestisce il passaggio dei dati di un ingrediente da aggiornare al controller applicativo. Ovviamente questi vengono incapsulati nel bean che effetua i controlli
+    sintattici di rito e, in caso di problemi, lancia delle eccezioni. Se l'update non va a buon fine, perchè il nome dell'ingrediente modificato corrisponde a un ingrediente già presente
+    nell'inventario, il metodo del controller applicativo ritornerà falso.
+     */
     @FXML
     public void onUpdateConfirmationButtonPression() throws IOException {
         IngredientBean updates = new IngredientBean();
@@ -158,13 +184,19 @@ public class InventoryGraphicController {
         this.loadUI();
     }
 
+    //sel l'utente preme il tasto per rimuovere un ingrediente si recupera quello selezionato dalla tabella e si passa al metodo corrispondente del controller applicativo
     @FXML
     public void onRemoveButtonPression(){
         IngredientBean toRemove = inventoryTable.getSelectionModel().getSelectedItem();
+        if(toRemove == null) return;
         applController.removeIngredient(toRemove);
         this.setUpTable();
     }
 
+    /*
+    Alla pressione del tasto di conferma di un ingrediente da aggiungere, vengono incapsulati nel bean i dati dai campi dell'interfaccia e passati al controller applicativo.
+    Se il bean riscontra problemi sintattici vengono lanciate eccezioni. Se il controller applicativo riscontra che l'ingrediente è già presente viene recapitato false dal metodo.
+     */
     @FXML
     public void onIngredientConfirmationButtonPression() throws IOException {
         IngredientBean ingredientBean = new IngredientBean();
@@ -185,11 +217,13 @@ public class InventoryGraphicController {
         }
     }
 
+    //se l'utente preme il tasto back sulla schermata di aggiunta o modifica di un ingrediente viene ricaricata la schermata dell'inventario
     @FXML
     public void onIngredientPageBackButtonPression() throws IOException {
         this.loadUI();
     }
 
+    //alla pressione del tasto "Save Changes" viene lanciato il relativo metodo del controller applicativo
     @FXML
     public void onSaveButtonPression(){
         applController.saveCurrentInventory();

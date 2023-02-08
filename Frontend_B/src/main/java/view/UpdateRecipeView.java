@@ -11,13 +11,11 @@ import java.util.Scanner;
 public class UpdateRecipeView {
 
     private Scanner sc;
-    private RecipeManagementView recipeManagementView;
     private RecipeBean updates;
     private String chefUsername;
 
-    public UpdateRecipeView(RecipeManagementView recipeManagementView, String chefUsername){
+    public UpdateRecipeView(String chefUsername){
         this.sc = new Scanner(System.in);
-        this.recipeManagementView = recipeManagementView;
         this.chefUsername = chefUsername;
     }
 
@@ -56,7 +54,10 @@ public class UpdateRecipeView {
                 case -1 -> {
                     assert (true); //errore nella risposta, non faccio nulla
                 }
-                case 0 -> this.recipeManagementView.display();
+                case 0 -> {
+                    RecipeManagementView recipeManagementView = new RecipeManagementView(this.chefUsername);
+                    recipeManagementView.display();
+                }
                 case 1 -> {
                     System.out.print("New name: ");
                     try {
@@ -92,7 +93,8 @@ public class UpdateRecipeView {
                     RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
                     RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
                     updadingController.updateRecipe(toUpdate.getName(),updates);
-                    this.recipeManagementView.display();
+                    RecipeManagementView recipeManagementView = new RecipeManagementView(this.chefUsername);
+                    recipeManagementView.display();
                 }
             }
         }

@@ -16,23 +16,36 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Controller applicativo che gestisce il recupero delle informazioni di una ricetta da rendere disponibile all'utente. Recupera anche le info dello chef e calcola gli ingredienti
+mancanti in base all'inventario.
+ */
+
 public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetrievingController{
 
     private static List<InventoryIngredient> inventoryList;
     private RecipeBean selectedRecipe;
 
+    //metodo che esegue il recupero delle informazioni di base della ricetta
     @Override
     public RecipeBean retrieveRecipeInfo(RecipeBrowsingTableBean recipeBrowsingBean) {
+
+        //recupero della ricetta dal DAO di navigazione
         RecipesBrowsingDAO recipesBrowsingDAO = new RecipesBrowsingDAO();
         RecipeBase recipe = recipesBrowsingDAO.getRecipeInfo(recipeBrowsingBean.getName(),recipeBrowsingBean.getChefUsername());
+
+        //incremento delle visualizzazioni. Quando questo metodo viene chiamato vuol dire che un utente ha cliccato sulla ricetta
         RecipeDAO recipeWriterDAO = new RecipeDAO(recipe.getChef().getUsername());
         recipeWriterDAO.incrementRecipeViews(recipe.getName());
+
+        //costruzione e ritorno del bean con i dati della ricetta
         RecipeBean toReturn = new RecipeBean();
         toReturn.setName(recipe.getName());
         toReturn.setServings(String.valueOf(recipe.getServings()));
         toReturn.setPreparationTime(recipe.getPreparationTime());
         toReturn.setDifficulty(recipe.getDifficulty());
         toReturn.setPreparationProcedure(recipe.getPreparationProcedure());
+
         List<RecipeIngredientBean> ingredientBeanList = new ArrayList<>();
         for(RecipeIngredient i: recipe.getIngredientList()){
             RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
@@ -49,11 +62,13 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
             ingredientBean.setMeasureUnit(i.getMeasureUnit());
             ingredientBeanList.add(ingredientBean);
         }
+
         toReturn.setIngredientList(ingredientBeanList);
         this.selectedRecipe = toReturn;
         return toReturn;
     }
 
+    //metodo per il recupero e ritorno alla UI delle informazioni dello chef
     @Override
     public ChefBean retrieveChefInfo(String chefUsername) {
         ChefDAO chefDAO = new ChefDAO();
@@ -72,24 +87,30 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
         return toReturn;
     }
 
+    //Metodo che crea l'ingrediente mancante, se esiste, e che calcola la quantità mancante.
     private RecipeIngredientBean getMissingQuantityIngredient(RecipeIngredientBean recipeIngredient, InventoryIngredient inventoryIngredient){
         RecipeIngredientBean newMissing = new RecipeIngredientBean();
         newMissing.setName(recipeIngredient.getName());
         try {
             if (recipeIngredient.getQuantity() != -1) {
 
+                //se la quantità dell'ingrediente della ricetta è definita, si calcola la differenza, riportando tutto a cifre elevate per evitare problemi di approssimazione
                 double difference = (recipeIngredient.getQuantity() * 100) - (inventoryIngredient.getQuantity() * 100);
                 newMissing.setQuantity(String.valueOf(difference / 100),false);
 
+                //se la quantità è j. e. non dobbiamo calcolare nulla, perchè in questo caso vuol dire che l'ingrediente non è proprio presente nell'inventario
             }else newMissing.setQuantity("J. E.",true);
 
         }catch (ParseException | RecipeIngredientQuantityException ignored) {
-            assert (true); //eccezione ignorata
+            assert (true); //eccezione ignorata, i dati provengono dalla memoria e sono giò stati validati
         }
         newMissing.setMeasureUnit(recipeIngredient.getMeasureUnit());
         return newMissing;
     }
 
+    /*
+    Metodo che cerca gli ingredienti mancanti nell'inventario
+     */
     @Override
     public List<RecipeIngredientBean> retrieveMissingIngredients(RecipeBrowsingTableBean recipe) {
         List<RecipeIngredientBean> missingIngredients = new ArrayList<>();
@@ -110,6 +131,7 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
         return missingIngredients;
     }
 
+    //metodo che serve a impostare la lista degli ingredienti dell'inventario dell'utente loggato, per permettere alle istanze del controller di effettuare i confronti con le ricette
     public static void setInventoryList(List<InventoryIngredient> inventoryList){
         RecipeInfoRetrievingApplicativeController.inventoryList = inventoryList;
     }

@@ -5,6 +5,8 @@ import dao.RecipeDAO;
 
 import java.io.IOException;
 
+//controller applicativo che gestisce la modifica di una ricetta esistente
+
 public class RecipeUpdatingApplicativeController implements RecipeUpdadingController{
 
     @Override

@@ -1,5 +1,10 @@
 package beans;
 
+/*
+bean che incapsula informazioni di base da visualizzare nella tabella per le istanze di ricette. Si porta dietro anche l'username dello chef per associare a ogni ricetta nella tabella
+un riferimento univoco allo chef stesso.
+ */
+
 public class RecipeBrowsingTableBean {
 
     private String name;

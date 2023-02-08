@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.lang.reflect.MalformedParametersException;
 import java.text.ParseException;
 
+//controller grafico che gestisce le schermate di registrazione dell'utente chef
+
 public class ChefRegistrationGraphicController {
 
     @FXML
@@ -42,6 +44,7 @@ public class ChefRegistrationGraphicController {
     @FXML
     private PasswordField passwordConfirmationField;
 
+    //essendoci due form da compilare per la registrazione, si usa un flag per capire in quale schermata si trova il sistema (true sceneB, false altrimenti)
     private boolean windowFlag = false;
     private Scene sceneA;
     private Scene sceneB;
@@ -49,6 +52,7 @@ public class ChefRegistrationGraphicController {
 
     private static final String ERROR_BOX_TITLE = "Error";
 
+    //in caso di pressione del tasto back, si controlla in che schermata si trova il sistema e in base a ciò si decide quale caricare
     @FXML
     private void onBackButtonPression() throws IOException {
         if(windowFlag){
@@ -60,6 +64,10 @@ public class ChefRegistrationGraphicController {
         }
     }
 
+    /*
+    il tasto next è quello presente nel primo form, se viene premuto si crea il bean del nuovo chef e vi si incapsulano i dati inseriti finora, potento effettuare i primi controlli
+    sintattici.
+    */
     @FXML
     private void onNextButtonPression() throws IOException {
         try {
@@ -80,6 +88,10 @@ public class ChefRegistrationGraphicController {
         }
     }
 
+    /*
+    Il tasto di registrazione è quello definitivo presente nel secondo form, se viene premuto si completa il bean creato precedentemente e, se i controlli sintattici non sollevano
+    eccezioni, si procede alla registrazione tramite il controller applicativo.
+     */
     @FXML
     private void onRegisterButtonPression() throws IOException {
         try {
@@ -107,6 +119,7 @@ public class ChefRegistrationGraphicController {
         }
     }
 
+    //metodo che gestisce caricamento e visualizzazione della schermata, in questo caso sarà la scena A dato che è il primo form da compilare per la registrazione
     public void loadUI() throws IOException {
         FXMLLoader windowALoader = new FXMLLoader(MainApp.class.getResource("ChefRegistrationView_A.fxml"));
         windowALoader.setController(this);

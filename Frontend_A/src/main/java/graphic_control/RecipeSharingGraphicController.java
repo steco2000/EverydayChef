@@ -24,6 +24,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+//controller grafico che gestisce la schermata di creazione della ricetta e di informazioni dello chef
+
 public class RecipeSharingGraphicController {
 
     @FXML
@@ -61,15 +63,16 @@ public class RecipeSharingGraphicController {
 
     private static final String ERROR_BOX_TITLE = "Error";
     private ObservableList<RecipeIngredientBean> ingredientTableList = FXCollections.observableArrayList();
-    private String chefUsername;
-    private ChefHomeGraphicController homeGraphicController;
-    private boolean onUpdateMode = false;
-    private String toUpdateName;
+    private String chefUsername;    //l'username dello chef è necessario per recuperare le sue informazioni con il controller applicativo
 
-    public RecipeSharingGraphicController(ChefHomeGraphicController homeGraphicController){
-        this.homeGraphicController = homeGraphicController;
-    }
+    private boolean onUpdateMode = false;   //questo attributo serve a sapere se la schermata è stata avviata in modalità di modifica
+    private String toUpdateName;    //nome della ricetta da modificare in tal caso
 
+    /*
+    Alla pressione del tasto aggiungi ingrediente viene creato il bean corrispondente, dove vengono incapsulati i dati dai campi della schermata. Per gli ingredienti della ricetta
+    è possibile evitare di specificare la quantità di un ingrediente attivando il radio button "Just Enough" ossia "quanto basta". In tal caso i campi di quantità e unità di misura
+    verrano disattivati.
+     */
     @FXML
     private void onAddIngredientButtonPression(){
         RecipeIngredientBean newIngredient = new RecipeIngredientBean();
@@ -91,6 +94,10 @@ public class RecipeSharingGraphicController {
         } catch (ParseException e) {
             AlertBox.display(ERROR_BOX_TITLE,"Invalid quantity.");
             return;
+
+            /*l'eccezione del prossimo catch viene lanciata nel caso in cui il bean riceva quantità nulla, allora viene chiesto all'utente se desidera continuare comunque e che,
+            in caso di risposta affermativa, l'ingrediente verrà salvato con la quantità settata a just enough.
+             */
         } catch (RecipeIngredientQuantityException e){
             boolean answer = ConfirmBox.display(newIngredient.getName(), "Are you sure that you want to save the ingredient \""+newIngredient.getName()+"\" without a specified quantity? It will be set as just enough");
             if(!answer) return;
@@ -116,6 +123,9 @@ public class RecipeSharingGraphicController {
         unitBox.setDisable(false);
     }
 
+    /*ogni volta che il bottone just enough viene premuto si controlla se è selezionato o meno. Nel primo caso vanno disattivati i campi di quantità e unità di misura, altrimenti vanno
+    attivati
+     */
     @FXML
     private void onJustEnoughButtonPression(){
         if(justEnoughButton.isSelected()){
@@ -127,16 +137,24 @@ public class RecipeSharingGraphicController {
         }
     }
 
+    //alla pressione del bottone di rimozione di un ingrediente si elimina l'ingrediente selezionato dalla tabella
     @FXML
     private void onRemoveButtonPression(){
         ingredientTableList.remove(ingredientTable.getSelectionModel().getSelectedItem());
     }
 
+    //alla pressione del tasto back si ricarica la home dello chef
     @FXML
     private void onBackButtonPression() throws IOException {
+        ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
         homeGraphicController.loadRecipeUI();
     }
 
+    /*
+    Quando l'utente preme il tasto share, la ricetta è confermata. A seguito di alcuni controlli preliminari, viene crato il bean che incapsula i dati inseriti dall'utente da passare
+    poi al controller applicativo. Nel caso in cui la schermata si trovi in modalità di modifica (flag a true) verrà invocato il metodo dell'UpdatingController, altrimenti dello
+    SharingController
+     */
     @FXML
     private void onShareButtonPression() throws IOException {
         if(ingredientTableList.isEmpty()){
@@ -152,15 +170,19 @@ public class RecipeSharingGraphicController {
             RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
             updadingController.updateRecipe(toUpdateName,updates);
             toUpdateName = null;
-            homeGraphicController.loadRecipeUI();
         }else {
             RecipeSharingControllerFactory factory = new RecipeSharingControllerFactory();
             RecipeSharingController controller = factory.createRecipeSharingController();
             controller.shareRecipe(updates);
-            homeGraphicController.loadRecipeUI();
         }
+        ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
+        homeGraphicController.loadRecipeUI();
     }
 
+    /*
+    Il pulsante delete, riferito alla ricetta, sarà visibile solo in modalità update. Se viene premuto e viene confermata la cancellazione si procede a invocare il relativo metodo del
+    controller applicativo.
+     */
     @FXML
     private void onDeleteButtonPression() throws IOException {
         if(ConfirmBox.display("Warning","Are you sure you want to delete this recipe?")){
@@ -168,10 +190,15 @@ public class RecipeSharingGraphicController {
             RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
             updadingController.deleteRecipe(toUpdateName);
             toUpdateName = null;
+            ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
             homeGraphicController.loadRecipeUI();
         }
     }
 
+    /*
+    Questo metodo crea e popola il bean che incapsula i dati di una nuova ricetta o di una esistente che viene modificata. Vengono raccolti tutti i dati dai campi della schermata e
+    nel bean avvengono i controlli sintattici.
+     */
     private RecipeBean getRecipeData(){
         RecipeBean newRecipe = new RecipeBean();
         try{
@@ -199,6 +226,11 @@ public class RecipeSharingGraphicController {
         }
     }
 
+    /*
+    Quando la schermata è caricata in modalità modifica, vengono compilati tutti i campi dell'interfaccia con lo stato della ricetta che si intende modificare. Questi ultimi vengono
+    recuperati grazie all'apposito bean che, essendo observer del RecipeDAO, possiede sempre i dati aggiornati. Inoltre, solo in questo caso, viene reso visibile il pulsante "Delete
+    Recipe".
+     */
     public void loadUpdateUI(String username, RecipeBean toUpdate) throws IOException {
         onUpdateMode = true;
         this.loadUI(username);
@@ -220,6 +252,10 @@ public class RecipeSharingGraphicController {
         ingredientTable.setItems(ingredientTableList);
     }
 
+    /*
+    Questo metodo gestisce caricamento e visualizzazione della schermata di creazione e condivisione della ricetta. I vari choicebox vengono popolati con i valori considerati legali
+    nel sistema. Il tasto "Delete" non viene reso visibile.
+     */
     public void loadUI(String username) throws IOException {
         chefUsername = username;
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("ShareRecipeView.fxml"));

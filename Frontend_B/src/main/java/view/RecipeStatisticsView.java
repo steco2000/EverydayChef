@@ -10,12 +10,10 @@ import java.util.Scanner;
 public class RecipeStatisticsView {
 
     private Scanner sc;
-    private ChefHomeView chefHomeView;
     private String chefUsername;
 
-    public RecipeStatisticsView(ChefHomeView chefHomeView, String chefUsername){
+    public RecipeStatisticsView(String chefUsername){
         this.sc = new Scanner(System.in);
-        this.chefHomeView = chefHomeView;
         this.chefUsername = chefUsername;
     }
 
@@ -30,6 +28,7 @@ public class RecipeStatisticsView {
         System.out.println();
         System.out.println("Press enter to go back home");
         this.sc.nextLine();
+        ChefHomeView chefHomeView = new ChefHomeView();
         chefHomeView.display();
     }
 

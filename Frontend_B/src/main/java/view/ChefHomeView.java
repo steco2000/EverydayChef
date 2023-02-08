@@ -37,7 +37,7 @@ public class ChefHomeView {
                     recipeManagementView.display();
                 }
                 default -> {
-                    RecipeStatisticsView recipeStatisticsView = new RecipeStatisticsView(this, LoginController.getChefLogged().getUsername());
+                    RecipeStatisticsView recipeStatisticsView = new RecipeStatisticsView(LoginController.getChefLogged().getUsername());
                     recipeStatisticsView.display();
                 }
             }

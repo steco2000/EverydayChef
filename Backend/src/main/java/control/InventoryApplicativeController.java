@@ -7,16 +7,22 @@ import factories.InventoryDAOFactory;
 import model.IngredientBase;
 import model.InventoryBase;
 
+/*
+Controller applicativo che per il caso d'uso "Gestisci inventario ingredienti".
+ */
+
 public class InventoryApplicativeController implements InventoryController{
 
     private final InventoryBase currentInventory;
 
+    //nel costruttore si effettua il caching dell'inventario dell'utente loggato
     public InventoryApplicativeController(){
         InventoryDAOFactory daoFactory = new InventoryDAOFactory();
         InventoryDAO dao = daoFactory.createInventoryDAO();
         currentInventory = dao.retrieveInventory();
     }
 
+    //aggiunta ingrediente, grazie alla relativa factory si inseriscono direttamente le informazioni dal bean in fase di creazione
     @Override
     public boolean addIngredient(IngredientBean ingredient) {
         for(IngredientBase i: currentInventory.getState()){
@@ -28,11 +34,13 @@ public class InventoryApplicativeController implements InventoryController{
         return true;
     }
 
+    //rimozione dell'ingrediente dall'inventario in cache
     @Override
     public void removeIngredient(IngredientBean ingredient) {
         currentInventory.removeIngredient(ingredient.getName());
     }
 
+    //la modifica di un ingrediente consiste, in sostanza nella sovrascrittura dell'ingrediente modificato con uno nuovo contenente le modifiche
     @Override
     public boolean updateIngredient(String toUpdate, IngredientBean updates) {
         for(IngredientBase i: currentInventory.getState()){
@@ -46,6 +54,7 @@ public class InventoryApplicativeController implements InventoryController{
         return true;
     }
 
+    //salvataggio delle modifiche all'inventario in persistenza, attraverso il DAO
     @Override
     public void saveCurrentInventory() {
         InventoryDAOFactory daoFactory = new InventoryDAOFactory();

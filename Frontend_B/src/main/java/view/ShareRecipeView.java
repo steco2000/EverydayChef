@@ -14,10 +14,8 @@ public class ShareRecipeView {
 
     private Scanner sc;
     private RecipeBean newRecipe;
-    private RecipeManagementView recipeManagementView;
 
-    public ShareRecipeView(RecipeManagementView recipeManagementView){
-        this.recipeManagementView = recipeManagementView;
+    public ShareRecipeView(){
         this.sc = new Scanner(System.in);
         this.newRecipe = new RecipeBean();
     }
@@ -62,7 +60,8 @@ public class ShareRecipeView {
                 this.sc.nextLine();
             }
         }
-        this.recipeManagementView.display();
+        RecipeManagementView recipeManagementView = new RecipeManagementView(chefUsername);
+        recipeManagementView.display();
     }
 
     private List<RecipeIngredientBean> getIngredientList() {

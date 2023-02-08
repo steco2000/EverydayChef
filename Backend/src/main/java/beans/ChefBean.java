@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//bean che incapsula i dati relativi a istanze di chef
+
 public class ChefBean {
 
     private String name;
@@ -23,6 +25,7 @@ public class ChefBean {
         return username;
     }
 
+    //non è ammesso un username vuoto, in tal caso viene lanciata un'eccezione
     public void setUsername(String username) {
         if(username == null || username.length() == 0) throw new IllegalArgumentException();
         this.username = username;
@@ -32,6 +35,7 @@ public class ChefBean {
         return name;
     }
 
+    //stessa cosa per il nome
     public void setName(String name) throws IllegalArgumentException{
         if(name == null || name.length() == 0) throw new IllegalArgumentException();
         this.name = name;
@@ -41,18 +45,25 @@ public class ChefBean {
         return surname;
     }
 
+    //e per il cognome
     public void setSurname(String surname) throws IllegalArgumentException{
         if(surname == null || surname.length() == 0) throw new IllegalArgumentException();
         this.surname = surname;
     }
 
+    //nel bean la data è trattata in formato stringa per i metodi standard
     public String getBirthDate() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(this.birthDate);
     }
 
+    //tuttavia si può richiedere nel formato interno scelto
     public Date getBirthDateInternalFormat(){ return this.birthDate; }
 
+    /*
+    Il metodo per settare la data di nascita si aspetta una stringa nel giusto formato, per poi convertirla nel tipo "Date". Ovviamente se il formato non è corretto verrà lanciata
+    la ParseException. Nel caso in cui la data di nascita sia nel futuro, cosa impossibile, viene lanciata L'IllegalArgumentException
+     */
     public void setBirthDate(String birthDate) throws ParseException {
         Date javaDate;
         if (!birthDate.trim().equals("")) {
@@ -76,6 +87,7 @@ public class ChefBean {
 
     public String getPassword() { return password; }
 
+    //anche la password non può essere vuota
     public void setPassword(String password) {
         if(password == null || password.length() == 0) throw new IllegalArgumentException();
         this.password = password;
@@ -89,6 +101,10 @@ public class ChefBean {
         return email;
     }
 
+    /*
+    Per la validazione delle email si utilizza una espressione regolare del formato atteso e si controlla che ciò che si è ricevuto in input matchi con l'espressione. E' bene
+    notare però che questo metodo non controlla se l'email esiste realmente, ma solo se sia corretta sintatticamente.
+     */
     private boolean isValid(String email){
         String regex = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(regex);
@@ -96,6 +112,7 @@ public class ChefBean {
         return matcher.matches();
     }
 
+    //nel caso in cui l'email sia non valida viene lanciata un'eccezione
     public void setEmail(String email) throws MalformedParametersException{
         if(!isValid(email)) throw new MalformedParametersException();
         this.email = email;

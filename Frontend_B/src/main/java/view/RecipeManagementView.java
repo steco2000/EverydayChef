@@ -16,14 +16,20 @@ public class RecipeManagementView {
     private RecipeTableDataBean dataBean;
     private List<RecipeBean> recipeList;
     private String chefUsername;
+    private static boolean observerIsSet = false;
 
     public RecipeManagementView(String chefUsername){
+        if(!observerIsSet) this.startRecipesObservation();
         this.chefUsername = chefUsername;
         this.sc = new Scanner(System.in);
+        this.dataBean = RecipeTableDataBean.getSingletonInstance();
+    }
+
+    private void startRecipesObservation() {
         RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
         RecipeSharingController sharingController = controllerFactory.createRecipeSharingController();
         sharingController.setUpRecipesObserver(LoginController.getChefLogged().getUsername());
-        this.dataBean = RecipeTableDataBean.getSingletonInstance();
+        observerIsSet = true;
     }
 
     public void display(){
@@ -52,7 +58,7 @@ public class RecipeManagementView {
                 chefHomeView.display();
             }
             case 1 -> {
-                ShareRecipeView shareRecipeView = new ShareRecipeView(this);
+                ShareRecipeView shareRecipeView = new ShareRecipeView();
                 shareRecipeView.display(this.chefUsername);
             }
             case 2 -> {
@@ -61,7 +67,7 @@ public class RecipeManagementView {
                 if(ans == -1) this.display();
                 RecipeBean toUpdate = this.recipeList.get(ans-1);
                 toUpdate = dataBean.getRecipe(toUpdate.getName());
-                UpdateRecipeView updateRecipeView = new UpdateRecipeView(this, this.chefUsername);
+                UpdateRecipeView updateRecipeView = new UpdateRecipeView(this.chefUsername);
                 updateRecipeView.display(toUpdate);
             }
             default -> {

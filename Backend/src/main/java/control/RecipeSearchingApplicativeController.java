@@ -7,8 +7,11 @@ import model.RecipeBase;
 import java.util.ArrayList;
 import java.util.List;
 
+//controller applicativo per la gestione delle ricerche globali di ricette da parte dell'utente
+
 public class RecipeSearchingApplicativeController implements RecipeSearchingController{
 
+    //il testo della ricerca digitata dall'utente viene capitalizzato in ogni parola, per evitare ambiguità nella ricerca
     private String toTitleCase(String givenSearch) {
         String[] arr = givenSearch.split(" ");
         StringBuilder sb = new StringBuilder();
@@ -20,6 +23,9 @@ public class RecipeSearchingApplicativeController implements RecipeSearchingCont
         return sb.toString().trim();
     }
 
+    /*
+    Metodo che effettua la ricerca, incapsula i dati nei bean e restituisce il tutto alla UI. La ricerca consiste in una semplice query al DAO di navigazione
+     */
     @Override
     public List<RecipeBrowsingTableBean> retrieveSearchResult(String givenSearch) {
         String search = toTitleCase(givenSearch);

@@ -16,8 +16,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//controller applicativo deputato a salvataggio e condivisione delle ricette
+
 public class RecipeSharingApplicativeController implements RecipeSharingController{
 
+    //al controller applicativo è assegnata la responsabilità di legare il bean observer di presentazione al DAO da osservare, dato che conosce entrambi e si trova nel mezzo
     @Override
     public void setUpRecipesObserver(String chefUsername){
         RecipeDAO recipeDAO = new RecipeDAO(chefUsername);
@@ -25,6 +28,7 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
         RecipeTableDataBean.getSingletonInstance().setSubject(recipeDAO);
     }
 
+    //metodo per innescare il salvataggio dei cambiamenti sul DAO
     @Override
     public void saveChanges() {
         RecipeDAO recipeDAO = new RecipeDAO();
@@ -35,12 +39,16 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
         }
     }
 
+    //metodo che gestisce creazione e salvataggio della ricetta
     @Override
     public void shareRecipe(RecipeBean recipe){
+
+        //vengono prima recuperati i dati dello chef che crea la ricetta
         RecipeFactory factory = new RecipeFactory();
         ChefDAO chefDAO = new ChefDAO();
         ChefBase chef = chefDAO.retrieveChef(recipe.getChefUsername());
 
+        //viene creata la lista degli ingredienti
         RecipeIngredientFactory ingredientFactory = new RecipeIngredientFactory();
         List<RecipeIngredient> ingredientList = new ArrayList<>();
         for(RecipeIngredientBean i: recipe.getIngredientList()){
@@ -48,6 +56,7 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
             ingredientList.add(ingredient);
         }
 
+        //si crea la ricetta
         RecipeBase newRecipe = factory.createRecipe(
                 recipe.getName(),
                 chef,
@@ -57,6 +66,11 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
                 ingredientList,
                 recipe.getPreparationProcedure()
         );
+
+        /*
+        Da qui in poi si gestiscono i casi di omonimia tra ricette. Se si tenta di salvare una ricetta con stesso nome di un'altra, si aggiunge a fianco un identificativo
+        numerico (es. Carbonara 2)
+         */
 
         RecipeDAO recipeDAO = new RecipeDAO(recipe.getChefUsername());
         int i=1;
@@ -73,7 +87,13 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
                 }
                 break;
             } catch (ExistingRecipeException e) {
+
+                /*
+                il metodo "saveRecipe" lancia l'eccezione di questo catch se già esiste una ricetta con quel nome. Ovviamente ne può esistere più di una, quindi si prova incrementando
+                di volta in volta l'identificativo, fino a trovarne uno non utilizzato
+                 */
                 i++;
+
             }
         }
 

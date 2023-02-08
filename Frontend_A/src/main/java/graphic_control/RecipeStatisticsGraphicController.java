@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+//controller grafico che gestisce la schermata delle statistiche delle ricette
+
 public class RecipeStatisticsGraphicController {
 
     @FXML
@@ -27,19 +29,27 @@ public class RecipeStatisticsGraphicController {
     @FXML
     private TableColumn<RecipeStatisticsTableBean, Integer> viewsColumn;
 
-    private final ChefHomeGraphicController homeGraphicController;
     private final String chefUsername;
 
-    public RecipeStatisticsGraphicController(ChefHomeGraphicController chefHomeGraphicController, String chefUsername){
-        this.homeGraphicController = chefHomeGraphicController;
+    /*
+    Questo controller grafico ha necessità di conoscere solamente l'username dello chef, dato che è l'unico parametro richiesto dal metodo del controller applicativo. Per questo
+    motivo, questo parametro gli viene passato dall'home controller direttamente nel costruttore, evitando di inserire una nuova associazione con il login controller.
+     */
+    public RecipeStatisticsGraphicController(String chefUsername){
         this.chefUsername = chefUsername;
     }
 
+    //back button -> si ricarica la home
     @FXML
     private void onBackButtonPression() throws IOException {
+        ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
         homeGraphicController.loadHomeUI();
     }
 
+    /*
+    Quando la schermata viene caricata la tabella deve già contenere i dati, che quindi vengono subito recuperati grazie all'invocazione verso il controller applicativo. Inoltre,
+    le ricette vengono ordinate nella tabella in base al numero di visualizzazioni
+     */
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("RecipeStatisticsView.fxml"));
         uiLoader.setController(this);

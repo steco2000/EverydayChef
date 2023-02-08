@@ -13,6 +13,8 @@ import utilities.AlertBox;
 
 import java.io.IOException;
 
+//controller grafico della schermata di login per l'utente
+
 public class UserLoginGraphicController {
 
     @FXML
@@ -24,6 +26,7 @@ public class UserLoginGraphicController {
     private Scene scene;
     private static final String ERROR_BOX_TITLE = "Login Failed";
 
+    //alla pressione del tasto di login si raccolgono i dati dai campi dell'interfaccia nel bean, dopodichè si tenta il login passando il bean al controller applicativo
     @FXML
     private void onLoginButtonPression() throws IOException {
         String username = usernameField.getText();
@@ -33,6 +36,7 @@ public class UserLoginGraphicController {
 
         UserCredBean credBean = new UserCredBean();
 
+        //se le credenziali inserite sono considerate illegali nel sistema si avverte subito l'utente, invece che provare il login
         try {
             credBean.setUsername(username);
             credBean.setPassword(password);
@@ -49,6 +53,7 @@ public class UserLoginGraphicController {
         }
     }
 
+    //passaggio alla schermata di registrazione
     @FXML
     private void onRegButtonPression() throws IOException {
         UserRegistrationGraphicController controller = new UserRegistrationGraphicController();
@@ -56,12 +61,14 @@ public class UserLoginGraphicController {
     }
 
 
+    //passaggio alla schermata di login per lo chef
     @FXML
     private void onChefLoginButtonPression() throws IOException {
         ChefLoginGraphicController chefController = new ChefLoginGraphicController();
         chefController.loadUI();
     }
 
+    //caricamento e visualizzazione dell'interfaccia
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("UserLoginView.fxml"));
         uiLoader.setController(this);

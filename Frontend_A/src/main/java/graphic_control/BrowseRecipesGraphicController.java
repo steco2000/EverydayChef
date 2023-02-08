@@ -26,6 +26,8 @@ import main.view.MainApp;
 import java.io.IOException;
 import java.util.List;
 
+//controller grafico delle schermate di navigazione delle ricette, info di una ricetta e info di uno chef
+
 public class BrowseRecipesGraphicController {
 
     @FXML
@@ -83,11 +85,18 @@ public class BrowseRecipesGraphicController {
     @FXML
     private TextArea chefPageBioArea;
 
+    //questi attributi servono a salvare le informazioni legate a una ricetta quando questa viene selezionata dalla tabella
     private ChefBean recipeChef;
     private RecipeBean selectedRecipeBean;
     private List<RecipeIngredientBean> missingIngredients;
+
+    //lista delle ricette consigliate visualizzate nella tabella
     private List<RecipeBrowsingTableBean> suggestedRecipes;
 
+    /*
+    Quando viene premuto il tasto di visualizzazione della ricetta e una ricetta è selezionata dalla tabella, questa deve essere caricata e mostrata. Viene quindi creato l'apposito controller
+    applicativo che si occupa di recuperare i vari dati, incluse informazioni dello chef e ingredienti mancanti da mostrare nell'apposita tabella.
+     */
     @FXML
     private void onShowRecipeButtonPression() throws IOException {
         RecipeBrowsingTableBean recipeSelected = recipeTable.getSelectionModel().getSelectedItem();
@@ -103,6 +112,10 @@ public class BrowseRecipesGraphicController {
         this.loadRecipePage(selectedRecipeBean,missingIngredients);
     }
 
+    /*
+    Alla pressione del tasto di ricerca per le ricette, viene salvato il contenuto della search bar e passato al controller applicativo che si occupa di recuperare le ricette legate
+    alla ricerca digitata dall'utente. Il risultato della ricerca, se non vuoto, viene inserito nella tabella.
+     */
     @FXML
     private void onSearchButtonPression(){
         mainLabel.setText("Search results");
@@ -122,6 +135,10 @@ public class BrowseRecipesGraphicController {
         }
     }
 
+    /*
+    Se l'utente clicca sulla label con il nome dello chef, nella schermata di info della ricetta, devono essere mostrate le informazioni dello chef, recuperate precedentemente,
+    attraverso l'apposita view.
+     */
     @FXML
     private void onChefLabelClick() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("ChefInfoView.fxml"));
@@ -135,22 +152,29 @@ public class BrowseRecipesGraphicController {
         MainApp.getPrimaryStage().setScene(scene);
     }
 
+    //tasto back della schermata della ricetta, si ricarica la view di navigazione
     @FXML
     private void onRecipePageBackButtonPression() throws IOException {
         this.loadUI();
     }
 
+    //tasto back della schermata di info dello chef, si ricarica la schermata della ricetta selezionata
     @FXML
     private void onChefPageBackButtonPression() throws IOException {
         this.loadRecipePage(selectedRecipeBean,missingIngredients);
     }
 
+    //tasto back della schermata di navigazione, si ricarica la schermata home
     @FXML
     private void onBackButtonPression() throws IOException {
         UserHomeGraphicController homeGraphicController = new UserHomeGraphicController();
         homeGraphicController.loadUI();
     }
 
+    /*
+    Questo metodo serve a innescare l'algoritmo di ricerca delle ricette consigliate eseguito dall'apposito controller applicativo. Il risultato della ricerca viene inserito nella
+    tabella delle ricette.
+     */
     private void getSuggestedRecipes() {
         ObservableList<RecipeBrowsingTableBean> observableBeanList = FXCollections.observableArrayList();
         if(this.suggestedRecipes == null){
@@ -165,6 +189,10 @@ public class BrowseRecipesGraphicController {
         recipeTable.setItems(observableBeanList);
     }
 
+    /*
+    Questo metodo coordina il caricamento e la visualizzazione della schermata di informazioni di una ricetta ricetta, una volta che questa viene recuperata dal controller applicativo
+    "RecipeInfoRetrieving". Vengono popolate le tabelle degli ingredienti richiesti e mancanti, più tutti gli altri campi.
+     */
     private void loadRecipePage(RecipeBean recipe, List<RecipeIngredientBean> missingIngredients) throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("RecipePageView.fxml"));
         uiLoader.setController(this);
@@ -187,6 +215,7 @@ public class BrowseRecipesGraphicController {
         MainApp.getPrimaryStage().setScene(scene);
     }
 
+    //questo metodo serve a popolare la tabella degli ingredienti richiesti per la schermata di info di una ricetta
     private void setUpIngredientsTable(List<RecipeIngredientBean> ingredientList) {
         ingredientNamecol.setCellValueFactory(new PropertyValueFactory<>("name"));
         ingredientQuantityCol.setCellValueFactory(new PropertyValueFactory<>("stringQuantity"));
@@ -196,6 +225,7 @@ public class BrowseRecipesGraphicController {
         ingredientListTable.setItems(beanObservableList);
     }
 
+    //questo metodo serve a popolare la tabella degli ingredienti mancanti per la schermata di info di una ricetta
     private void setUpMissingIngredientsTable(List<RecipeIngredientBean> missingIngredients) {
         missingIngredientNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         missingIngredientQuantityCol.setCellValueFactory(new PropertyValueFactory<>("stringQuantity"));
@@ -205,6 +235,11 @@ public class BrowseRecipesGraphicController {
         missingIngredientsTable.setItems(beanObservableList);
     }
 
+    /*
+    Questo è il metodo che gestisce caricamento e visualizzazione della schermata di navigazione. L'operazione principale che viene eseguita è il recupero e la visualizzazione
+    delle ricette consigliate sfruttando l'apposito metodo definito precedentemente. La colonna dell'username è fittizia, serve solo a mantenere un riferimento univoco allo chef se la
+    ricetta viene selezionata. Viene perciò resa invisibile all'utente.
+     */
     public void loadUI() throws IOException {
         FXMLLoader uiLoader = new FXMLLoader(MainApp.class.getResource("BrowseRecipesView.fxml"));
         uiLoader.setController(this);

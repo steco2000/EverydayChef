@@ -2,6 +2,8 @@ package beans;
 
 import java.util.List;
 
+//bean che incapsula i dati di istanze delle ricette
+
 public class RecipeBean {
 
     private String name;
@@ -14,6 +16,9 @@ public class RecipeBean {
 
     public String getName() {return name; }
 
+    /*
+    Il nome di ogni ricetta viene capitalizzato in ogni parola, per evitare ambiguità nell'algoritmo di ricerca
+     */
     private String toTitleCase(String givenName) {
         String[] arr = givenName.split(" ");
         StringBuilder sb = new StringBuilder();
@@ -25,6 +30,7 @@ public class RecipeBean {
         return sb.toString().trim();
     }
 
+    //nomi vuoti non sono ammessi
     public void setName(String name) throws IllegalArgumentException{
         if(name == null || name.length() == 0) throw new IllegalArgumentException();
         this.name = this.toTitleCase(name);

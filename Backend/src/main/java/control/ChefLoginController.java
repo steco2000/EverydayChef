@@ -2,9 +2,11 @@ package control;
 
 import beans.ChefBean;
 
+//Interfaccia del controller applicativo "LoginController" esposta alla UI dell'utente chef
+
 public interface ChefLoginController {
 
-    public boolean attemptChefLogin(ChefBean credentials);
-    public boolean registerChef(ChefBean chefInfo);
+    boolean attemptChefLogin(ChefBean credentials);
+    boolean registerChef(ChefBean chefInfo);
 
 }
