@@ -25,7 +25,7 @@ public class RecipeManagementView {
         this.dataBean = RecipeTableDataBean.getSingletonInstance();
     }
 
-    private void startRecipesObservation() {
+    private static void startRecipesObservation() {
         RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
         RecipeSharingController sharingController = controllerFactory.createRecipeSharingController();
         sharingController.setUpRecipesObserver(LoginController.getChefLogged().getUsername());
