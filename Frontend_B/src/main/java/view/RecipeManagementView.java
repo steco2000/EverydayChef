@@ -19,7 +19,7 @@ public class RecipeManagementView {
     private static boolean observerIsSet = false;
 
     public RecipeManagementView(String chefUsername){
-        if(!observerIsSet) this.startRecipesObservation();
+        if(!observerIsSet) startRecipesObservation();
         this.chefUsername = chefUsername;
         this.sc = new Scanner(System.in);
         this.dataBean = RecipeTableDataBean.getSingletonInstance();

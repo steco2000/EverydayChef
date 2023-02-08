@@ -41,7 +41,7 @@ public class ChefHomeGraphicController {
     controller applicativo. In questo modo l'interfaccia potrà, attraverso il bean, avere sempre i dati aggiornati sulle ricette create dallo chef.
     */
     public ChefHomeGraphicController(){
-        if(!recipeObserverIsSet) this.startRecipesObservation();
+        if(!recipeObserverIsSet) startRecipesObservation();
         this.dataBean = RecipeTableDataBean.getSingletonInstance();
     }
 
