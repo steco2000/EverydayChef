@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+//entità che incapsula i dati dell'inventario ingredienti, lo stato è l'utente e la lista degli ingredienti da inventario
+
 public class Inventory extends InventorySubject implements InventoryBase, Serializable  {
 
     private UserCredentials user;
     private List<InventoryIngredient> ingredientList;
 
+    //quando l'inventario viene creato si associa all'utente
     public Inventory(UserCredentials user){
         this.ingredientList = new ArrayList<>();
         this.user = user;
@@ -22,6 +25,8 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
     public UserCredentials getUser() {
         return this.user;
     }
+
+    //L'inventario è osservato dal bean in pull model per l'interfaccia di gestione, ogni modifica deve essere notificata
 
     @Override
     public void addIngredient(IngredientBase ingredient){
@@ -52,6 +57,7 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
         return null;
     }
 
+    //metodo usato dal bean in pull model per ottenere i dati aggiornati
     @Override
     public List<IngredientBase> getState(){
         List<IngredientBase> state = new ArrayList<>();

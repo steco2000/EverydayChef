@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 
+//entità che incapusla i dati degli ingredienti da inserire nell'inventario. Agli ingredienti delle ricette (superclasse) aggiunge solo le note e la data di scadenza
+
 public class InventoryIngredient extends Ingredient implements IngredientBase, Serializable {
 
     private Date expirationDate;

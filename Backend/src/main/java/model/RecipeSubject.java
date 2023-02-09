@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+//subject astratto del RecipeDAO (subject concreto)
+
 public abstract class RecipeSubject {
 
     private List<RecipeObserver> observers;

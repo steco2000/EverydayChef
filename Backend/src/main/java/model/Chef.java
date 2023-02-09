@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+//entità che incapsula i dati degli chef
+
 public class Chef implements ChefBase, Serializable {
 
     private String name;

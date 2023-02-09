@@ -5,6 +5,8 @@ import dao.UserCredentialsDAO;
 import java.io.IOException;
 import java.io.Serializable;
 
+//entità che incapsula i dati degli utenti
+
 public class UserCredentials implements UserCredBase, Serializable {
 
     private String username;
@@ -50,13 +52,14 @@ public class UserCredentials implements UserCredBase, Serializable {
 
     public Inventory getIngredientsInventory(){ return this.ingredientsInventory; }
 
+    //quando si lega un inventario all'utente questo chiede al DAO di esssre salvato
     public void setIngredientsInventory(Inventory ingredientsInventory) {
         this.ingredientsInventory = ingredientsInventory;
         UserCredentialsDAO dao = new UserCredentialsDAO();
         try {
             dao.saveUser(this);
         } catch (IOException ignored) {
-            assert(true); //eccezione ignorata
+            assert(true); //eccezione ignorata, se l'utente esiste esiste anche il file
         }
     }
 

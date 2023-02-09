@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
+//entità che incapsula i dati delle ricette
+
 public class Recipe implements RecipeBase, Serializable {
 
     private String name;

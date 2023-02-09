@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 
+//interfaccia dell'entità chef esposta allo strato di controllo
+
 public interface ChefBase extends Serializable {
 
     void setName(String name);

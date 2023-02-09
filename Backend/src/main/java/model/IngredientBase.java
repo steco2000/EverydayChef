@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+//interfaccia dell'entità ingrediente esposta allo strato di controllo
+
 public interface IngredientBase {
 
     void setName(String name);

@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
+//interfaccia dell'entità ricetta esposta allo strato di controllo
+
 public interface RecipeBase extends Serializable {
 
     String getName();

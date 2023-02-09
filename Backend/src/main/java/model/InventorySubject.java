@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+//subject astratto dell'inventario
+
 public abstract class InventorySubject {
 
     private List<InventoryObserver> observerList;

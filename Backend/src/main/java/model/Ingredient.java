@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 
+//entità che incapsula i dati degli ingredienti base (quelli delle ricette)
+
 public class Ingredient implements RecipeIngredient, Serializable {
 
     protected String name;

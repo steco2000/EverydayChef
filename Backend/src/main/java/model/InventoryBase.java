@@ -3,6 +3,8 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
+//interfaccia dell'entità inventario esposta allo strato di controllo
+
 public interface InventoryBase extends Serializable {
 
     void addIngredient(IngredientBase ingredient);
