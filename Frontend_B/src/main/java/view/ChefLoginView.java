@@ -7,6 +7,8 @@ import factories.ChefLoginControllerFactory;
 
 import java.util.Scanner;
 
+//view che gestisce la schermata di login per lo chef
+
 public class ChefLoginView {
 
     private Scanner sc;
@@ -15,6 +17,7 @@ public class ChefLoginView {
         this.sc = new Scanner(System.in);
     }
 
+    //display della view e raccolta azioni utente
     public void display(){
         while(true) {
             System.out.println();
@@ -55,6 +58,7 @@ public class ChefLoginView {
         }
     }
 
+    //tentativo di login. Si raccolgono le credenziali nel bean e si chiama il metodo del controller
     private boolean chefLoginAttempt() {
         System.out.println("Log in as chef");
         String[] credentials = InputReusableUtilities.getCredentials(this.sc);

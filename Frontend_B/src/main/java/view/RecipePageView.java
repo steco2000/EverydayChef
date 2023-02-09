@@ -11,6 +11,8 @@ import factories.RecipeInfoRetrievingControllerFactory;
 import java.util.List;
 import java.util.Scanner;
 
+//view che gestisce la pagina di informazioni della ricetta
+
 public class RecipePageView {
 
     private Scanner sc;
@@ -18,6 +20,7 @@ public class RecipePageView {
     private ChefBean chef;
     private List<RecipeIngredientBean> missingIngredients;
 
+    //nel costruttore recupero tutte le info necessarie
     public RecipePageView(RecipeBrowsingTableBean recipe){
         this.sc = new Scanner(System.in);
         RecipeInfoRetrievingControllerFactory factory = new RecipeInfoRetrievingControllerFactory();
@@ -27,6 +30,7 @@ public class RecipePageView {
         this.missingIngredients = controller.retrieveMissingIngredients(recipe);
     }
 
+    //display della ricetta e raccolta azioni utente
     public void display(){
         System.out.println();
         System.out.println(this.recipeSelected.getName());
@@ -60,6 +64,7 @@ public class RecipePageView {
         }
     }
 
+    //stampa informazioni dello chef
     private void displayChefPage() {
         System.out.println();
         System.out.println("Chef Page:");
@@ -74,6 +79,7 @@ public class RecipePageView {
         this.display();
     }
 
+    //stampa le tabelle degli ingredienti (della ricetta e mancanti)
     private void displayIngredientTable(List<RecipeIngredientBean> data) {
         for(RecipeIngredientBean i: data){
             System.out.println("- "+i.getName()+", "+i.getStringQuantity()+" "+i.getMeasureUnit());

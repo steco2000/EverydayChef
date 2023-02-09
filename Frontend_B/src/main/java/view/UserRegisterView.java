@@ -8,6 +8,8 @@ import factories.UserLoginControllerFactory;
 import java.lang.reflect.MalformedParametersException;
 import java.util.Scanner;
 
+//view per la gestione della schermata di registrazione dello chef
+
 public class UserRegisterView {
 
     private Scanner sc;
@@ -16,6 +18,7 @@ public class UserRegisterView {
         this.sc = new Scanner(System.in);
     }
 
+    //display della schermata e raccolta informazioni dello chef nel bean + tentativo di registrazione tramite il controller
     public void display(){
         System.out.println("Register as user");
         System.out.println();
@@ -58,6 +61,7 @@ public class UserRegisterView {
                 this.display();
             }
 
+            //tentativo di registrazione
             UserLoginControllerFactory factory = new UserLoginControllerFactory();
             UserLoginController controller = factory.createUserLoginController();
 

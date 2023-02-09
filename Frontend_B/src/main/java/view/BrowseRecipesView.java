@@ -10,9 +10,13 @@ import factories.RecipeSearchingControllerFactory;
 import java.util.List;
 import java.util.Scanner;
 
+//view che gestisce la navigazione tra le ricette consigliate
+
 public class BrowseRecipesView {
 
     private Scanner sc;
+
+    //ricette consigliate o risultati di una ricerca
     private List<RecipeBrowsingTableBean> suggestedRecipes;
     private List<RecipeBrowsingTableBean> searchResult;
 
@@ -20,6 +24,7 @@ public class BrowseRecipesView {
         this.sc = new Scanner(System.in);
     }
 
+    //display della view e raccolta azioni utente
     public void display(boolean fromSearch, String ...search){
         System.out.println();
         System.out.println("Browse Recipes");
@@ -55,6 +60,7 @@ public class BrowseRecipesView {
         }
     }
 
+    //metodo che gestisce come visualizzare le ricette, se siamo in ricerca o in fase di consiglio delle ricette consigliate
     private void manageShowRecipe(boolean fromSearch) {
         while(true){
             if(fromSearch) this.fromSearchRecipeBrowsing();
@@ -63,6 +69,7 @@ public class BrowseRecipesView {
         }
     }
 
+    //gestione azioni utente in modalità di ricerca
     private void fromSearchRecipeBrowsing(){
         int answer;
         if(this.searchResult.isEmpty()){
@@ -72,6 +79,8 @@ public class BrowseRecipesView {
             this.display(false);
         }
         System.out.println();
+
+        //ogni ricetta della lista viene associata a un indice numerico, lo stesso dell'array + 1. In questo modo è possibile accedervi direttamente
         System.out.println("Digit the recipe's index");
         answer = InputReusableUtilities.getAnswer(this.sc,1,this.searchResult.size());
         if(answer == -1){
@@ -86,11 +95,12 @@ public class BrowseRecipesView {
         recipePageView.display();
     }
 
+    //gestione azioni utente in modalità di consiglio ricette
     private void suggestedRecipesBrowsing() {
         int answer;
         if(this.suggestedRecipes.isEmpty()){
             System.out.println();
-            System.out.println("There are no suggested recipes, try to search something. Press enter to continue");
+            System.out.println("There are no suggested recipes. Make sure to keep your inventory up to date. You can also try to search something. Press enter to continue");
             this.sc.nextLine();
             this.display(false);
         }
@@ -109,6 +119,7 @@ public class BrowseRecipesView {
         recipePageView.display();
     }
 
+    //recupero e visualizzazione dei risultati di una ricerca
     private void displaySearchResults(String search) {
         if(search.isEmpty()){
             this.display(false);
@@ -124,6 +135,7 @@ public class BrowseRecipesView {
         }
     }
 
+    //recupero e visualizzazione ricette consigliate
     private void displaySuggestedRecipesTable() {
         if(this.suggestedRecipes == null){
             BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
@@ -137,6 +149,7 @@ public class BrowseRecipesView {
         this.displayTable(this.suggestedRecipes);
     }
 
+    //metodo per stampare una lista di ricette
     private void displayTable(List<RecipeBrowsingTableBean> data){
         int index = 1;
         for(RecipeBrowsingTableBean r: data){

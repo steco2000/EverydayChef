@@ -8,6 +8,8 @@ import factories.RecipeUpdatingControllerFactory;
 
 import java.util.Scanner;
 
+//view per la gestione della schermata di modifica di una ricetta
+
 public class UpdateRecipeView {
 
     private Scanner sc;
@@ -19,6 +21,7 @@ public class UpdateRecipeView {
         this.chefUsername = chefUsername;
     }
 
+    //display della schermata con visualizzazione delle info della ricetta + raccolta azioni utente
     public void display(RecipeBean toUpdate) {
         updates = new RecipeBean();
         updates.setName(toUpdate.getName());
@@ -50,6 +53,7 @@ public class UpdateRecipeView {
             System.out.println("8) to confirm changes");
             int ans = InputReusableUtilities.getAnswer(this.sc,0,8);
 
+            //gestione degli input dell'utente in base all'azione scelta
             switch (ans) {
                 case -1 -> {
                     assert (true); //errore nella risposta, non faccio nulla
@@ -100,6 +104,7 @@ public class UpdateRecipeView {
         }
     }
 
+    //metodo che stampa la lista degli ingredienti
     private void displayIngredientTable(RecipeBean recipe) {
         if(recipe.getIngredientList() == null || recipe.getIngredientList().isEmpty()) return;
         System.out.println();

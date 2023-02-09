@@ -10,13 +10,18 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Scanner;
 
+//view che gestisce la schermata di gestione dell'inventario ingredienti
+
 public class InventoryView {
 
     private Scanner sc;
     private InventoryTableDataBean dataBean;
+
+    //riferimenti al controller e alla lista di ingredienti nell'inventario
     private InventoryController applController;
     private List<IngredientBean> ingredientList;
 
+    //nel costruttore avviamo la procedura di caching dell'inventario dell'utente
     public InventoryView(){
         this.sc = new Scanner(System.in);
         InventoryControllerFactory controllerFactory = new InventoryControllerFactory();
@@ -24,6 +29,7 @@ public class InventoryView {
         dataBean = InventoryTableDataBean.getSingletonInstance();
     }
 
+    //display della schermata e raccolta azioni utente
     public void display(){
         while(true) {
             System.out.println();
@@ -66,6 +72,7 @@ public class InventoryView {
         }
     }
 
+    //gestione dell'aggiunta di un ingrediente
     private void manageIngredientAdd() {
         IngredientBean newIngredient = new IngredientBean();
         boolean dataAcquired = false;
@@ -97,14 +104,18 @@ public class InventoryView {
         }
     }
 
+    //gestione dell'aggiornamento di un ingrediente
     private void manageIngredientUpdating() {
         System.out.println();
+
+        //ogni ingrediente della lista viene associato a un indice numerico, lo stesso dell'array + 1. In questo modo è possibile accedervi direttamente
         System.out.print("Digit the index of the ingredient you want to update: ");
         int answer = InputReusableUtilities.getAnswer(this.sc, 1, this.ingredientList.size());
         if (answer == -1){
             return;
         }
 
+        //abbiamo bisongo di due bean, uno contentente gli aggiornamenti e uno i dati precedenti
         IngredientBean toUpdate = this.ingredientList.get(answer - 1);
         IngredientBean updates = new IngredientBean();
         updates.setName(toUpdate.getName());
@@ -118,6 +129,7 @@ public class InventoryView {
             assert(true); //eccezione ignorata, dati da memoria già validati
         }
 
+        //gestione dell'inserimento delle modifiche
         while(true) {
             System.out.println();
             System.out.println("You selected:");
@@ -177,6 +189,7 @@ public class InventoryView {
         }
     }
 
+    //metodo per la rimozione di un ingrediente, la gestione degli indici è la stessa della procedura di modifica
     private void manageIngredientRemoving() {
         while(true) {
             System.out.println();
@@ -191,6 +204,7 @@ public class InventoryView {
         }
     }
 
+    //metodo che stampa la lista degli ingredienti nell'inventario
     private void displayInventoryTable() {
         try {
             this.ingredientList = dataBean.getTableData();

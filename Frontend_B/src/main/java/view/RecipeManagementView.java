@@ -10,6 +10,8 @@ import factories.RecipeSharingControllerFactory;
 import java.util.List;
 import java.util.Scanner;
 
+//view che controlla la schermata di gestione delle ricette
+
 public class RecipeManagementView {
 
     private Scanner sc;
@@ -18,6 +20,7 @@ public class RecipeManagementView {
     private String chefUsername;
     private static boolean observerIsSet = false;
 
+    //nel costruttore si inizializzano gli attributi della view e si controlla se l'observer sul RecipeDAO è stato impostato
     public RecipeManagementView(String chefUsername){
         if(!observerIsSet) startRecipesObservation();
         this.chefUsername = chefUsername;
@@ -25,6 +28,7 @@ public class RecipeManagementView {
         this.dataBean = RecipeTableDataBean.getSingletonInstance();
     }
 
+    //metodo per impostare l'observer sul RecipeDAO
     private static void startRecipesObservation() {
         RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
         RecipeSharingController sharingController = controllerFactory.createRecipeSharingController();
@@ -32,6 +36,7 @@ public class RecipeManagementView {
         observerIsSet = true;
     }
 
+    //display della schermata e raccolta azioni utente. In base all'azione scelta viene caricata la relativa schermata
     public void display(){
         System.out.println();
         System.out.println("Recipe Management");
@@ -81,6 +86,7 @@ public class RecipeManagementView {
         }
     }
 
+    //metodo che stampa la lista delle ricette salvate dallo chef
     private void displayRecipeTable() {
         recipeList = dataBean.getTableData();
         if(recipeList.isEmpty()) return;

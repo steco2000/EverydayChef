@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import static javafx.geometry.Pos.CENTER;
 
+//pop up con conferma richiesta all'utente. Si presuppone che il messaggio sia una domanda e che l'utente debba rispondere co si o no
+
 public class ConfirmBox {
 
     static boolean answer;
@@ -18,6 +20,7 @@ public class ConfirmBox {
     private ConfirmBox(){
     }
 
+    //display del pop up. Accetta titolo e messaggio da visualizzare. Ritorna la risposta dell'utente
     public static boolean display(String title, String message){
         Stage box = new Stage();
         box.initModality(Modality.APPLICATION_MODAL);
@@ -30,6 +33,7 @@ public class ConfirmBox {
         label.setText(message);
         label.setTextAlignment(TextAlignment.CENTER);
 
+        //gestione del valore di ritorno. A seconda del tasto premuto viene ritornato vero o falso
         Button yesButton = new Button("Yes");
         yesButton.setOnAction(e -> {
             answer = true;

@@ -5,6 +5,8 @@ import control.LoginController;
 
 import java.util.Scanner;
 
+//view per la gestione della home per l'utente base
+
 public class UserHomeView {
 
     private Scanner sc;
@@ -13,6 +15,7 @@ public class UserHomeView {
         this.sc = new Scanner(System.in);
     }
 
+    //display della schermata e raccolta azioni utente. In base all'azione scelta si carica la rispettiva schermata
     public void display(){
         while(true) {
             System.out.println();

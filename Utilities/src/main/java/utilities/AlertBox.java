@@ -9,11 +9,14 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+//pop up di avviso per l'utente. Dispone di una label e di un semplice pulsante di ok
+
 public class AlertBox {
 
     private AlertBox(){
     }
 
+    //display del pop up. Accetta titolo e messaggio da visualizzare
     public static void display(String title, String message){
         Stage box = new Stage();
         box.initModality(Modality.APPLICATION_MODAL);

@@ -7,6 +7,8 @@ import factories.UserLoginControllerFactory;
 
 import java.util.Scanner;
 
+//view per la gestione dell'interfaccia di login dell'utente
+
 public class UserLoginView {
 
     private Scanner sc;
@@ -16,6 +18,7 @@ public class UserLoginView {
         this.sc = new Scanner(System.in);
     }
 
+    //display della schermata e raccolta azioni utente. In base all'azione si carica la relativa interfaccia
     public void display() {
         while(true) {
             System.out.println("EverydayChef");
@@ -56,6 +59,7 @@ public class UserLoginView {
         }
     }
 
+    //tentativo di login. Si raccolgono le credenziali nel bean e si chiama il metodo del controller
     private boolean loginAttempt() {
         System.out.println("Log in");
         String[] credentials = InputReusableUtilities.getCredentials(this.sc);

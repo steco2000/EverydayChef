@@ -9,6 +9,8 @@ import java.lang.reflect.MalformedParametersException;
 import java.text.ParseException;
 import java.util.Scanner;
 
+//view che gestisce la schermata di registrazione dello chef
+
 public class ChefRegisterView {
 
     private Scanner sc;
@@ -17,6 +19,7 @@ public class ChefRegisterView {
         this.sc = new Scanner(System.in);
     }
 
+    //display della schermata e raccolta dati per la registrazione
     public void display() {
         ChefBean newChef = new ChefBean();
 
@@ -82,6 +85,7 @@ public class ChefRegisterView {
 
     }
 
+    //metodo che gestisce la risposta alla conferma di registrazione e la chiamata al metodo del controller
     private void manageRegistrationAnswer(ChefBean newChef){
         if (InputReusableUtilities.yes(this.sc)) {
             ChefLoginControllerFactory factory = new ChefLoginControllerFactory();

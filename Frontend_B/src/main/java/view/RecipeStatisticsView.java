@@ -7,6 +7,8 @@ import factories.RecipeStatisticsControllerFactory;
 import java.util.List;
 import java.util.Scanner;
 
+//view per la gestione della schermata di statistiche delle ricette
+
 public class RecipeStatisticsView {
 
     private Scanner sc;
@@ -17,6 +19,7 @@ public class RecipeStatisticsView {
         this.chefUsername = chefUsername;
     }
 
+   //recupero informazioni e display della schermata
     public void display(){
         RecipeStatisticsController controller = (new RecipeStatisticsControllerFactory()).createRecipeStatisticsController();
         List<RecipeStatisticsTableBean> beanList = controller.getRecipesStatistics(this.chefUsername);

@@ -6,6 +6,8 @@ import exceptions.RecipeIngredientQuantityException;
 import java.text.ParseException;
 import java.util.Scanner;
 
+//classe di utilities per input da console, con controlli sintattici di base
+
 public class InputReusableUtilities {
 
     private static final String INVALID_VALUE_MESSAGE = "Invalid value, press enter to continue";
@@ -14,11 +16,16 @@ public class InputReusableUtilities {
         assert(true); //costruttore privato per nascondere quello pubblico implicito
     }
 
+    //metodo che serve a ricevere in input la risposta a una domanda con risposta del tipo si o no
     public static boolean yes(Scanner sc){
         String answer = sc.nextLine();
         return (answer.equals("y") || answer.equals("Y"));
     }
 
+    /*
+    metodo che serve a ricevere in input l'indice di una azione da eseguire o di qualcosa da selezionare da una lista. Deve essere un valore intero e si specificano quale è il primo
+    ammesso e quale l'ultimo
+     */
     public static int getAnswer(Scanner sc, int firstAllowed, int lastAllowed) throws NumberFormatException{
         int answer;
         try{
@@ -36,6 +43,7 @@ public class InputReusableUtilities {
         }
     }
 
+    //metodo che gestisce l'input di qualunque tipo di credenziale in fase di login
     public static String[] getCredentials(Scanner sc){
         System.out.print("Username: ");
         String username = sc.nextLine();
@@ -44,6 +52,7 @@ public class InputReusableUtilities {
         return new String[] {username, password};
     }
 
+    //metodo che gestisce l'input dell'unità di misura di un ingrediente. Ritorna solo i formati ammessi dal sistema
     public static String measureUnitInput(Scanner sc){
         while(true) {
             System.out.println("Measure Unit - press:");
@@ -64,6 +73,7 @@ public class InputReusableUtilities {
         }
     }
 
+    //metodo per la gestione dell'input del tempo di preparazione di una ricetta, formato e valore
     public static  String preparationTimeInput(Scanner sc) {
         String measureUnit = "";
         double value = -1;
@@ -99,6 +109,7 @@ public class InputReusableUtilities {
         return value+" "+measureUnit;
     }
 
+    //metodo per la gestione dell'input della difficoltà di una ricetta. Ritorna solo i valori consentiti dal sistema
     public static String difficultyInput(Scanner sc) {
         while(true) {
             System.out.println("Press:");
@@ -124,6 +135,7 @@ public class InputReusableUtilities {
         }
     }
 
+    //metodo per la gestione dell'input di un ingrediente della ricetta, con tutti i dati richiesti
     public static RecipeIngredientBean getIngredientData(Scanner sc) {
         RecipeIngredientBean newIngredient = new RecipeIngredientBean();
         while(true){

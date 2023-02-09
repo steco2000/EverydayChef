@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+//view per la gestione della condivisione di una ricetta
+
 public class ShareRecipeView {
 
     private Scanner sc;
@@ -20,6 +22,7 @@ public class ShareRecipeView {
         this.newRecipe = new RecipeBean();
     }
 
+    //display della schermata e raccolta informazioni
     public void display(String chefUsername){
         this.newRecipe.setChefUsername(chefUsername);
         boolean dataAcquired = false;
@@ -64,6 +67,7 @@ public class ShareRecipeView {
         recipeManagementView.display();
     }
 
+    //metodo che gestisce la compilazione della lista degli ingredienti
     private List<RecipeIngredientBean> getIngredientList() {
         List<RecipeIngredientBean> ingredientList = new ArrayList<>();
         while (true) {
@@ -96,6 +100,7 @@ public class ShareRecipeView {
         }
     }
 
+    //metodo che stampa la lista degli ingredienti
     private void displayIngredientList(List<RecipeIngredientBean> ingredientList){
         if(ingredientList.isEmpty()) return;
         int idx = 1;
