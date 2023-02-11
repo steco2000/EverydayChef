@@ -34,6 +34,7 @@ public class ChefHomeView {
                 }
                 //in caso di uscita torniamo alla view di login
                 case 0 -> {
+                    RecipeManagementView.stopRecipesObservation();
                     ChefLoginView chefLoginView = new ChefLoginView();
                     chefLoginView.display();
                 }

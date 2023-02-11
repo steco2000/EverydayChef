@@ -139,7 +139,8 @@ public class ChefHomeGraphicController {
 
     //alla pressione del tasto di log out basta ricaricare la schermata di login, una successiva autenticazione sovrascriverà le variabili di identificazione dello chef loggato
     @FXML
-    private void onLogOutButtonPression() throws IOException {
+    private static void onLogOutButtonPression() throws IOException {
+        recipeObserverIsSet = false;
         ChefLoginGraphicController controller = new ChefLoginGraphicController();
         controller.loadUI();
     }

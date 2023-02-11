@@ -37,6 +37,9 @@ public class RecipeManagementView {
         observerIsSet = true;
     }
 
+    //metodo per interrompere l'osservazione delle ricette al momento del logout dello chef
+    public static void stopRecipesObservation(){ observerIsSet = false; }
+
     //display della schermata e raccolta azioni utente. In base all'azione scelta viene caricata la relativa schermata
     public void display(){
         try {
