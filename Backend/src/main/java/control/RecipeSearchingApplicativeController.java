@@ -4,7 +4,6 @@ import beans.RecipeBrowsingTableBean;
 import dao.RecipesBrowsingDAO;
 import model.RecipeBase;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
