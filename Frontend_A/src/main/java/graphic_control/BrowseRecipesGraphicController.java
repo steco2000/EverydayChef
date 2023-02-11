@@ -193,6 +193,7 @@ public class BrowseRecipesGraphicController {
             }
         }catch(PersistentDataAccessException e){
             AlertBox.display(ERROR_BOX_TITLE,e.getMessage());
+            return;
         }
         observableBeanList.addAll(this.suggestedRecipes);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
