@@ -57,6 +57,7 @@ public class ChefHomeGraphicController {
         }
     }
 
+    //metodo per interrompere l'osservazione delle ricette da parte del bean in pull model al logout dello chef
     private static void stopRecipesObservetion(){ recipeObserverIsSet = false; }
 
     /*
