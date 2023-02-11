@@ -74,8 +74,9 @@ public class UserCredentialsDAO {
                 filein = new FileInputStream(Paths.get("Backend\\src\\main\\resources\\user_credentials\\"+f.getName()).toAbsolutePath().toString());
                 objStream = new ObjectInputStream(filein);
                 currUser = (UserCredentials) objStream.readObject();
+                objStream.close();
+                filein.close();
                 if((currUser.getEmail().equals(email)) || (currUser.getUsername().equals(username))){
-                    filein.close();
                     return false;
                 }
             }

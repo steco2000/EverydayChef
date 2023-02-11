@@ -4,6 +4,7 @@ import model.Chef;
 import model.ChefBase;
 import dao.ChefDAO;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 //factory adibita alla creazione di istanze di Chef
@@ -20,6 +21,8 @@ public class ChefFactory {
             newChef.setId(id+1);
         } catch (ClassNotFoundException ignored) {
             assert(true); //ignorata, il tipo di dato che si sta leggendo è primitivo
+        } catch(FileNotFoundException e){
+            newChef.setId(1);   //non esiste alcuno chef
         }
         return newChef;
     }

@@ -54,16 +54,15 @@ public class ChefDAO {
                 filein = new FileInputStream(Paths.get("Backend\\src\\main\\resources\\chef_data\\"+f.getName()).toAbsolutePath().toString());
                 objStream = new ObjectInputStream(filein);
                 currChef = (Chef) objStream.readObject();
+                objStream.close();
+                filein.close();
                 if((currChef.getEmail().equals(email)) || (currChef.getUsername().equals(username))){
                     return false;
                 }
             }
             return true;
         } catch(ClassNotFoundException e){
-            return false;   //se non viene trovato alcun file significa che lo chef non esiste e può essere registrato
-        } finally {
-            objStream.close();
-            filein.close();
+            return false;   //lo chef non esiste e può essere registrato
         }
     }
 
