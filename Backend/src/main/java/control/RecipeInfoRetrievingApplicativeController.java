@@ -28,6 +28,24 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
     private static List<InventoryIngredient> inventoryList;
     private RecipeBean selectedRecipe;
 
+    //metodo per costruire i bean degli ingredienti della ricetta
+    private RecipeIngredientBean setUpIngredientBean(RecipeIngredient i){
+        RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
+        ingredientBean.setName(i.getName());
+        try {
+            if (i.getQuantity() != -1) {
+                ingredientBean.setQuantity(String.valueOf(i.getQuantity()), false);
+            } else {
+                ingredientBean.setQuantity("J. E.", true);
+            }
+        } catch (ParseException | RecipeIngredientQuantityException ignored) {
+            assert(true);   //ignorata perché i dati da memoria sono già validati
+        }
+
+        ingredientBean.setMeasureUnit(i.getMeasureUnit());
+        return ingredientBean;
+    }
+
     //metodo che esegue il recupero delle informazioni di base della ricetta
     @Override
     public RecipeBean retrieveRecipeInfo(RecipeBrowsingTableBean recipeBrowsingBean) throws PersistentDataAccessException {
@@ -50,20 +68,7 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
 
             List<RecipeIngredientBean> ingredientBeanList = new ArrayList<>();
             for (RecipeIngredient i : recipe.getIngredientList()) {
-                RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
-                ingredientBean.setName(i.getName());
-                try {
-                    if (i.getQuantity() != -1) {
-                        ingredientBean.setQuantity(String.valueOf(i.getQuantity()), false);
-                    } else {
-                        ingredientBean.setQuantity("J. E.", true);
-                    }
-                } catch (ParseException | RecipeIngredientQuantityException ignored) {
-                    assert(true);   //ignorata perché i dati da memoria sono già validati
-                }
-
-                ingredientBean.setMeasureUnit(i.getMeasureUnit());
-                ingredientBeanList.add(ingredientBean);
+                ingredientBeanList.add(this.setUpIngredientBean(i));
             }
 
             toReturn.setIngredientList(ingredientBeanList);
@@ -74,24 +79,29 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
         }
     }
 
+    //metodo per la costruzione del bean che incapsula le informazioni dello chef
+    private ChefBean setUpChefBean(ChefBase chef){
+        ChefBean toReturn = new ChefBean();
+        toReturn.setName(chef.getName());
+        toReturn.setSurname(chef.getSurname());
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            toReturn.setBirthDate(dateFormat.format(chef.getBirthDate()));
+        } catch (NullPointerException | ParseException ignored) {
+            assert (true); //eccezione ignorata, dati da memoria già validati
+        }
+        toReturn.setInfo(chef.getInfo());
+        toReturn.setEmail(chef.getEmail());
+        return toReturn;
+    }
+
     //metodo per il recupero e ritorno alla UI delle informazioni dello chef
     @Override
     public ChefBean retrieveChefInfo(String chefUsername) throws PersistentDataAccessException {
         try {
             ChefDAO chefDAO = new ChefDAO();
             ChefBase chef = chefDAO.retrieveChef(chefUsername);
-            ChefBean toReturn = new ChefBean();
-            toReturn.setName(chef.getName());
-            toReturn.setSurname(chef.getSurname());
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                toReturn.setBirthDate(dateFormat.format(chef.getBirthDate()));
-            } catch (NullPointerException | ParseException ignored) {
-                assert (true); //eccezione ignorata, dati da memoria già validati
-            }
-            toReturn.setInfo(chef.getInfo());
-            toReturn.setEmail(chef.getEmail());
-            return toReturn;
+            return this.setUpChefBean(chef);
         }catch (IOException e){
             throw new PersistentDataAccessException(e);
         }

@@ -3,7 +3,6 @@ package view;
 import beans.UserCredBean;
 import code_reuse.InputReusableUtilities;
 import control.UserLoginController;
-import exceptions.PersistentDataAccessException;
 import factories.UserLoginControllerFactory;
 
 import java.util.Scanner;

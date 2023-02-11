@@ -43,6 +43,18 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
         return (rec.getIngredientList().stream().anyMatch(o -> ((o.getName().contains(ingr.getName()) || ingr.getName().contains(o.getName())) && o.getQuantity()!=-1)) && !suggestedRecipes.contains(rec));
     }
 
+    //metodo che recupera l'ultimo id salvato per scorrere tra i file delle ricette degli chef
+    private int retrieveLastChefID() throws IOException {
+        ChefDAO chefDAO = new ChefDAO();
+        int lastId = 1;
+        try {
+            lastId = chefDAO.getLastId();
+        } catch (ClassNotFoundException ignored) {
+            assert (true); //eccezione ignorata dato che l'id salvato su un file è un tipo primitivo java
+        }
+        return lastId;
+    }
+
     /*
     Metodo esposto alla UI per recuperare le ricette consigliate in base all'inventario dell'utente loggato
      */
@@ -61,13 +73,7 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
             List<RecipeBase> suggestedRecipes = new ArrayList<>();
 
             //si recupera l'ultimo id chef salvato per controllare e scorrere le ricette di tutti gli chef
-            ChefDAO chefDAO = new ChefDAO();
-            int lastId = 1;
-            try {
-                lastId = chefDAO.getLastId();
-            } catch (ClassNotFoundException ignored) {
-                assert (true); //eccezione ignorata dato che l'id salvato su un file è un tipo primitivo java
-            }
+            int lastId = this.retrieveLastChefID();
 
             List<RecipeBase> currentChefRecipeList;
             RecipesBrowsingDAO dao = new RecipesBrowsingDAO();

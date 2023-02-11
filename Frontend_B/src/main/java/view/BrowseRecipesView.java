@@ -16,6 +16,8 @@ import java.util.Scanner;
 public class BrowseRecipesView {
 
     private Scanner sc;
+    private static final String ERROR_TITLE = "Error";
+    private static final String ERROR_WARNING_CONTINUE = " Press enter to continue";
 
     //ricette consigliate o risultati di una ricerca
     private List<RecipeBrowsingTableBean> suggestedRecipes;
@@ -98,7 +100,7 @@ public class BrowseRecipesView {
             RecipePageView recipePageView = new RecipePageView(recipeSelected);
             recipePageView.display();
         }catch (PersistentDataAccessException e){
-            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            System.out.println(ERROR_TITLE+e.getMessage()+ERROR_WARNING_CONTINUE);
             this.sc.nextLine();
         }
     }
@@ -117,7 +119,7 @@ public class BrowseRecipesView {
             RecipePageView recipePageView = new RecipePageView(recipeSelected);
             recipePageView.display();
         }catch (PersistentDataAccessException e){
-            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            System.out.println(ERROR_TITLE+e.getMessage()+ERROR_WARNING_CONTINUE);
             this.sc.nextLine();
         }
     }
@@ -153,7 +155,7 @@ public class BrowseRecipesView {
                 this.suggestedRecipes = browseRecipeController.retrieveSuggestedRecipe();
             }
         }catch(PersistentDataAccessException e){
-            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            System.out.println(ERROR_TITLE+e.getMessage()+ERROR_WARNING_CONTINUE);
             this.sc.nextLine();
             return;
         }

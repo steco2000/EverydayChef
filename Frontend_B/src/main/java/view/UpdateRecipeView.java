@@ -4,7 +4,6 @@ import beans.RecipeBean;
 import beans.RecipeIngredientBean;
 import code_reuse.InputReusableUtilities;
 import control.RecipeUpdadingController;
-import exceptions.ExistingRecipeException;
 import exceptions.PersistentDataAccessException;
 import factories.RecipeUpdatingControllerFactory;
 
@@ -66,26 +65,10 @@ public class UpdateRecipeView {
                         RecipeManagementView recipeManagementView = new RecipeManagementView(this.chefUsername);
                         recipeManagementView.display();
                     }
-                    case 1 -> {
-                        System.out.print("New name: ");
-                        try {
-                            updates.setName(this.sc.nextLine());
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("The name can't be empty, press enter to continue");
-                            this.sc.nextLine();
-                        }
-                    }
+                    case 1 -> this.manageNameModification();
                     case 2 -> updates.setDifficulty(InputReusableUtilities.difficultyInput(this.sc));
                     case 3 -> updates.setPreparationTime(InputReusableUtilities.preparationTimeInput(this.sc));
-                    case 4 -> {
-                        System.out.print("Number of servings: ");
-                        try {
-                            updates.setServings(this.sc.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid value, press enter to continue");
-                            this.sc.nextLine();
-                        }
-                    }
+                    case 4 -> this.manageServingsModification();
                     case 5 -> {
                         System.out.println("Preparation procedure (do not press enter to start a new line!)");
                         updates.setPreparationProcedure(this.sc.nextLine());
@@ -97,22 +80,7 @@ public class UpdateRecipeView {
                         int ingrIdx = InputReusableUtilities.getAnswer(this.sc, 1, updates.getIngredientList().size());
                         if (ingrIdx != -1) updates.getIngredientList().remove(ingrIdx - 1);
                     }
-                    case 8 -> {
-                        try {
-                            System.out.println("Are you sure you want to delete this recipe? (y/n)");
-                            if (InputReusableUtilities.yes(this.sc)) {
-                                RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
-                                RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
-                                updadingController.deleteRecipe(toUpdate.getName());
-                                RecipeManagementView recipeManagementView = new RecipeManagementView(this.chefUsername);
-                                recipeManagementView.display();
-                                return;
-                            }
-                        }catch (PersistentDataAccessException e){
-                            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
-                            this.sc.nextLine();
-                        }
-                    }
+                    case 8 -> this.manageRecipeDeleting(toUpdate);
                     default -> {
                         RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
                         RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
@@ -123,6 +91,45 @@ public class UpdateRecipeView {
                 }
             }
         }catch(PersistentDataAccessException e){
+            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
+        }
+    }
+
+    //gestione della modifica del nome
+    private void manageNameModification() {
+        System.out.print("New name: ");
+        try {
+            updates.setName(this.sc.nextLine());
+        } catch (IllegalArgumentException e) {
+            System.out.println("The name can't be empty, press enter to continue");
+            this.sc.nextLine();
+        }
+    }
+
+    //gestione modifica delle porzioni
+    private void manageServingsModification() {
+        System.out.print("Number of servings: ");
+        try {
+            updates.setServings(this.sc.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid value, press enter to continue");
+            this.sc.nextLine();
+        }
+    }
+
+    //gestione dell'eliminazione della ricetta
+    private void manageRecipeDeleting(RecipeBean toDelete){
+        try {
+            System.out.println("Are you sure you want to delete this recipe? (y/n)");
+            if (InputReusableUtilities.yes(this.sc)) {
+                RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
+                RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
+                updadingController.deleteRecipe(toDelete.getName());
+                RecipeManagementView recipeManagementView = new RecipeManagementView(this.chefUsername);
+                recipeManagementView.display();
+            }
+        }catch (PersistentDataAccessException e){
             System.out.println("Error: "+e.getMessage()+" Press enter to continue");
             this.sc.nextLine();
         }
