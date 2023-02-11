@@ -57,6 +57,8 @@ public class ChefHomeGraphicController {
         }
     }
 
+    private static void stopRecipesObservetion(){ recipeObserverIsSet = false; }
+
     /*
     Questo metodo si occupa di impostare gli elementi della tabella delle ricette create dallo chef, recuperati dal metodo "getObservableTableData"
      */
@@ -139,8 +141,8 @@ public class ChefHomeGraphicController {
 
     //alla pressione del tasto di log out basta ricaricare la schermata di login, una successiva autenticazione sovrascriverà le variabili di identificazione dello chef loggato
     @FXML
-    private static void onLogOutButtonPression() throws IOException {
-        recipeObserverIsSet = false;
+    private void onLogOutButtonPression() throws IOException {
+        stopRecipesObservetion();
         ChefLoginGraphicController controller = new ChefLoginGraphicController();
         controller.loadUI();
     }
