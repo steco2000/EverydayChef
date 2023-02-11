@@ -1,19 +1,10 @@
 //Stefano Colamartini
 //Matricola: 0278902
 
-/*
-N.B. : Per il corretto funzionamento del test potrebbe essere necessario modificare la working directory nella configurazione di lancio di junit, altrimenti il sistema calcolerà male
-       i path relativi dei file ".ser".
-
-       In intellij:
-       Run -> Edit Configurations -> JUnit -> *classe di test*.*metodo di test* -> Working directory (Selezionare la directory generale del progetto, ossia "EverydayChef") -> Apply
-*/
-
 import beans.*;
 import control.*;
-import dao.InventoryDAO;
+import exceptions.PersistentDataAccessException;
 import exceptions.RecipeIngredientQuantityException;
-import model.Inventory;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -24,8 +15,25 @@ import static org.junit.Assert.assertTrue;
 
 public class TestRecipeInfoRetrievingApplicativeController {
 
+    /*
+        IMPORTANTE: Per il corretto funzionamento del test potrebbe essere necessario modificare la working directory nella configurazione di lancio di junit, altrimenti il sistema
+        calcolerà male i path assoluti dei file ".ser".
+
+        In intellij:
+        Run -> Edit Configurations -> JUnit -> *classe di test*.*metodo di test* -> Working directory (Selezionare la directory generale del progetto, ossia "EverydayChef") -> Apply
+    */
+
+    /*
+    Il seguente metodo si occupa di testare il funzionamento dell'operazione "RetrieveMissingIngredients" del controller applicativo "RecipeInfoRetrievingApplicativeController".
+    Il metodo testato si occupa di recuperare le informazioni sugli ingredienti mancanti nell'inventario dell'utente per la realizzazione di una ricetta, quando selezionata.
+    Nel test viene creato un utente di prova, e inserito un ingrediente nell'inventario, da confrontare con quello di una ricetta. Viene poi registrato uno chef con una ricetta
+    di prova, la quale richiede lo stesso ingrediente dell'inventario ma con una quantità maggiorata. In questo modo il test può capire se la quantità mancante calcolata è conforme
+    con quanto atteso. Dopodiché, viene simulata l'interazione dell'utente con il sistema. La ricetta verrà selezionata tra le consigliate dato che contiene l'ingrediente di prova,
+    ma, ovviamente, questo apparirà tra gli ingredienti mancanti insieme agli altri, proprio perché è stato salvato con una quantità minore di quella richiesta dalla ricetta.
+     */
+
     @Test
-    public void testRetrieveMissingIngredients() throws ParseException {
+    public void testRetrieveMissingIngredients() throws ParseException, PersistentDataAccessException {
 
         //registrazione utente e "simulazione" del login
         UserCredBean testUser = new UserCredBean();

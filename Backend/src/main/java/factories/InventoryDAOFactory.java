@@ -4,8 +4,10 @@ import dao.DBMSInventoryDAO;
 import dao.FileSystemInventoryDAO;
 import dao.InventoryDAO;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.Random;
 
 //factory adibita alla creazione di istanze di InventoryDAO
@@ -59,7 +61,7 @@ public class InventoryDAOFactory {
     /*
     il metodo di creazione associerà alle variabili di tipo InventoryDAO l'istanza del tipo deciso in modo polimorfico
      */
-    public InventoryDAO createInventoryDAO(){
+    public InventoryDAO createInventoryDAO() throws IOException, SQLException {
         if(runtimeSelectedDA0){
             return new FileSystemInventoryDAO();
         }else{

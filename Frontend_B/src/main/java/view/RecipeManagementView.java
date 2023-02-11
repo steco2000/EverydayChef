@@ -5,6 +5,7 @@ import beans.RecipeTableDataBean;
 import code_reuse.InputReusableUtilities;
 import control.LoginController;
 import control.RecipeSharingController;
+import exceptions.PersistentDataAccessException;
 import factories.RecipeSharingControllerFactory;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class RecipeManagementView {
     private static boolean observerIsSet = false;
 
     //nel costruttore si inizializzano gli attributi della view e si controlla se l'observer sul RecipeDAO è stato impostato
-    public RecipeManagementView(String chefUsername){
+    public RecipeManagementView(String chefUsername) throws PersistentDataAccessException {
         if(!observerIsSet) startRecipesObservation();
         this.chefUsername = chefUsername;
         this.sc = new Scanner(System.in);
@@ -29,7 +30,7 @@ public class RecipeManagementView {
     }
 
     //metodo per impostare l'observer sul RecipeDAO
-    private static void startRecipesObservation() {
+    private static void startRecipesObservation() throws PersistentDataAccessException {
         RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
         RecipeSharingController sharingController = controllerFactory.createRecipeSharingController();
         sharingController.setUpRecipesObserver(LoginController.getChefLogged().getUsername());
@@ -38,51 +39,56 @@ public class RecipeManagementView {
 
     //display della schermata e raccolta azioni utente. In base all'azione scelta viene caricata la relativa schermata
     public void display(){
-        System.out.println();
-        System.out.println("Recipe Management");
-        System.out.println();
+        try {
+            System.out.println();
+            System.out.println("Recipe Management");
+            System.out.println();
 
-        this.displayRecipeTable();
+            this.displayRecipeTable();
 
-        System.out.println("Press:");
-        System.out.println("0) To go back home");
-        System.out.println("1) To share a new recipe");
-        System.out.println("2) To update a recipe from your list");
-        System.out.println("3) To save changes");
-        int answer = InputReusableUtilities.getAnswer(this.sc,0,3);
+            System.out.println("Press:");
+            System.out.println("0) To go back home");
+            System.out.println("1) To share a new recipe");
+            System.out.println("2) To update a recipe from your list");
+            System.out.println("3) To save changes");
+            int answer = InputReusableUtilities.getAnswer(this.sc, 0, 3);
 
-        switch (answer){
-            case -1 -> {
-                assert(true); //errore nella risposta, non faccio nulla
+            switch (answer) {
+                case -1 -> {
+                    assert (true); //errore nella risposta, non faccio nulla
+                }
+                case 0 -> {
+                    RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
+                    RecipeSharingController controller = controllerFactory.createRecipeSharingController();
+                    controller.saveChanges();
+                    ChefHomeView chefHomeView = new ChefHomeView();
+                    chefHomeView.display();
+                }
+                case 1 -> {
+                    ShareRecipeView shareRecipeView = new ShareRecipeView();
+                    shareRecipeView.display(this.chefUsername);
+                }
+                case 2 -> {
+                    System.out.println("Digit the index of the recipe to update");
+                    int ans = InputReusableUtilities.getAnswer(this.sc, 1, this.recipeList.size());
+                    if (ans == -1) this.display();
+                    RecipeBean toUpdate = this.recipeList.get(ans - 1);
+                    toUpdate = dataBean.getRecipe(toUpdate.getName());
+                    UpdateRecipeView updateRecipeView = new UpdateRecipeView(this.chefUsername);
+                    updateRecipeView.display(toUpdate);
+                }
+                default -> {
+                    RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
+                    RecipeSharingController controller = controllerFactory.createRecipeSharingController();
+                    controller.saveChanges();
+                    System.out.println("Save completed, press enter to continue");
+                    this.sc.nextLine();
+                    this.display();
+                }
             }
-            case 0 -> {
-                RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
-                RecipeSharingController controller = controllerFactory.createRecipeSharingController();
-                controller.saveChanges();
-                ChefHomeView chefHomeView = new ChefHomeView();
-                chefHomeView.display();
-            }
-            case 1 -> {
-                ShareRecipeView shareRecipeView = new ShareRecipeView();
-                shareRecipeView.display(this.chefUsername);
-            }
-            case 2 -> {
-                System.out.println("Digit the index of the recipe to update");
-                int ans = InputReusableUtilities.getAnswer(this.sc,1,this.recipeList.size());
-                if(ans == -1) this.display();
-                RecipeBean toUpdate = this.recipeList.get(ans-1);
-                toUpdate = dataBean.getRecipe(toUpdate.getName());
-                UpdateRecipeView updateRecipeView = new UpdateRecipeView(this.chefUsername);
-                updateRecipeView.display(toUpdate);
-            }
-            default -> {
-                RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
-                RecipeSharingController controller = controllerFactory.createRecipeSharingController();
-                controller.saveChanges();
-                System.out.println("Save completed, press enter to continue");
-                this.sc.nextLine();
-                this.display();
-            }
+        }catch(PersistentDataAccessException e){
+            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
         }
     }
 

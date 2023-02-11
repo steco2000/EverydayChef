@@ -36,18 +36,14 @@ public class RecipeDAO extends RecipeSubject {
     se è presente ma è diverso da quello salvato dobbiamo cambiarlo, perchè vuol dire che a runtime quello chef ha effettuato il logout e un altro si è autenticato. Dopodiché si effettua
     il caching delle ricette
      */
-    public RecipeDAO(String chefUsername){
+    public RecipeDAO(String chefUsername) throws IOException {
         this();
         if(chef == null || !(chef.getUsername().equals(chefUsername))) setChef(chefUsername);
-        try {
-            updateState(chefUsername, this.recipeFileName);
-        } catch (IOException ignored) {
-            assert(true); //eccezione ignorata
-        }
+        updateState(chefUsername, this.recipeFileName);
     }
 
     //questo metodo recupera i dati dello chef legato al dao
-    private static void setChef(String chefUsername) {
+    private static void setChef(String chefUsername) throws IOException {
         ChefDAO chefDAO = new ChefDAO();
         chef = (Chef) chefDAO.retrieveChef(chefUsername);
     }
@@ -126,13 +122,9 @@ public class RecipeDAO extends RecipeSubject {
     }
 
     //metodo che serve a incrementare le visualizzazioni di una ricetta quando viene aperta. In questo caso salviamo subito dato che non ha senso attendere modifiche
-    public void incrementRecipeViews(String recipe) {
+    public void incrementRecipeViews(String recipe) throws IOException {
         Recipe toIncrement = recipeList.stream().filter(o -> o.getName().equals(recipe)).findFirst().orElse(null);
-        try {
-            toIncrement.incrementViews();
-            this.saveChanges();
-        } catch (IOException | NullPointerException ignored) {
-            assert(true); //eccezione ignorata, deve per forza esistere la ricetta, perché viene selezionata proprio dalla lista
-        }
+        toIncrement.incrementViews();
+        this.saveChanges();
     }
 }

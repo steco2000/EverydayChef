@@ -2,6 +2,7 @@ package view;
 
 import code_reuse.InputReusableUtilities;
 import control.LoginController;
+import exceptions.PersistentDataAccessException;
 
 import java.util.Scanner;
 
@@ -35,8 +36,13 @@ public class UserHomeView {
                     loginView.display();
                 }
                 case 1 -> {
-                    InventoryView inventoryView = new InventoryView();
-                    inventoryView.display();
+                    try {
+                        InventoryView inventoryView = new InventoryView();
+                        inventoryView.display();
+                    }catch (PersistentDataAccessException e){
+                        System.out.println("Error "+e.getMessage()+" Press enter to continue");
+                        this.sc.nextLine();
+                    }
                 }
                 default -> {
                     BrowseRecipesView browseRecipesView = new BrowseRecipesView();

@@ -2,10 +2,14 @@ package control;
 
 import beans.IngredientBean;
 import dao.InventoryDAO;
+import exceptions.PersistentDataAccessException;
 import factories.IngredientFactory;
 import factories.InventoryDAOFactory;
 import model.IngredientBase;
 import model.InventoryBase;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /*
 Controller applicativo che per il caso d'uso "Gestisci inventario ingredienti".
@@ -16,10 +20,14 @@ public class InventoryApplicativeController implements InventoryController{
     private final InventoryBase currentInventory;
 
     //nel costruttore si effettua il caching dell'inventario dell'utente loggato
-    public InventoryApplicativeController(){
-        InventoryDAOFactory daoFactory = new InventoryDAOFactory();
-        InventoryDAO dao = daoFactory.createInventoryDAO();
-        currentInventory = dao.retrieveInventory();
+    public InventoryApplicativeController() throws PersistentDataAccessException {
+        try {
+            InventoryDAOFactory daoFactory = new InventoryDAOFactory();
+            InventoryDAO dao = daoFactory.createInventoryDAO();
+            currentInventory = dao.retrieveInventory();
+        } catch (IOException | SQLException e) {
+            throw new PersistentDataAccessException(e);
+        }
     }
 
     //aggiunta ingrediente, grazie alla relativa factory si inseriscono direttamente le informazioni dal bean in fase di creazione
@@ -56,10 +64,14 @@ public class InventoryApplicativeController implements InventoryController{
 
     //salvataggio delle modifiche all'inventario in persistenza, attraverso il DAO
     @Override
-    public void saveCurrentInventory() {
-        InventoryDAOFactory daoFactory = new InventoryDAOFactory();
-        InventoryDAO dao = daoFactory.createInventoryDAO();
-        dao.saveInventory(currentInventory);
+    public void saveCurrentInventory() throws PersistentDataAccessException {
+        try {
+            InventoryDAOFactory daoFactory = new InventoryDAOFactory();
+            InventoryDAO dao = daoFactory.createInventoryDAO();
+            dao.saveInventory(currentInventory);
+        }catch (IOException | SQLException e){
+            throw new PersistentDataAccessException(e);
+        }
     }
 
 }

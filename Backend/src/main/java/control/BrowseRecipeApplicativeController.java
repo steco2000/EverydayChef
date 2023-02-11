@@ -4,10 +4,12 @@ import beans.RecipeBrowsingTableBean;
 import dao.ChefDAO;
 import dao.InventoryDAO;
 import dao.RecipesBrowsingDAO;
+import exceptions.PersistentDataAccessException;
 import factories.InventoryDAOFactory;
 import model.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,47 +47,50 @@ public class BrowseRecipeApplicativeController implements BrowseRecipeController
     Metodo esposto alla UI per recuperare le ricette consigliate in base all'inventario dell'utente loggato
      */
     @Override
-    public List<RecipeBrowsingTableBean> retrieveSuggestedRecipe() {
-
-        //recupero inventario utente
-        InventoryDAOFactory inventoryDAOFactory = new InventoryDAOFactory();
-        InventoryDAO inventoryDAO = inventoryDAOFactory.createInventoryDAO();
-        Inventory inventory = (Inventory) inventoryDAO.retrieveInventory();
-        if(inventory == null) return new ArrayList<>(); //inventario vuoto -> no suggerimenti
-
-        //Una volta recuperato viene passato ai controller delegati alle info della ricetta, ad esmpio per il calcolo degli ingredienti mancanti
-        RecipeInfoRetrievingApplicativeController.setInventoryList(inventory.getIngredientList());
-
-        List<RecipeBase> suggestedRecipes = new ArrayList<>();
-
-        //si recupera l'ultimo id chef salvato per controllare e scorrere le ricette di tutti gli chef
-        ChefDAO chefDAO = new ChefDAO();
-        int lastId = 1;
+    public List<RecipeBrowsingTableBean> retrieveSuggestedRecipe() throws PersistentDataAccessException {
         try {
-            lastId = chefDAO.getLastId();
-        } catch (IOException | ClassNotFoundException ignored) {
-            assert(true); //eccezione ignorata dato che l'id salvato su un file è un tipo primitivo java
-        }
+            //recupero inventario utente
+            InventoryDAOFactory inventoryDAOFactory = new InventoryDAOFactory();
+            InventoryDAO inventoryDAO = inventoryDAOFactory.createInventoryDAO();
+            Inventory inventory = (Inventory) inventoryDAO.retrieveInventory();
+            if (inventory == null) return new ArrayList<>(); //inventario vuoto -> no suggerimenti
 
-        List<RecipeBase> currentChefRecipeList;
-        RecipesBrowsingDAO dao = new RecipesBrowsingDAO();
+            //Una volta recuperato viene passato ai controller delegati alle info della ricetta, ad esmpio per il calcolo degli ingredienti mancanti
+            RecipeInfoRetrievingApplicativeController.setInventoryList(inventory.getIngredientList());
+
+            List<RecipeBase> suggestedRecipes = new ArrayList<>();
+
+            //si recupera l'ultimo id chef salvato per controllare e scorrere le ricette di tutti gli chef
+            ChefDAO chefDAO = new ChefDAO();
+            int lastId = 1;
+            try {
+                lastId = chefDAO.getLastId();
+            } catch (ClassNotFoundException ignored) {
+                assert (true); //eccezione ignorata dato che l'id salvato su un file è un tipo primitivo java
+            }
+
+            List<RecipeBase> currentChefRecipeList;
+            RecipesBrowsingDAO dao = new RecipesBrowsingDAO();
 
         /*
         Dal DAO si recupera la lista delle ricette per ogni chef. Poi si scorrono tutti gli ingredienti nell'inventario e si controlla se l'ingrediente è presente. Se si, si
         aggiunge la ricetta alla lista da restituire alla UI
          */
-        for (int i = 1; i < lastId + 1; i++) {
-            currentChefRecipeList = dao.getRecipeList(i);
-            if (currentChefRecipeList.isEmpty()) continue;
+            for (int i = 1; i < lastId + 1; i++) {
+                currentChefRecipeList = dao.getRecipeList(i);
+                if (currentChefRecipeList.isEmpty()) continue;
 
-            for (Ingredient ingr : (inventory.getIngredientList())) {
-                for(RecipeBase rec: currentChefRecipeList){
-                    if(recipeContainsIngredient(rec, ingr, suggestedRecipes)) suggestedRecipes.add(rec);
+                for (Ingredient ingr : (inventory.getIngredientList())) {
+                    for (RecipeBase rec : currentChefRecipeList) {
+                        if (recipeContainsIngredient(rec, ingr, suggestedRecipes)) suggestedRecipes.add(rec);
+                    }
                 }
             }
-        }
 
-        return this.setUpSuggestedBeanList(suggestedRecipes);
+            return this.setUpSuggestedBeanList(suggestedRecipes);
+        }  catch (IOException | SQLException e) {
+            throw new PersistentDataAccessException(e);
+        }
     }
 
 }

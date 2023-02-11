@@ -3,6 +3,7 @@ package view;
 import beans.ChefBean;
 import code_reuse.InputReusableUtilities;
 import control.ChefLoginController;
+import exceptions.PersistentDataAccessException;
 import factories.ChefLoginControllerFactory;
 
 import java.lang.reflect.MalformedParametersException;
@@ -87,20 +88,25 @@ public class ChefRegisterView {
 
     //metodo che gestisce la risposta alla conferma di registrazione e la chiamata al metodo del controller
     private void manageRegistrationAnswer(ChefBean newChef){
-        if (InputReusableUtilities.yes(this.sc)) {
-            ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
-            ChefLoginController chefLoginController = factory.createChefLoginController();
-            if (chefLoginController.registerChef(newChef)) {
-                ChefLoginView loginView = new ChefLoginView();
-                loginView.display();
+        try{
+            if (InputReusableUtilities.yes(this.sc)) {
+                ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
+                ChefLoginController chefLoginController = factory.createChefLoginController();
+                if (chefLoginController.registerChef(newChef)) {
+                    ChefLoginView loginView = new ChefLoginView();
+                    loginView.display();
+                } else {
+                    System.out.println("Unable to register, username or email already used, digit something to continue");
+                    sc.nextLine();
+                    this.display();
+                }
             } else {
-                System.out.println("Unable to register, username or email already used, digit something to continue");
-                sc.nextLine();
-                this.display();
+                ChefLoginView chefLoginView = new ChefLoginView();
+                chefLoginView.display();
             }
-        } else {
-            ChefLoginView chefLoginView = new ChefLoginView();
-            chefLoginView.display();
+        }catch(PersistentDataAccessException e){
+            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
         }
     }
 

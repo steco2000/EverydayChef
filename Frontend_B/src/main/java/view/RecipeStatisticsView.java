@@ -2,6 +2,7 @@ package view;
 
 import beans.RecipeStatisticsTableBean;
 import control.RecipeStatisticsController;
+import exceptions.PersistentDataAccessException;
 import factories.RecipeStatisticsControllerFactory;
 
 import java.util.List;
@@ -21,18 +22,23 @@ public class RecipeStatisticsView {
 
    //recupero informazioni e display della schermata
     public void display(){
-        RecipeStatisticsController controller = (new RecipeStatisticsControllerFactory()).createRecipeStatisticsController();
-        List<RecipeStatisticsTableBean> beanList = controller.getRecipesStatistics(this.chefUsername);
-        System.out.println();
-        System.out.println("Recipe Statistics:");
-        for(int i=0; i<beanList.size(); i++){
-            System.out.println(i+1+") "+beanList.get(i).getRecipeName()+": "+beanList.get(i).getViews()+" views");
+        try {
+            RecipeStatisticsController controller = (new RecipeStatisticsControllerFactory()).createRecipeStatisticsController();
+            List<RecipeStatisticsTableBean> beanList = controller.getRecipesStatistics(this.chefUsername);
+            System.out.println();
+            System.out.println("Recipe Statistics:");
+            for (int i = 0; i < beanList.size(); i++) {
+                System.out.println(i + 1 + ") " + beanList.get(i).getRecipeName() + ": " + beanList.get(i).getViews() + " views");
+            }
+            System.out.println();
+            System.out.println("Press enter to go back home");
+            this.sc.nextLine();
+            ChefHomeView chefHomeView = new ChefHomeView();
+            chefHomeView.display();
+        }catch(PersistentDataAccessException e){
+            System.out.println("Error "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
         }
-        System.out.println();
-        System.out.println("Press enter to go back home");
-        this.sc.nextLine();
-        ChefHomeView chefHomeView = new ChefHomeView();
-        chefHomeView.display();
     }
 
 }

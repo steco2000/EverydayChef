@@ -1,14 +1,6 @@
 //Stefano Colamartini
 //Matricola: 0278902
 
-/*
-N.B. : Per il corretto funzionamento del test potrebbe essere necessario modificare la working directory nella configurazione di lancio di junit, altrimenti il sistema calcolerà male
-       i path relativi dei file ".ser".
-
-       In intellij:
-       Run -> Edit Configurations -> JUnit -> *classe di test*.*metodo di test* -> Working directory (Selezionare la directory generale del progetto, ossia "EverydayChef") -> Apply
-*/
-
 import beans.ChefBean;
 import beans.RecipeBean;
 import beans.RecipeBrowsingTableBean;
@@ -16,6 +8,7 @@ import beans.RecipeIngredientBean;
 import control.LoginController;
 import control.RecipeSearchingApplicativeController;
 import control.RecipeSharingApplicativeController;
+import exceptions.PersistentDataAccessException;
 import exceptions.RecipeIngredientQuantityException;
 import org.junit.Test;
 
@@ -27,13 +20,22 @@ import static org.junit.Assert.assertTrue;
 
 public class TestRecipeSearchingApplicativeController {
 
-    /* Il seguente metodo si occupa di testare il corretto funzionamento l'operazione "retrieveSearchResult" del controller applicativo "RecipeSearchingApplicativeController",
+    /*
+        IMPORTANTE: Per il corretto funzionamento del test potrebbe essere necessario modificare la working directory nella configurazione di lancio di junit, altrimenti il sistema
+        calcolerà male i path assoluti dei file ".ser".
+
+        In intellij:
+        Run -> Edit Configurations -> JUnit -> *classe di test*.*metodo di test* -> Working directory (Selezionare la directory generale del progetto, ossia "EverydayChef") -> Apply
+    */
+
+    /*
+        Il seguente metodo si occupa di testare il corretto funzionamento dell'operazione "retrieveSearchResult" del controller applicativo "RecipeSearchingApplicativeController",
         la quale si occupa di cercare ricette in memoria in base all'input dell'utente. Prima di lanciare il metodo, viene salvata una ricetta di test (con il relativo chef),
         per fare in modo che il risultato della ricerca contenga almeno un valore da confrontare. Infatti, nel caso in cui si riceva un risultato vuoto,
         non si può stabilire se il metodo abbia funzionato o se semplicemente non sono presenti ricette corrispondenti alla ricerca data in input.
     */
     @Test
-    public void testBasicRecipeSearch(){
+    public void testBasicRecipeSearch() throws PersistentDataAccessException {
 
         //registrazione chef di test per la ricetta
         ChefBean testChef = new ChefBean();
@@ -83,7 +85,6 @@ public class TestRecipeSearchingApplicativeController {
 
         List<RecipeBrowsingTableBean> searchResult = (new RecipeSearchingApplicativeController()).retrieveSearchResult(searchInput);
         for(RecipeBrowsingTableBean r: searchResult){
-            System.out.println(r.getName());
             if(!(r.getName().contains(searchInput) || searchInput.contains(r.getName()))){
                 testPassed = false;
                 break;

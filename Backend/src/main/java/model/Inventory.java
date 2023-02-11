@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class Inventory extends InventorySubject implements InventoryBase, Serial
     private List<InventoryIngredient> ingredientList;
 
     //quando l'inventario viene creato si associa all'utente
-    public Inventory(UserCredentials user){
+    public Inventory(UserCredentials user) throws IOException {
         this.ingredientList = new ArrayList<>();
         this.user = user;
         user.setIngredientsInventory(this);

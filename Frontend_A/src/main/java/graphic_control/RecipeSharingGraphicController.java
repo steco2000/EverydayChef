@@ -5,6 +5,7 @@ import beans.RecipeIngredientBean;
 import beans.RecipeTableDataBean;
 import control.RecipeSharingController;
 import control.RecipeUpdadingController;
+import exceptions.PersistentDataAccessException;
 import exceptions.RecipeIngredientQuantityException;
 import factories.RecipeSharingControllerFactory;
 import factories.RecipeUpdatingControllerFactory;
@@ -157,26 +158,30 @@ public class RecipeSharingGraphicController {
      */
     @FXML
     private void onShareButtonPression() throws IOException {
-        if(ingredientTableList.isEmpty()){
-            AlertBox.display(ERROR_BOX_TITLE,"A recipe must have at least one ingredient.");
-            return;
+        try {
+            if (ingredientTableList.isEmpty()) {
+                AlertBox.display(ERROR_BOX_TITLE, "A recipe must have at least one ingredient.");
+                return;
+            }
+            RecipeBean updates = this.getRecipeData();
+            if (updates == null) {
+                return;
+            }
+            if (onUpdateMode) {
+                RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
+                RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
+                updadingController.updateRecipe(toUpdateName, updates);
+                toUpdateName = null;
+            } else {
+                RecipeSharingControllerFactory factory = new RecipeSharingControllerFactory();
+                RecipeSharingController controller = factory.createRecipeSharingController();
+                controller.shareRecipe(updates);
+            }
+            ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
+            homeGraphicController.loadRecipeUI();
+        }catch (PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE, e.getMessage());
         }
-        RecipeBean updates = this.getRecipeData();
-        if(updates == null){
-            return;
-        }
-        if(onUpdateMode){
-            RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
-            RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
-            updadingController.updateRecipe(toUpdateName,updates);
-            toUpdateName = null;
-        }else {
-            RecipeSharingControllerFactory factory = new RecipeSharingControllerFactory();
-            RecipeSharingController controller = factory.createRecipeSharingController();
-            controller.shareRecipe(updates);
-        }
-        ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
-        homeGraphicController.loadRecipeUI();
     }
 
     /*
@@ -185,13 +190,17 @@ public class RecipeSharingGraphicController {
      */
     @FXML
     private void onDeleteButtonPression() throws IOException {
-        if(ConfirmBox.display("Warning","Are you sure you want to delete this recipe?")){
-            RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
-            RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
-            updadingController.deleteRecipe(toUpdateName);
-            toUpdateName = null;
-            ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
-            homeGraphicController.loadRecipeUI();
+        try {
+            if (ConfirmBox.display("Warning", "Are you sure you want to delete this recipe?")) {
+                RecipeUpdatingControllerFactory updatingControllerFactory = new RecipeUpdatingControllerFactory();
+                RecipeUpdadingController updadingController = updatingControllerFactory.createRecipeUpdatingController();
+                updadingController.deleteRecipe(toUpdateName);
+                toUpdateName = null;
+                ChefHomeGraphicController homeGraphicController = new ChefHomeGraphicController();
+                homeGraphicController.loadRecipeUI();
+            }
+        }catch (PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE, e.getMessage());
         }
     }
 

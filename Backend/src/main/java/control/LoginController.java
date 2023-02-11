@@ -4,6 +4,7 @@ import beans.ChefBean;
 import beans.UserCredBean;
 import dao.ChefDAO;
 import dao.UserCredentialsDAO;
+import exceptions.PersistentDataAccessException;
 import factories.ChefFactory;
 import factories.UserCredentialsFactory;
 import model.*;
@@ -31,14 +32,14 @@ public class LoginController implements UserLoginController, ChefLoginController
     @Override
     public boolean attemptChefLogin(ChefBean credentials) {
         ChefDAO dao = new ChefDAO();
-        return dao.credentialsAreCorrect(credentials.getUsername(),credentials.getPassword());
+        return dao.credentialsAreCorrect(credentials.getUsername(), credentials.getPassword());
     }
 
     /*
     Registrazione dello chef. Viene prima controllato se esiste già uno chef con gli identificativi inseriti. Se no si procede alla registrazione
      */
     @Override
-    public boolean registerChef(ChefBean chefInfo) {
+    public boolean registerChef(ChefBean chefInfo) throws PersistentDataAccessException {
         ChefDAO dao = new ChefDAO();
         try{
             if(dao.chefNotExists(chefInfo.getEmail(),chefInfo.getUsername())){
@@ -57,7 +58,7 @@ public class LoginController implements UserLoginController, ChefLoginController
                 return false;
             }
         }catch(IOException e){
-            return false;
+            throw new PersistentDataAccessException(e);
         }
     }
 
@@ -65,12 +66,12 @@ public class LoginController implements UserLoginController, ChefLoginController
     @Override
     public boolean attemptUserLogin(UserCredBean credentials) {
         UserCredentialsDAO dao = new UserCredentialsDAO();
-        return dao.credentialsAreCorrect(credentials.getUsername(),credentials.getPassword());
+        return dao.credentialsAreCorrect(credentials.getUsername(), credentials.getPassword());
     }
 
     //registrazione utente, analoga allo chef
     @Override
-    public boolean registerUser(UserCredBean credentials) {
+    public boolean registerUser(UserCredBean credentials) throws PersistentDataAccessException {
         UserCredentialsDAO dao = new UserCredentialsDAO();
         try {
             if(dao.userNotExists(credentials.getEmail(),credentials.getUsername())) {
@@ -80,7 +81,7 @@ public class LoginController implements UserLoginController, ChefLoginController
                 return true;
             }else return false;
         } catch (IOException e) {
-            return false;
+            throw new PersistentDataAccessException(e);
         }
     }
 }

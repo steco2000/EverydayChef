@@ -53,14 +53,10 @@ public class UserCredentials implements UserCredBase, Serializable {
     public Inventory getIngredientsInventory(){ return this.ingredientsInventory; }
 
     //quando si lega un inventario all'utente questo chiede al DAO di esssre salvato
-    public void setIngredientsInventory(Inventory ingredientsInventory) {
+    public void setIngredientsInventory(Inventory ingredientsInventory) throws IOException {
         this.ingredientsInventory = ingredientsInventory;
         UserCredentialsDAO dao = new UserCredentialsDAO();
-        try {
-            dao.saveUser(this);
-        } catch (IOException ignored) {
-            assert(true); //eccezione ignorata, se l'utente esiste esiste anche il file
-        }
+        dao.saveUser(this);
     }
 
 }

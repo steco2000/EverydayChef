@@ -2,6 +2,7 @@ package graphic_control;
 
 import beans.ChefBean;
 import control.ChefLoginController;
+import exceptions.PersistentDataAccessException;
 import factories.ChefLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,28 +45,26 @@ public class ChefLoginGraphicController {
      */
     @FXML
     private void onLoginButtonPression() throws IOException {
-        ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
-        ChefLoginController controller = factory.createChefLoginController();
-
-        ChefBean chefCredentials = new ChefBean();
-
-        //se il bean riconosce dati considerati illegali dal sistema verrà lanciata l'eccezione
         try {
+            ChefLoginControllerFactory factory = new ChefLoginControllerFactory();
+            ChefLoginController controller = factory.createChefLoginController();
+
+            ChefBean chefCredentials = new ChefBean();
+
+            //se il bean riconosce dati considerati illegali dal sistema verrà lanciata l'eccezione
             chefCredentials.setUsername(usernameField.getText());
             chefCredentials.setPassword(passField.getText());
-        }catch(IllegalArgumentException e){
+
+            //se il tentativo di login fallisce il metodo del controller ritorna falso
+            if (controller.attemptChefLogin(chefCredentials)) {
+                ChefHomeGraphicController homeController = new ChefHomeGraphicController();
+                homeController.loadHomeUI();
+            } else {
+                AlertBox.display(ERROR_BOX_TITLE, "Incorrect credentials");
+            }
+        } catch(IllegalArgumentException e){
             AlertBox.display(ERROR_BOX_TITLE,"Incorrect credentials.");
-            return;
         }
-
-        //se il tentativo di login fallisce il metodo del controller ritorna falso
-        if(controller.attemptChefLogin(chefCredentials)){
-            ChefHomeGraphicController homeController = new ChefHomeGraphicController();
-            homeController.loadHomeUI();
-        }else{
-            AlertBox.display(ERROR_BOX_TITLE,"Incorrect credentials");
-        }
-
     }
 
     //metodo chegestisce caricamento e visualizzazione della schermata

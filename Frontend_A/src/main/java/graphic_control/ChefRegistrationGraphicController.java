@@ -2,6 +2,7 @@ package graphic_control;
 
 import beans.ChefBean;
 import control.ChefLoginController;
+import exceptions.PersistentDataAccessException;
 import factories.ChefLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -116,6 +117,8 @@ public class ChefRegistrationGraphicController {
             AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing!");
         }catch(MalformedParametersException e){
             AlertBox.display(ERROR_BOX_TITLE,"Invalid email!");
+        }catch(PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE,e.getMessage());
         }
     }
 

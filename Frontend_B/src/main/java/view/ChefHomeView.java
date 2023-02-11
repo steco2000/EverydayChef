@@ -2,6 +2,7 @@ package view;
 
 import code_reuse.InputReusableUtilities;
 import control.LoginController;
+import exceptions.PersistentDataAccessException;
 
 import java.util.Scanner;
 
@@ -37,8 +38,13 @@ public class ChefHomeView {
                     chefLoginView.display();
                 }
                 case 1 -> {
-                    RecipeManagementView recipeManagementView = new RecipeManagementView(LoginController.getChefLogged().getUsername());
-                    recipeManagementView.display();
+                    try {
+                        RecipeManagementView recipeManagementView = new RecipeManagementView(LoginController.getChefLogged().getUsername());
+                        recipeManagementView.display();
+                    }catch (PersistentDataAccessException e){
+                        System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+                        this.sc.nextLine();
+                    }
                 }
                 default -> {
                     RecipeStatisticsView recipeStatisticsView = new RecipeStatisticsView(LoginController.getChefLogged().getUsername());

@@ -4,6 +4,7 @@ import beans.RecipeBean;
 import beans.RecipeTableDataBean;
 import control.LoginController;
 import control.RecipeSharingController;
+import exceptions.PersistentDataAccessException;
 import factories.RecipeSharingControllerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,10 +47,14 @@ public class ChefHomeGraphicController {
     }
 
     private static void startRecipesObservation() {
-        RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
-        RecipeSharingController sharingController = controllerFactory.createRecipeSharingController();
-        sharingController.setUpRecipesObserver(LoginController.getChefLogged().getUsername());
-        recipeObserverIsSet = true;
+        try {
+            RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
+            RecipeSharingController sharingController = controllerFactory.createRecipeSharingController();
+            sharingController.setUpRecipesObserver(LoginController.getChefLogged().getUsername());
+            recipeObserverIsSet = true;
+        }catch(PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE, e.getMessage());
+        }
     }
 
     /*
@@ -93,9 +98,13 @@ public class ChefHomeGraphicController {
     //alla pressione del tasto save vengono salvate le modifiche effettuate invocando il metodo del controller applicativo
     @FXML
     private void onSaveButtonPression(){
-        RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
-        RecipeSharingController controller = controllerFactory.createRecipeSharingController();
-        controller.saveChanges();
+        try {
+            RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
+            RecipeSharingController controller = controllerFactory.createRecipeSharingController();
+            controller.saveChanges();
+        }catch (PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE, e.getMessage());
+        }
     }
 
     /*
@@ -103,10 +112,14 @@ public class ChefHomeGraphicController {
      */
     @FXML
     private void onBackButtonPression() throws IOException {
-        RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
-        RecipeSharingController controller = controllerFactory.createRecipeSharingController();
-        controller.saveChanges();
-        this.loadHomeUI();
+        try {
+            RecipeSharingControllerFactory controllerFactory = new RecipeSharingControllerFactory();
+            RecipeSharingController controller = controllerFactory.createRecipeSharingController();
+            controller.saveChanges();
+            this.loadHomeUI();
+        }catch (PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE, e.getMessage());
+        }
     }
 
     /*

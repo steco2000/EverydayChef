@@ -3,6 +3,7 @@ package view;
 import beans.ChefBean;
 import code_reuse.InputReusableUtilities;
 import control.ChefLoginController;
+import exceptions.PersistentDataAccessException;
 import factories.ChefLoginControllerFactory;
 
 import java.util.Scanner;
@@ -71,6 +72,7 @@ public class ChefLoginView {
         ChefLoginController loginController = factory.createChefLoginController();
 
         return loginController.attemptChefLogin(credBean);
+
     }
 
 }

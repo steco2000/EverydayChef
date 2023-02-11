@@ -35,7 +35,7 @@ public class RecipesBrowsingDAO {
     }
 
     //metodo che recupera le informazioni di una ricetta a partire dagli identificativi univoci della stessa, nome e username dello chef
-    public RecipeBase getRecipeInfo(String recipeName, String chefUsername){
+    public RecipeBase getRecipeInfo(String recipeName, String chefUsername) throws IOException {
         ChefDAO chefDAO = new ChefDAO();
         int chefId = chefDAO.retrieveChefId(chefUsername);
         List<RecipeBase> recipeList = this.getRecipeList(chefId);
@@ -49,7 +49,7 @@ public class RecipesBrowsingDAO {
     Metodo che recupera, per chef, i risultati di una ricerca dell'utente. Il metodo richiede anche l'id dello chef perché la ricerca avviene lista per lista,
     dato che le ricette sono organizzate in liste associate ai singoli chef.
      */
-    private List<RecipeBase> getSearchMatchings(String searchValue, int chefId){
+    private List<RecipeBase> getSearchMatchings(String searchValue, int chefId) {
         try{
             FileInputStream filein = new FileInputStream(recipeFileName+chefId+".ser");
             ObjectInputStream inputStream = new ObjectInputStream(filein);
@@ -60,13 +60,13 @@ public class RecipesBrowsingDAO {
             matchings.addAll(currentRecipeList.stream().filter(o -> (o.getName().contains(searchValue) || searchValue.contains(o.getName()))).collect(Collectors.toList()));
 
             return matchings;
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e) {
             return new ArrayList<>();
         }
     }
 
     //metodo che recupera i risultati di una ricerca dell'utente.
-    public List<RecipeBase> getSearchResult(String searchValue){
+    public List<RecipeBase> getSearchResult(String searchValue)  {
         ChefDAO chefDAO = new ChefDAO();
         List<RecipeBase> searchResult = new ArrayList<>();
         try {
@@ -75,7 +75,7 @@ public class RecipesBrowsingDAO {
                 List<RecipeBase> matchings = this.getSearchMatchings(searchValue,i);
                 if(!matchings.isEmpty()) searchResult.addAll(matchings);
             }
-        } catch (IOException | ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException | IOException ignored) {
             assert(true);   //eccezione ignorata
         }
         return searchResult;

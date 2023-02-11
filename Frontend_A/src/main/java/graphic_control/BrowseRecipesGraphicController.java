@@ -7,6 +7,7 @@ import beans.RecipeIngredientBean;
 import control.BrowseRecipeController;
 import control.RecipeInfoRetrievingController;
 import control.RecipeSearchingController;
+import exceptions.PersistentDataAccessException;
 import factories.BrowseRecipeControllerFactory;
 import factories.RecipeInfoRetrievingControllerFactory;
 import factories.RecipeSearchingControllerFactory;
@@ -85,6 +86,8 @@ public class BrowseRecipesGraphicController {
     @FXML
     private TextArea chefPageBioArea;
 
+    private static final String ERROR_BOX_TITLE = "Error";
+
     //questi attributi servono a salvare le informazioni legate a una ricetta quando questa viene selezionata dalla tabella
     private ChefBean recipeChef;
     private RecipeBean selectedRecipeBean;
@@ -99,17 +102,21 @@ public class BrowseRecipesGraphicController {
      */
     @FXML
     private void onShowRecipeButtonPression() throws IOException {
-        RecipeBrowsingTableBean recipeSelected = recipeTable.getSelectionModel().getSelectedItem();
-        if(recipeSelected == null){
-            AlertBox.display("Error","No recipe selected.");
-            return;
+        try {
+            RecipeBrowsingTableBean recipeSelected = recipeTable.getSelectionModel().getSelectedItem();
+            if (recipeSelected == null) {
+                AlertBox.display(ERROR_BOX_TITLE, "No recipe selected.");
+                return;
+            }
+            RecipeInfoRetrievingControllerFactory factory = new RecipeInfoRetrievingControllerFactory();
+            RecipeInfoRetrievingController controller = factory.createRecipeInfoRetrievingController();
+            selectedRecipeBean = controller.retrieveRecipeInfo(recipeSelected);
+            this.recipeChef = controller.retrieveChefInfo(recipeSelected.getChefUsername());
+            missingIngredients = controller.retrieveMissingIngredients(recipeSelected);
+            this.loadRecipePage(selectedRecipeBean, missingIngredients);
+        }catch(PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE, e.getMessage());
         }
-        RecipeInfoRetrievingControllerFactory factory = new RecipeInfoRetrievingControllerFactory();
-        RecipeInfoRetrievingController controller = factory.createRecipeInfoRetrievingController();
-        selectedRecipeBean = controller.retrieveRecipeInfo(recipeSelected);
-        this.recipeChef = controller.retrieveChefInfo(recipeSelected.getChefUsername());
-        missingIngredients = controller.retrieveMissingIngredients(recipeSelected);
-        this.loadRecipePage(selectedRecipeBean,missingIngredients);
     }
 
     /*
@@ -119,13 +126,13 @@ public class BrowseRecipesGraphicController {
     @FXML
     private void onSearchButtonPression(){
         mainLabel.setText("Search results");
-        if(searchBar.getText().isEmpty()) return;
+        if (searchBar.getText().isEmpty()) return;
         RecipeSearchingControllerFactory factory = new RecipeSearchingControllerFactory();
         RecipeSearchingController controller = factory.createRecipeSearchingController();
         List<RecipeBrowsingTableBean> searchResult = controller.retrieveSearchResult(searchBar.getText());
-        if(searchResult.isEmpty()){
-            AlertBox.display("No results","No recipes found.");
-        }else {
+        if (searchResult.isEmpty()) {
+            AlertBox.display("No results", "No recipes found.");
+        } else {
             ObservableList<RecipeBrowsingTableBean> beanObservableList = FXCollections.observableArrayList();
             beanObservableList.addAll(searchResult);
             nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -133,6 +140,7 @@ public class BrowseRecipesGraphicController {
             chefUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("chefUsername"));
             recipeTable.setItems(beanObservableList);
         }
+
     }
 
     /*
@@ -177,10 +185,14 @@ public class BrowseRecipesGraphicController {
      */
     private void getSuggestedRecipes() {
         ObservableList<RecipeBrowsingTableBean> observableBeanList = FXCollections.observableArrayList();
-        if(this.suggestedRecipes == null){
-            BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
-            BrowseRecipeController browseRecipeController = factory.createBrowseRecipeController();
-            this.suggestedRecipes = browseRecipeController.retrieveSuggestedRecipe();
+        try{
+            if(this.suggestedRecipes == null){
+                BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
+                BrowseRecipeController browseRecipeController = factory.createBrowseRecipeController();
+                this.suggestedRecipes = browseRecipeController.retrieveSuggestedRecipe();
+            }
+        }catch(PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE,e.getMessage());
         }
         observableBeanList.addAll(this.suggestedRecipes);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));

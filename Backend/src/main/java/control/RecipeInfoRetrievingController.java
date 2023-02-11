@@ -1,6 +1,7 @@
 package control;
 
 import beans.*;
+import exceptions.PersistentDataAccessException;
 
 import java.util.List;
 
@@ -8,8 +9,8 @@ import java.util.List;
 
 public interface RecipeInfoRetrievingController {
 
-    RecipeBean retrieveRecipeInfo(RecipeBrowsingTableBean recipe);
-    ChefBean retrieveChefInfo(String chefUsername);
+    RecipeBean retrieveRecipeInfo(RecipeBrowsingTableBean recipe) throws PersistentDataAccessException;
+    ChefBean retrieveChefInfo(String chefUsername) throws PersistentDataAccessException;
     List<RecipeIngredientBean> retrieveMissingIngredients(RecipeBrowsingTableBean recipe);
 
 }

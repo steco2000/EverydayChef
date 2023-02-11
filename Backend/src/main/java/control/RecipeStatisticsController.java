@@ -1,6 +1,7 @@
 package control;
 
 import beans.RecipeStatisticsTableBean;
+import exceptions.PersistentDataAccessException;
 
 import java.util.List;
 
@@ -8,6 +9,6 @@ import java.util.List;
 
 public interface RecipeStatisticsController {
 
-    List<RecipeStatisticsTableBean> getRecipesStatistics(String chefUsername);
+    List<RecipeStatisticsTableBean> getRecipesStatistics(String chefUsername) throws PersistentDataAccessException;
 
 }

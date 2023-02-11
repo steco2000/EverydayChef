@@ -7,6 +7,7 @@ import model.UserCredentials;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 //classe astratta che rappresenta il tipo InventoryDAO
 
@@ -26,9 +27,9 @@ public abstract class InventoryDAO {
     }
 
     //i metodi esposti e il metodo per la consistenza dei dati variano in base al tipo di dao, quindi sono astratti
-    public abstract void saveInventory(InventoryBase inventory);
-    public abstract InventoryBase retrieveInventory();
-    protected abstract void makeDataConsistent() throws IOException, ClassNotFoundException;
+    public abstract void saveInventory(InventoryBase inventory) throws SQLException, IOException;
+    public abstract InventoryBase retrieveInventory() throws SQLException, IOException;
+    protected abstract void makeDataConsistent() throws IOException, ClassNotFoundException, SQLException;
 
     //Il metodo di scrittura del flag identificativo è comune
     protected void writeLastUsed(boolean value) throws IOException {

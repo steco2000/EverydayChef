@@ -4,6 +4,7 @@ import beans.RecipeBrowsingTableBean;
 import code_reuse.InputReusableUtilities;
 import control.BrowseRecipeController;
 import control.RecipeSearchingController;
+import exceptions.PersistentDataAccessException;
 import factories.BrowseRecipeControllerFactory;
 import factories.RecipeSearchingControllerFactory;
 
@@ -64,7 +65,14 @@ public class BrowseRecipesView {
     private void manageShowRecipe(boolean fromSearch) {
         while(true){
             if(fromSearch) this.fromSearchRecipeBrowsing();
-            else this.suggestedRecipesBrowsing();
+            else{
+                if(this.suggestedRecipes.isEmpty()){
+                    System.out.println("There are no suggested recipes, please search something or update your inventory! Press enter to continue");
+                    this.sc.nextLine();
+                    return;
+                }
+                this.suggestedRecipesBrowsing();
+            }
             break;
         }
     }
@@ -72,12 +80,6 @@ public class BrowseRecipesView {
     //gestione azioni utente in modalità di ricerca
     private void fromSearchRecipeBrowsing(){
         int answer;
-        if(this.searchResult.isEmpty()){
-            System.out.println();
-            System.out.println("There are no results from your search, try again. Press enter to continue");
-            this.sc.nextLine();
-            this.display(false);
-        }
         System.out.println();
 
         //ogni ricetta della lista viene associata a un indice numerico, lo stesso dell'array + 1. In questo modo è possibile accedervi direttamente
@@ -91,44 +93,51 @@ public class BrowseRecipesView {
         }
 
         RecipeBrowsingTableBean recipeSelected = this.searchResult.get(answer-1);
-        RecipePageView recipePageView = new RecipePageView(recipeSelected);
-        recipePageView.display();
+
+        try {
+            RecipePageView recipePageView = new RecipePageView(recipeSelected);
+            recipePageView.display();
+        }catch (PersistentDataAccessException e){
+            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
+        }
     }
 
     //gestione azioni utente in modalità di consiglio ricette
     private void suggestedRecipesBrowsing() {
         int answer;
-        if(this.suggestedRecipes.isEmpty()){
-            System.out.println();
-            System.out.println("There are no suggested recipes. Make sure to keep your inventory up to date. You can also try to search something. Press enter to continue");
-            this.sc.nextLine();
-            this.display(false);
-        }
         System.out.println();
         System.out.println("Digit the recipe's index");
         answer = InputReusableUtilities.getAnswer(this.sc,1,this.suggestedRecipes.size());
-        if(answer == -1){
-            System.out.println();
-            System.out.println("Invalid answer, press enter to continue");
-            this.sc.nextLine();
-            return;
-        }
+        if(answer == -1) return;
 
         RecipeBrowsingTableBean recipeSelected = this.suggestedRecipes.get(answer-1);
-        RecipePageView recipePageView = new RecipePageView(recipeSelected);
-        recipePageView.display();
+
+        try {
+            RecipePageView recipePageView = new RecipePageView(recipeSelected);
+            recipePageView.display();
+        }catch (PersistentDataAccessException e){
+            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
+        }
     }
 
     //recupero e visualizzazione dei risultati di una ricerca
     private void displaySearchResults(String search) {
-        if(search.isEmpty()){
+        if (search.isEmpty()) {
             this.display(false);
-        }else{
+        } else {
             RecipeSearchingControllerFactory factory = new RecipeSearchingControllerFactory();
             RecipeSearchingController controller = factory.createRecipeSearchingController();
             this.searchResult = controller.retrieveSearchResult(search);
 
-            if(this.searchResult.isEmpty()) return;
+            if(this.searchResult.isEmpty()){
+                System.out.println();
+                System.out.println("There are no results from your search, try again. Press enter to continue");
+                this.sc.nextLine();
+                this.display(false);
+                return;
+            }
 
             System.out.println("Search results:");
             this.displayTable(this.searchResult);
@@ -137,13 +146,24 @@ public class BrowseRecipesView {
 
     //recupero e visualizzazione ricette consigliate
     private void displaySuggestedRecipesTable() {
-        if(this.suggestedRecipes == null){
-            BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
-            BrowseRecipeController browseRecipeController = factory.createBrowseRecipeController();
-            this.suggestedRecipes = browseRecipeController.retrieveSuggestedRecipe();
+        try{
+            if(this.suggestedRecipes == null){
+                BrowseRecipeControllerFactory factory = new BrowseRecipeControllerFactory();
+                BrowseRecipeController browseRecipeController = factory.createBrowseRecipeController();
+                this.suggestedRecipes = browseRecipeController.retrieveSuggestedRecipe();
+            }
+        }catch(PersistentDataAccessException e){
+            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
+            return;
         }
 
-        if(this.suggestedRecipes.isEmpty()) return;
+        if(this.suggestedRecipes.isEmpty()){
+            System.out.println();
+            System.out.println("There are no suggested recipes. Make sure to keep your inventory up to date. You can also try to search something. Press enter to continue");
+            this.sc.nextLine();
+            return;
+        }
 
         System.out.println("Suggested Recipes:");
         this.displayTable(this.suggestedRecipes);

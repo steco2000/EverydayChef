@@ -4,6 +4,7 @@ import beans.IngredientBean;
 import beans.InventoryTableDataBean;
 import code_reuse.InputReusableUtilities;
 import control.InventoryController;
+import exceptions.PersistentDataAccessException;
 import factories.InventoryControllerFactory;
 
 import java.text.ParseException;
@@ -22,7 +23,7 @@ public class InventoryView {
     private List<IngredientBean> ingredientList;
 
     //nel costruttore avviamo la procedura di caching dell'inventario dell'utente
-    public InventoryView(){
+    public InventoryView() throws PersistentDataAccessException {
         this.sc = new Scanner(System.in);
         InventoryControllerFactory controllerFactory = new InventoryControllerFactory();
         applController = controllerFactory.createInventoryController();
@@ -47,27 +48,33 @@ public class InventoryView {
             System.out.println("4) To save changes");
             int answer = InputReusableUtilities.getAnswer(this.sc, 0, 4);
 
-            switch (answer){
-                case -1 -> {
-                    assert(true); //errore nella risposta non faccio nulla
+            try {
+                switch (answer) {
+                    case -1 -> {
+                        assert (true); //errore nella risposta non faccio nulla
+                    }
+                    case 0 -> {
+                        applController.saveCurrentInventory();
+                        UserHomeView userHomeView = new UserHomeView();
+                        userHomeView.display();
+                    }
+                    case 1 -> {
+                        System.out.println();
+                        System.out.println("Ingredient adding");
+                        this.manageIngredientAdd();
+                    }
+                    case 2 -> this.manageIngredientUpdating();
+                    case 3 -> this.manageIngredientRemoving();
+                    default -> {
+                        applController.saveCurrentInventory();
+                        System.out.println("Save completed, press enter to continue");
+                        this.sc.nextLine();
+                    }
                 }
-                case 0 -> {
-                    applController.saveCurrentInventory();
-                    UserHomeView userHomeView = new UserHomeView();
-                    userHomeView.display();
-                }
-                case 1 -> {
-                    System.out.println();
-                    System.out.println("Ingredient adding");
-                    this.manageIngredientAdd();
-                }
-                case 2 -> this.manageIngredientUpdating();
-                case 3 -> this.manageIngredientRemoving();
-                default -> {
-                    applController.saveCurrentInventory();
-                    System.out.println("Save completed, press enter to continue");
-                    this.sc.nextLine();
-                }
+            }catch (PersistentDataAccessException e){
+                System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+                this.sc.nextLine();
+                return;
             }
         }
     }

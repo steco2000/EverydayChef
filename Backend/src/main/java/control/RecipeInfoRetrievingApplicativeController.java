@@ -7,9 +7,11 @@ import beans.RecipeIngredientBean;
 import dao.ChefDAO;
 import dao.RecipeDAO;
 import dao.RecipesBrowsingDAO;
+import exceptions.PersistentDataAccessException;
 import exceptions.RecipeIngredientQuantityException;
 import model.*;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,63 +30,71 @@ public class RecipeInfoRetrievingApplicativeController implements RecipeInfoRetr
 
     //metodo che esegue il recupero delle informazioni di base della ricetta
     @Override
-    public RecipeBean retrieveRecipeInfo(RecipeBrowsingTableBean recipeBrowsingBean) {
+    public RecipeBean retrieveRecipeInfo(RecipeBrowsingTableBean recipeBrowsingBean) throws PersistentDataAccessException {
+        try {
+            //recupero della ricetta dal DAO di navigazione
+            RecipesBrowsingDAO recipesBrowsingDAO = new RecipesBrowsingDAO();
+            RecipeBase recipe = recipesBrowsingDAO.getRecipeInfo(recipeBrowsingBean.getName(), recipeBrowsingBean.getChefUsername());
 
-        //recupero della ricetta dal DAO di navigazione
-        RecipesBrowsingDAO recipesBrowsingDAO = new RecipesBrowsingDAO();
-        RecipeBase recipe = recipesBrowsingDAO.getRecipeInfo(recipeBrowsingBean.getName(),recipeBrowsingBean.getChefUsername());
+            //incremento delle visualizzazioni. Quando questo metodo viene chiamato vuol dire che un utente ha cliccato sulla ricetta
+            RecipeDAO recipeWriterDAO = new RecipeDAO(recipe.getChef().getUsername());
+            recipeWriterDAO.incrementRecipeViews(recipe.getName());
 
-        //incremento delle visualizzazioni. Quando questo metodo viene chiamato vuol dire che un utente ha cliccato sulla ricetta
-        RecipeDAO recipeWriterDAO = new RecipeDAO(recipe.getChef().getUsername());
-        recipeWriterDAO.incrementRecipeViews(recipe.getName());
+            //costruzione e ritorno del bean con i dati della ricetta
+            RecipeBean toReturn = new RecipeBean();
+            toReturn.setName(recipe.getName());
+            toReturn.setServings(String.valueOf(recipe.getServings()));
+            toReturn.setPreparationTime(recipe.getPreparationTime());
+            toReturn.setDifficulty(recipe.getDifficulty());
+            toReturn.setPreparationProcedure(recipe.getPreparationProcedure());
 
-        //costruzione e ritorno del bean con i dati della ricetta
-        RecipeBean toReturn = new RecipeBean();
-        toReturn.setName(recipe.getName());
-        toReturn.setServings(String.valueOf(recipe.getServings()));
-        toReturn.setPreparationTime(recipe.getPreparationTime());
-        toReturn.setDifficulty(recipe.getDifficulty());
-        toReturn.setPreparationProcedure(recipe.getPreparationProcedure());
-
-        List<RecipeIngredientBean> ingredientBeanList = new ArrayList<>();
-        for(RecipeIngredient i: recipe.getIngredientList()){
-            RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
-            ingredientBean.setName(i.getName());
-            try {
-                if(i.getQuantity() != -1) {
-                    ingredientBean.setQuantity(String.valueOf(i.getQuantity()),false);
-                }else{
-                    ingredientBean.setQuantity("J. E.",true);
+            List<RecipeIngredientBean> ingredientBeanList = new ArrayList<>();
+            for (RecipeIngredient i : recipe.getIngredientList()) {
+                RecipeIngredientBean ingredientBean = new RecipeIngredientBean();
+                ingredientBean.setName(i.getName());
+                try {
+                    if (i.getQuantity() != -1) {
+                        ingredientBean.setQuantity(String.valueOf(i.getQuantity()), false);
+                    } else {
+                        ingredientBean.setQuantity("J. E.", true);
+                    }
+                } catch (ParseException | RecipeIngredientQuantityException ignored) {
+                    assert(true);   //ignorata perché i dati da memoria sono già validati
                 }
-            } catch (ParseException | RecipeIngredientQuantityException ignored) {
-                assert(true);
-            }
-            ingredientBean.setMeasureUnit(i.getMeasureUnit());
-            ingredientBeanList.add(ingredientBean);
-        }
 
-        toReturn.setIngredientList(ingredientBeanList);
-        this.selectedRecipe = toReturn;
-        return toReturn;
+                ingredientBean.setMeasureUnit(i.getMeasureUnit());
+                ingredientBeanList.add(ingredientBean);
+            }
+
+            toReturn.setIngredientList(ingredientBeanList);
+            this.selectedRecipe = toReturn;
+            return toReturn;
+        } catch(IOException e){
+            throw new PersistentDataAccessException(e);
+        }
     }
 
     //metodo per il recupero e ritorno alla UI delle informazioni dello chef
     @Override
-    public ChefBean retrieveChefInfo(String chefUsername) {
-        ChefDAO chefDAO = new ChefDAO();
-        ChefBase chef = chefDAO.retrieveChef(chefUsername);
-        ChefBean toReturn = new ChefBean();
-        toReturn.setName(chef.getName());
-        toReturn.setSurname(chef.getSurname());
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    public ChefBean retrieveChefInfo(String chefUsername) throws PersistentDataAccessException {
         try {
-            toReturn.setBirthDate(dateFormat.format(chef.getBirthDate()));
-        }catch(NullPointerException | ParseException ignored){
-            assert(true); //eccezione ignorata, dati da memoria già validati
+            ChefDAO chefDAO = new ChefDAO();
+            ChefBase chef = chefDAO.retrieveChef(chefUsername);
+            ChefBean toReturn = new ChefBean();
+            toReturn.setName(chef.getName());
+            toReturn.setSurname(chef.getSurname());
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                toReturn.setBirthDate(dateFormat.format(chef.getBirthDate()));
+            } catch (NullPointerException | ParseException ignored) {
+                assert (true); //eccezione ignorata, dati da memoria già validati
+            }
+            toReturn.setInfo(chef.getInfo());
+            toReturn.setEmail(chef.getEmail());
+            return toReturn;
+        }catch (IOException e){
+            throw new PersistentDataAccessException(e);
         }
-        toReturn.setInfo(chef.getInfo());
-        toReturn.setEmail(chef.getEmail());
-        return toReturn;
     }
 
     //Metodo che crea l'ingrediente mancante, se esiste, e che calcola la quantità mancante.

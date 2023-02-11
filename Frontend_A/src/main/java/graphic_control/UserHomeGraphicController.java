@@ -1,11 +1,13 @@
 package graphic_control;
 
+import exceptions.PersistentDataAccessException;
 import main.view.MainApp;
 import control.LoginController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import utilities.AlertBox;
 
 import java.io.IOException;
 
@@ -19,8 +21,12 @@ public class UserHomeGraphicController {
     //alla pressione del tasto relativo alla gestione dell'inventario si carica la relativa interfaccia
     @FXML
     private void onInventoryButtonPression() throws IOException {
-        InventoryGraphicController controller = new InventoryGraphicController();
-        controller.loadUI();
+        try {
+            InventoryGraphicController controller = new InventoryGraphicController();
+            controller.loadUI();
+        }catch(PersistentDataAccessException e){
+            AlertBox.display("Error", e.getMessage());
+        }
     }
 
     //alla pressione del tasto relativo alla navigazione delle ricette si carica la relativa interfaccia

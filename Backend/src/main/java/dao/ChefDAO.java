@@ -38,10 +38,10 @@ public class ChefDAO {
     Questo metodo controlla che uno chef non esista al momento della registrazione. Vengono aperti e letti tutti i file contententi le istanze, e controllato che il valore di username
     e email non sia già stato usato.
      */
-    public boolean chefNotExists(String email, String username){
+    public boolean chefNotExists(String email, String username) throws IOException {
         Chef currChef;
-        FileInputStream filein;
-        ObjectInputStream objStream;
+        FileInputStream filein = null;
+        ObjectInputStream objStream = null;
 
         File folder = new File(Paths.get("Backend\\src\\main\\resources\\chef_data\\").toAbsolutePath().toString());
         File[] listOfFiles = folder.listFiles();
@@ -55,13 +55,15 @@ public class ChefDAO {
                 objStream = new ObjectInputStream(filein);
                 currChef = (Chef) objStream.readObject();
                 if((currChef.getEmail().equals(email)) || (currChef.getUsername().equals(username))){
-                    filein.close();
                     return false;
                 }
             }
             return true;
-        } catch(ClassNotFoundException | IOException e){
+        } catch(ClassNotFoundException e){
             return false;   //se non viene trovato alcun file significa che lo chef non esiste e può essere registrato
+        } finally {
+            objStream.close();
+            filein.close();
         }
     }
 
@@ -112,19 +114,19 @@ public class ChefDAO {
 
 
     //questo metodo recupera dalla memoria una istanza di chef. Come identificativo si usa l'username essendo univoco nel sistema
-    public ChefBase retrieveChef(String chefUsername) {
+    public ChefBase retrieveChef(String chefUsername) throws IOException {
         FileInputStream filein;
         try {
             filein = new FileInputStream(chefFileName + chefUsername + ".ser");
             ObjectInputStream inputObjStream = new ObjectInputStream(filein);
             return (ChefBase) inputObjStream.readObject();
-        } catch (ClassNotFoundException | IOException ignored) {
-            return null;
+        } catch (ClassNotFoundException ignored) {
+            return null;    //eccezione lanciata solo in caso di cambiamenti del model
         }
     }
 
     //questo metodo recupera l'id di uno chef a partire dall'username. Serve ad esempio ad accedere al file delle ricette da lui salvate
-    public int retrieveChefId(String chefUsername){
+    public int retrieveChefId(String chefUsername) throws IOException {
         Chef chef = (Chef) this.retrieveChef(chefUsername);
         return chef.getId();
     }

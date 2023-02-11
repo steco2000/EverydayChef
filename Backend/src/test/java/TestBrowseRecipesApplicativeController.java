@@ -1,16 +1,9 @@
 //Stefano Colamartini
 //Matricola: 0278902
 
-/*
-N.B. : Per il corretto funzionamento del test potrebbe essere necessario modificare la working directory nella configurazione di lancio di junit, altrimenti il sistema calcolerà male
-       i path relativi dei file ".ser".
-
-       In intellij:
-       Run -> Edit Configurations -> JUnit -> *classe di test*.*metodo di test* -> Working directory (Selezionare la directory generale del progetto, ossia "EverydayChef") -> Apply
-*/
-
 import beans.*;
 import control.*;
+import exceptions.PersistentDataAccessException;
 import exceptions.RecipeIngredientQuantityException;
 import org.junit.Test;
 
@@ -23,15 +16,22 @@ import static org.junit.Assert.assertTrue;
 public class TestBrowseRecipesApplicativeController {
 
     /*
+        IMPORTANTE: Per il corretto funzionamento del test potrebbe essere necessario modificare la working directory nella configurazione di lancio di junit, altrimenti il sistema
+        calcolerà male i path assoluti dei file ".ser".
+
+        In intellij:
+        Run -> Edit Configurations -> JUnit -> *classe di test*.*metodo di test* -> Working directory (Selezionare la directory generale del progetto, ossia "EverydayChef") -> Apply
+    */
+
+    /*
     Il seguente metodo si occupa di testare l'operazione "retrieveSuggestedRecipe" del controller applicativo "BrowseRecipeApplicativeController". Questa operazione si occupa di
     recuperare le ricette consigliate all'utente in base al contenuto dell'inventario ingredienti. Prima di lanciare il metodo associato all'operazione, viene registrato un utente
     di test con un inventario contenete un ingrediente di prova. Oltre a questo viene registrato uno chef di test con almeno una ricetta che dovrebbe essere selezionata dal metodo
     in base al contenuto dell'inventario costruito. In questo modo si può avere almeno un valore da confrontare. Se ottenessimo un risultato vuoto, infatti, sarebbe impossibile
     stabilire se qualcosa non ha funzionato nell'operazione o se non è stata trovata nessuna ricetta compatibile con l'inventario in analisi.
      */
-
     @Test
-    public void testRetrieveSuggestedRecipes() throws ParseException {
+    public void testRetrieveSuggestedRecipes() throws ParseException, PersistentDataAccessException {
 
         //registrazione utente e "simulazione" del login
         UserCredBean testUser = new UserCredBean();
@@ -106,13 +106,13 @@ public class TestBrowseRecipesApplicativeController {
 
         for(RecipeBrowsingTableBean r: suggestedRecipes){
             RecipeBean recipe = recipeInfoController.retrieveRecipeInfo(r);
-            for(RecipeIngredientBean i: recipe.getIngredientList()){
-                System.out.println(i.getName());
-                if(!(i.getName().contains(ingredientKeyWord) || ingredientKeyWord.contains(i.getName()))){
-                    testPassed = false;
-                    break;
-                }
+
+            //si controlla se almeno un ingrediente della ricetta contiene la keyword dell'ingrediente dell'inventario o viceversa. Se no la variabile testPassed è settata a false
+            if(recipe.getIngredientList().stream().noneMatch(o -> o.getName().contains(ingredientKeyWord) || ingredientKeyWord.contains(o.getName()))){
+                testPassed = false;
+                break;
             }
+
         }
 
         assertTrue(testPassed);

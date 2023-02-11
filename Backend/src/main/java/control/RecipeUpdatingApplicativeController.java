@@ -2,6 +2,7 @@ package control;
 
 import beans.RecipeBean;
 import dao.RecipeDAO;
+import exceptions.PersistentDataAccessException;
 
 import java.io.IOException;
 
@@ -10,20 +11,20 @@ import java.io.IOException;
 public class RecipeUpdatingApplicativeController implements RecipeUpdadingController{
 
     @Override
-    public void updateRecipe(String toUpdateName, RecipeBean recipe) {
+    public void updateRecipe(String toUpdateName, RecipeBean recipe) throws PersistentDataAccessException {
         this.deleteRecipe(toUpdateName);
         RecipeSharingApplicativeController sharingController = new RecipeSharingApplicativeController();
         sharingController.shareRecipe(recipe);
     }
 
     @Override
-    public void deleteRecipe(String toDeleteName) {
+    public void deleteRecipe(String toDeleteName) throws PersistentDataAccessException {
         RecipeDAO recipeDAO = new RecipeDAO();
         recipeDAO.deleteRecipe(toDeleteName);
         try {
             recipeDAO.saveChanges();
-        } catch (IOException ignored) {
-            assert(true); //eccezione ignorata
+        } catch (IOException e) {
+            throw new PersistentDataAccessException(e);
         }
     }
 

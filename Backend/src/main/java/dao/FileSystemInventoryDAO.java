@@ -10,6 +10,7 @@ import model.UserCredentials;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 //dao in versione file system per il salvataggio di istanze di tipo inventario
 
@@ -20,20 +21,20 @@ public class FileSystemInventoryDAO extends InventoryDAO{
     /*
     Nel costruttore viene calcolato il percorso assoluto dei file ".ser" che contengono istanze di tipo inventario. Inoltre viene garantito che all'avvio i dati siano aggiornati
      */
-    public FileSystemInventoryDAO(){
+    public FileSystemInventoryDAO() throws SQLException, IOException {
         super();
         Path relativeInventoryFilePath = Paths.get("Backend\\src\\main\\resources\\inventories\\"+LoginController.getUserLogged().getUsername()+"-inventory.ser");
         inventoryFileName = relativeInventoryFilePath.toAbsolutePath().toString();
         try {
             this.makeDataConsistent();
-        } catch (IOException | ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException ignored) {
             assert(true); //eccezione ignorata
         }
     }
 
     //Questo metodo scrive sui file le istanze di tipo inventario
     @Override
-    public void saveInventory(InventoryBase inventory) {
+    public void saveInventory(InventoryBase inventory) throws IOException {
         try {
             FileOutputStream fileout = new FileOutputStream(inventoryFileName);
             ObjectOutputStream out = new ObjectOutputStream(fileout);
@@ -52,18 +53,14 @@ public class FileSystemInventoryDAO extends InventoryDAO{
         Lo si fa su un file apposito. In questo modo, quando verrà lanciato un InventoryDAO in versione DBMS, saprà che l'ultimo DAO ad aver scritto era di tipo file system, e che quindi i dati sui file
         devono essere aggiornati da quelli presenti sul DB.
          */
-        try {
-            this.writeLastUsed(true);
-        } catch (IOException ignored) {
-            assert(true); //eccezione ignorata
-        }
+        this.writeLastUsed(true);
     }
 
     /*
     Questo metodo recupera dai file l'istanza di inventario relativa all'utente correntemente loggato.
      */
     @Override
-    public InventoryBase retrieveInventory(){
+    public InventoryBase retrieveInventory() throws IOException {
         Inventory currInv;
         FileInputStream filein = null;
 
@@ -94,7 +91,7 @@ public class FileSystemInventoryDAO extends InventoryDAO{
     Questo metodo serve a rendere consistenti i dati tra file system e DBMS. Legge il flag dell'ultimo tipo di inventoryDAO ad aver scritto in memoria
      */
     @Override
-    protected void makeDataConsistent() throws IOException, ClassNotFoundException {
+    protected void makeDataConsistent() throws IOException, ClassNotFoundException, SQLException {
         try {
             FileInputStream filein = new FileInputStream(this.lastUsedDaoFileName);
             ObjectInputStream objectInputStream = new ObjectInputStream(filein);

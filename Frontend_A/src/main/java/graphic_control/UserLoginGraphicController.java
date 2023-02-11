@@ -2,6 +2,7 @@ package graphic_control;
 
 import beans.UserCredBean;
 import control.UserLoginController;
+import exceptions.PersistentDataAccessException;
 import factories.UserLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,27 +30,26 @@ public class UserLoginGraphicController {
     //alla pressione del tasto di login si raccolgono i dati dai campi dell'interfaccia nel bean, dopodichè si tenta il login passando il bean al controller applicativo
     @FXML
     private void onLoginButtonPression() throws IOException {
-        String username = usernameField.getText();
-        String password = passField.getText();
-        UserLoginControllerFactory controllerFactory = new UserLoginControllerFactory();
-        UserLoginController loginController = controllerFactory.createUserLoginController();
-
-        UserCredBean credBean = new UserCredBean();
-
-        //se le credenziali inserite sono considerate illegali nel sistema si avverte subito l'utente, invece che provare il login
         try {
+            String username = usernameField.getText();
+            String password = passField.getText();
+            UserLoginControllerFactory controllerFactory = new UserLoginControllerFactory();
+            UserLoginController loginController = controllerFactory.createUserLoginController();
+
+            UserCredBean credBean = new UserCredBean();
+
+            //se le credenziali inserite sono considerate illegali nel sistema si avverte subito l'utente, invece che provare il login
             credBean.setUsername(username);
             credBean.setPassword(password);
+
+            if (loginController.attemptUserLogin(credBean)) {
+                UserHomeGraphicController controller = new UserHomeGraphicController();
+                controller.loadUI();
+            } else {
+                AlertBox.display(ERROR_BOX_TITLE, "Incorrect credentials");
+            }
         }catch(IllegalArgumentException e){
             AlertBox.display(ERROR_BOX_TITLE,"Login failed: incorrect credentials");
-            return;
-        }
-
-        if(loginController.attemptUserLogin(credBean)){
-            UserHomeGraphicController controller = new UserHomeGraphicController();
-            controller.loadUI();
-        }else{
-            AlertBox.display(ERROR_BOX_TITLE,"Incorrect credentials");
         }
     }
 

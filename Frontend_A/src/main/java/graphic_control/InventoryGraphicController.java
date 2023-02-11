@@ -1,5 +1,6 @@
 package graphic_control;
 
+import exceptions.PersistentDataAccessException;
 import javafx.scene.control.*;
 import main.view.MainApp;
 import beans.IngredientBean;
@@ -57,7 +58,7 @@ public class InventoryGraphicController {
     che fa da observer all'inventario per i dati da visualizzare sull'interfaccia. Per questo successive modifiche all'inventario necessitanto di essere salvate dal controller
     applicativo, a seguito di una richiesta esplicita da parte del controller grafico.
      */
-    public InventoryGraphicController(){
+    public InventoryGraphicController() throws PersistentDataAccessException {
         InventoryControllerFactory controllerFactory = new InventoryControllerFactory();
         applController = controllerFactory.createInventoryController();
         dataBean = InventoryTableDataBean.getSingletonInstance();
@@ -104,9 +105,13 @@ public class InventoryGraphicController {
     //tasto back premuto -> si ricarica la schermata home
     @FXML
     public void onBackButtonPression() throws IOException {
-        applController.saveCurrentInventory();
-        UserHomeGraphicController controller = new UserHomeGraphicController();
-        controller.loadUI();
+        try {
+            applController.saveCurrentInventory();
+            UserHomeGraphicController controller = new UserHomeGraphicController();
+            controller.loadUI();
+        }catch (PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE,e.getMessage());
+        }
     }
 
     //quando l'utente preme il tasto per aggiungere un ingrediente si carica la relativa schermata
@@ -226,7 +231,11 @@ public class InventoryGraphicController {
     //alla pressione del tasto "Save Changes" viene lanciato il relativo metodo del controller applicativo
     @FXML
     public void onSaveButtonPression(){
-        applController.saveCurrentInventory();
+        try {
+            applController.saveCurrentInventory();
+        }catch(PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE,e.getMessage());
+        }
     }
 
 }

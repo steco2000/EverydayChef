@@ -6,6 +6,7 @@ import beans.RecipeTableDataBean;
 import dao.ChefDAO;
 import dao.RecipeDAO;
 import exceptions.ExistingRecipeException;
+import exceptions.PersistentDataAccessException;
 import factories.RecipeFactory;
 import factories.RecipeIngredientFactory;
 import model.ChefBase;
@@ -13,6 +14,7 @@ import model.RecipeBase;
 import model.RecipeIngredient;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,31 +24,42 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
 
     //al controller applicativo è assegnata la responsabilità di legare il bean observer di presentazione al DAO da osservare, dato che conosce entrambi e si trova nel mezzo
     @Override
-    public void setUpRecipesObserver(String chefUsername){
-        RecipeDAO recipeDAO = new RecipeDAO(chefUsername);
-        recipeDAO.attach(RecipeTableDataBean.getSingletonInstance());
-        RecipeTableDataBean.getSingletonInstance().setSubject(recipeDAO);
+    public void setUpRecipesObserver(String chefUsername) throws PersistentDataAccessException {
+        try {
+            RecipeDAO recipeDAO = new RecipeDAO(chefUsername);
+            recipeDAO.attach(RecipeTableDataBean.getSingletonInstance());
+            RecipeTableDataBean.getSingletonInstance().setSubject(recipeDAO);
+        }catch (IOException e){
+            throw new PersistentDataAccessException(e);
+        }
     }
 
     //metodo per innescare il salvataggio dei cambiamenti sul DAO
     @Override
-    public void saveChanges() {
+    public void saveChanges() throws PersistentDataAccessException {
         RecipeDAO recipeDAO = new RecipeDAO();
         try {
             recipeDAO.saveChanges();
-        } catch (IOException ignored) {
-            assert(true);
+        } catch (IOException e) {
+            throw new PersistentDataAccessException(e);
         }
     }
 
     //metodo che gestisce creazione e salvataggio della ricetta
     @Override
-    public void shareRecipe(RecipeBean recipe){
+    public void shareRecipe(RecipeBean recipe) throws PersistentDataAccessException {
+
+        RecipeFactory factory = new RecipeFactory();
 
         //vengono prima recuperati i dati dello chef che crea la ricetta
-        RecipeFactory factory = new RecipeFactory();
-        ChefDAO chefDAO = new ChefDAO();
-        ChefBase chef = chefDAO.retrieveChef(recipe.getChefUsername());
+        ChefBase chef;
+
+        try {
+            ChefDAO chefDAO = new ChefDAO();
+            chef = chefDAO.retrieveChef(recipe.getChefUsername());
+        }catch(IOException e){
+            throw new PersistentDataAccessException(e);
+        }
 
         //viene creata la lista degli ingredienti
         RecipeIngredientFactory ingredientFactory = new RecipeIngredientFactory();
@@ -72,7 +85,14 @@ public class RecipeSharingApplicativeController implements RecipeSharingControll
         numerico (es. Carbonara 2)
          */
 
-        RecipeDAO recipeDAO = new RecipeDAO(recipe.getChefUsername());
+        RecipeDAO recipeDAO;
+
+        try {
+            recipeDAO = new RecipeDAO(recipe.getChefUsername());
+        }catch(IOException e){
+            throw new PersistentDataAccessException(e);
+        }
+
         int i=1;
         String name = newRecipe.getName();
 

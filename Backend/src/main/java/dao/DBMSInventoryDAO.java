@@ -25,18 +25,14 @@ public class DBMSInventoryDAO extends InventoryDAO{
     alcuni dati, non abbiamo quindi bisogno di definire ruoli o controllare gli accessi. Perciò il db possiede un solo utente globale, usato semplicemente come punto di accesso al db.
     Oltre a questo viene garantito che all'avvio i dati siano aggiornati.
      */
-    public DBMSInventoryDAO(){
+    public DBMSInventoryDAO() throws IOException, SQLException {
         super();
         if(pass == null) makePassword();
-        try {
-            this.makeDataConsistent();
-        } catch (IOException | ClassNotFoundException ignored) {
-            assert(true); //eccezione ignorata
-        }
+        this.makeDataConsistent();
     }
 
     //questo metodo recupera la password dal file quando questa non esiste
-    private static void makePassword() {
+    private static void makePassword() throws IOException {
         pwPath = Paths.get("Backend\\src\\main\\resources\\inventoryDB\\dbpass.ser").toAbsolutePath().toString();
         try{
             FileInputStream filein = new FileInputStream(pwPath);
@@ -46,22 +42,18 @@ public class DBMSInventoryDAO extends InventoryDAO{
             objIn.close();
         }catch(FileNotFoundException e){
             storePassword();    //se il file non esiste scriviamo la password sul file
-        } catch (IOException | ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException ignored) {
             assert(true); //eccezione ignorata, stiamo scrivendo un tipo di dato primitivo
         }
     }
 
     //questo è il metodo che scrive la password sul file
-    private static void storePassword() {
-        try {
-            FileOutputStream filein = new FileOutputStream(pwPath);
-            ObjectOutputStream objOut = new ObjectOutputStream(filein);
-            objOut.writeObject(USERNAME);
-            filein.close();
-            objOut.close();
-        } catch (IOException ignored) {
-            assert(true); //eccezione ignorata
-        }
+    private static void storePassword() throws IOException {
+        FileOutputStream filein = new FileOutputStream(pwPath);
+        ObjectOutputStream objOut = new ObjectOutputStream(filein);
+        objOut.writeObject(USERNAME);
+        filein.close();
+        objOut.close();
     }
 
     /*
@@ -69,7 +61,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
     aggiornati di tutte le istanze coinvolte, in modo compatibile allo schema del db.
      */
     @Override
-    public void saveInventory(InventoryBase inventory){
+    public void saveInventory(InventoryBase inventory) throws SQLException, IOException {
         user.setIngredientsInventory((Inventory) inventory);
         Statement stmt = null;
         Connection conn;
@@ -95,7 +87,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
             //se viene lanciata questa eccezione l'inventario è già presente, bisogna solo aggiornarlo
             this.updateExistingInventory(stmt,inventory,user);
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException e) {
             assert(true); //Se si verifica questa eccezione non c'è modo di salvare sul db
         }
 
@@ -104,25 +96,17 @@ public class DBMSInventoryDAO extends InventoryDAO{
         Lo si fa su un file apposito. In questo modo, quando verrà lanciato un InventoryDAO in versione file system, saprà che l'ultimo DAO ad aver scritto era di tipo DBMS, e che quindi i dati sui file
         devono essere aggiornati da quelli presenti sul DB.
          */
-        try {
-            this.writeLastUsed(false);
-        } catch (IOException ignored) {
-            assert(true); //eccezione ignorata
-        }
+        this.writeLastUsed(false);
     }
 
     /*
     Se l'inventario che stiamo provando a scrivere esiste già, va solo modificato. Per fare ciò si fa prima a eliminare tutti gli ingredienti e a reinserirli completamente
      */
-    private void updateExistingInventory(Statement stmt, InventoryBase inventory, UserCredentials user) {
-        try {
-            stmt.execute("delete from inventoryingredient where inventory = '"+user.getUsername()+"'");
-            for (InventoryIngredient i : ((Inventory) inventory).getIngredientList()) {
-                java.sql.Date sqlDate = new java.sql.Date(i.getExpirationDate().getTime());
-                stmt.execute("insert into InventoryIngredient(name,inventory,quantity,measureUnit,expirationDate,notes) values('" + i.getName() + "','" + user.getUsername() + "','" + i.getQuantity() + "','" + i.getMeasureUnit() + "','" + sqlDate + "','" + i.getNotes() + "')");
-            }
-        } catch (SQLException e) {
-            assert(true); //se si verifica questa eccezione non c'è modo di scrivere sul db
+    private void updateExistingInventory(Statement stmt, InventoryBase inventory, UserCredentials user) throws SQLException {
+        stmt.execute("delete from inventoryingredient where inventory = '"+user.getUsername()+"'");
+        for (InventoryIngredient i : ((Inventory) inventory).getIngredientList()) {
+            java.sql.Date sqlDate = new java.sql.Date(i.getExpirationDate().getTime());
+            stmt.execute("insert into InventoryIngredient(name,inventory,quantity,measureUnit,expirationDate,notes) values('" + i.getName() + "','" + user.getUsername() + "','" + i.getQuantity() + "','" + i.getMeasureUnit() + "','" + sqlDate + "','" + i.getNotes() + "')");
         }
     }
 
@@ -131,7 +115,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
     la rappresentazione nel model del sistema, perciò vanno "convertiti".
      */
     @Override
-    public InventoryBase retrieveInventory(){
+    public InventoryBase retrieveInventory() throws SQLException, IOException {
         Statement stmt = null;
         Connection conn = null;
         Inventory currInv;
@@ -160,7 +144,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
                 }
 
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException  e) {
             return null;    //in questo caso si verifica un errore e si restituisce quindi null
         }
 
@@ -179,7 +163,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
     Questo metodo serve a rendere consistenti i dati tra file system e DBMS. Legge il flag dell'ultimo tipo di inventoryDAO ad aver scritto in memoria
      */
     @Override
-    protected void makeDataConsistent() throws IOException, ClassNotFoundException {
+    protected void makeDataConsistent() throws IOException, SQLException {
         try {
             FileInputStream filein = new FileInputStream(this.lastUsedDaoFileName);
             ObjectInputStream objectInputStream = new ObjectInputStream(filein);
@@ -192,7 +176,7 @@ public class DBMSInventoryDAO extends InventoryDAO{
                 FileSystemInventoryDAO fsDao = new FileSystemInventoryDAO();
                 this.saveInventory(fsDao.retrieveInventory());
             }
-        }catch(FileNotFoundException e){
+        }catch(FileNotFoundException | ClassNotFoundException e){
             assert(true); //se il file non c'è non devo fare nulla
         }
     }

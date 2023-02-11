@@ -1,6 +1,7 @@
 package control;
 
 import beans.RecipeBrowsingTableBean;
+import exceptions.PersistentDataAccessException;
 
 import java.util.List;
 
@@ -8,6 +9,6 @@ import java.util.List;
 
 public interface BrowseRecipeController {
 
-    List<RecipeBrowsingTableBean> retrieveSuggestedRecipe();
+    List<RecipeBrowsingTableBean> retrieveSuggestedRecipe() throws PersistentDataAccessException;
 
 }

@@ -3,6 +3,7 @@ package view;
 import beans.UserCredBean;
 import code_reuse.InputReusableUtilities;
 import control.UserLoginController;
+import exceptions.PersistentDataAccessException;
 import factories.UserLoginControllerFactory;
 
 import java.util.Scanner;
@@ -61,17 +62,21 @@ public class UserLoginView {
 
     //tentativo di login. Si raccolgono le credenziali nel bean e si chiama il metodo del controller
     private boolean loginAttempt() {
-        System.out.println("Log in");
-        String[] credentials = InputReusableUtilities.getCredentials(this.sc);
+        try {
+            System.out.println("Log in");
+            String[] credentials = InputReusableUtilities.getCredentials(this.sc);
 
-        this.credBean = new UserCredBean();
-        credBean.setUsername(credentials[0]);
-        credBean.setPassword(credentials[1]);
+            this.credBean = new UserCredBean();
+            credBean.setUsername(credentials[0]);
+            credBean.setPassword(credentials[1]);
 
-        UserLoginControllerFactory factory = new UserLoginControllerFactory();
-        UserLoginController loginController = factory.createUserLoginController();
+            UserLoginControllerFactory factory = new UserLoginControllerFactory();
+            UserLoginController loginController = factory.createUserLoginController();
 
-        return loginController.attemptUserLogin(credBean);
+            return loginController.attemptUserLogin(credBean);
+        }catch(IllegalArgumentException e){
+            return false;
+        }
     }
 
 }

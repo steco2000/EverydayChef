@@ -4,6 +4,7 @@ import beans.RecipeBean;
 import beans.RecipeIngredientBean;
 import code_reuse.InputReusableUtilities;
 import control.RecipeSharingController;
+import exceptions.PersistentDataAccessException;
 import factories.RecipeSharingControllerFactory;
 
 import java.util.ArrayList;
@@ -24,11 +25,11 @@ public class ShareRecipeView {
 
     //display della schermata e raccolta informazioni
     public void display(String chefUsername){
-        this.newRecipe.setChefUsername(chefUsername);
-        boolean dataAcquired = false;
-        while(true) {
-            if(dataAcquired) break;
-            try {
+        try {
+            this.newRecipe.setChefUsername(chefUsername);
+            boolean dataAcquired = false;
+            while (true) {
+                if (dataAcquired) break;
                 System.out.println();
                 System.out.println("Recipe sharing");
                 System.out.print("Recipe name: ");
@@ -53,18 +54,21 @@ public class ShareRecipeView {
                 RecipeSharingController controller = factory.createRecipeSharingController();
                 controller.shareRecipe(this.newRecipe);
                 dataAcquired = true;
-            } catch (NumberFormatException e) {
-                System.out.println();
-                System.out.println("Invalid value, press enter to continue");
-                this.sc.nextLine();
-            } catch (IllegalArgumentException e) {
-                System.out.println();
-                System.out.println("Name can't be empty, press enter to continue");
-                this.sc.nextLine();
             }
+            RecipeManagementView recipeManagementView = new RecipeManagementView(chefUsername);
+            recipeManagementView.display();
+        }catch (PersistentDataAccessException e){
+            System.out.println("Error: "+e.getMessage()+" Press enter to continue");
+            this.sc.nextLine();
+        }catch (NumberFormatException e) {
+            System.out.println();
+            System.out.println("Invalid value, press enter to continue");
+            this.sc.nextLine();
+        } catch (IllegalArgumentException e) {
+            System.out.println();
+            System.out.println("Name can't be empty, press enter to continue");
+            this.sc.nextLine();
         }
-        RecipeManagementView recipeManagementView = new RecipeManagementView(chefUsername);
-        recipeManagementView.display();
     }
 
     //metodo che gestisce la compilazione della lista degli ingredienti

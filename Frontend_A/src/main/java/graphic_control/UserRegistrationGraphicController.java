@@ -2,6 +2,7 @@ package graphic_control;
 
 import beans.UserCredBean;
 import control.UserLoginController;
+import exceptions.PersistentDataAccessException;
 import factories.UserLoginControllerFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,6 +65,8 @@ public class UserRegistrationGraphicController {
             AlertBox.display(ERROR_BOX_TITLE,"Some required fields are missing.");
         }catch(MalformedParametersException e){
             AlertBox.display(ERROR_BOX_TITLE,"Email is not valid.");
+        }catch(PersistentDataAccessException e){
+            AlertBox.display(ERROR_BOX_TITLE, e.getMessage());
         }
     }
 

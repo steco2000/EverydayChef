@@ -6,6 +6,7 @@ import beans.RecipeBrowsingTableBean;
 import beans.RecipeIngredientBean;
 import code_reuse.InputReusableUtilities;
 import control.RecipeInfoRetrievingController;
+import exceptions.PersistentDataAccessException;
 import factories.RecipeInfoRetrievingControllerFactory;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class RecipePageView {
     private List<RecipeIngredientBean> missingIngredients;
 
     //nel costruttore recupero tutte le info necessarie
-    public RecipePageView(RecipeBrowsingTableBean recipe){
+    public RecipePageView(RecipeBrowsingTableBean recipe) throws PersistentDataAccessException {
         this.sc = new Scanner(System.in);
         RecipeInfoRetrievingControllerFactory factory = new RecipeInfoRetrievingControllerFactory();
         RecipeInfoRetrievingController controller = factory.createRecipeInfoRetrievingController();

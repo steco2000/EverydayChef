@@ -58,7 +58,7 @@ public class UserCredentialsDAO {
     Questo metodo controlla che un utente non esista al momento della registrazione. Vengono aperti e letti tutti i file contententi le istanze, e controllato che il valore di username
     e email non sia già stato usato.
      */
-    public boolean userNotExists(String email, String username){
+    public boolean userNotExists(String email, String username) throws IOException {
         UserCredentials currUser;
         FileInputStream filein;
         ObjectInputStream objStream;
@@ -80,7 +80,7 @@ public class UserCredentialsDAO {
                 }
             }
             return true;
-        } catch(ClassNotFoundException | IOException e){
+        } catch(ClassNotFoundException e){
             return false;
         }
     }

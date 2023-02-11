@@ -1,6 +1,7 @@
 package control;
 
 import beans.RecipeBrowsingTableBean;
+import exceptions.PersistentDataAccessException;
 
 import java.util.List;
 
