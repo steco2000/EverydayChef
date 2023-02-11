@@ -31,6 +31,7 @@
                   <PasswordField fx:id="passwordConfirmationField" layoutX="435.0" layoutY="561.0" prefHeight="26.0" prefWidth="445.0" />
                   <Button layoutX="436.0" layoutY="627.0" mnemonicParsing="false" onAction="#onBackButtonPression" text="Cancel" />
                   <Button layoutX="821.0" layoutY="627.0" mnemonicParsing="false" onAction="#onRegistrationButtonPression" text="Confirm" />
+                  <Label layoutX="435.0" layoutY="363.0" text="Register as User:" />
                </children>
             </Pane>
          </center>
