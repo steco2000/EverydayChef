@@ -21,6 +21,7 @@ public class InventoryApplicativeController implements InventoryController{
 
     //nel costruttore si effettua il caching dell'inventario dell'utente loggato
     public InventoryApplicativeController() throws PersistentDataAccessException {
+        int i;
         try {
             InventoryDAOFactory daoFactory = new InventoryDAOFactory();
             InventoryDAO dao = daoFactory.createInventoryDAO();
